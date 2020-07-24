@@ -1,0 +1,294 @@
+<html><!-- #BeginTemplate "/Templates/template.dwt" --><!-- DW6 -->
+<head>
+<!-- #BeginEditable "doctitle" -->
+<title>Computer Conservation Society</title>
+<!-- #EndEditable -->
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<script type="text/javascript" language="JavaScript" src="../../../../../../email.js"></script>
+<script type="text/javascript" language="JavaScript" src="../../../../../../rimages.js"></script>
+<script type="text/javascript" language="JavaScript" src="../../../../../../resurrection/resscript.js"></script>
+<SCRIPT language=JavaScript>
+function makeArray() {
+     for (i = 0; i<makeArray.arguments.length; i++)
+         this[i] = makeArray.arguments[i];
+ }
+
+function getFullYear(d) {
+    var y = d.getYear();
+    if (y < 1000) {y += 1900};
+    return y;
+}
+
+//var zone = "EDT";
+var days = new makeArray("Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday");
+var months = new makeArray("January","February","March","April","May","June","July","August","September","October","November","December");
+
+function format_time(t) {
+
+    var Day = t.getDay();
+    var Date = t.getDate();
+    var Month = t.getMonth();
+    var Year = t.getFullYear();
+
+    timeString = "";
+    timeString += days[Day];
+    timeString += ", ";
+    timeString += " ";
+    timeString += months[Month];
+    timeString += " ";
+    timeString += Date;
+    timeString += ", ";
+    timeString += " ";
+    timeString += Year;
+
+   return timeString;
+ }
+</SCRIPT>
+<link rel="stylesheet" href="../../../../../styles.css" type="text/css">
+
+<style type="text/css">
+</style>
+<style type="text/css">
+#dhtmltooltip{
+position: absolute;
+width: 150px;
+border: 2px solid black;
+padding: 2px;
+background-color: lightyellow;
+visibility: hidden;
+z-index: 100;
+/*Remove below line to remove shadow. Below line should always appear last within this CSS*/
+filter: progid:DXImageTransform.Microsoft.Shadow(color=gray,direction=135);
+}
+.style3 {font-size: 24px}
+</style>
+</head>
+<body bgcolor="#ffffff" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
+<div id="dhtmltooltip"></div>
+
+<script type="text/javascript">
+
+/***********************************************
+* Cool DHTML tooltip script- copyright Dynamic Drive DHTML code library (www.dynamicdrive.com)
+* This notice MUST stay intact for legal use
+* Visit Dynamic Drive at http://www.dynamicdrive.com/ for full source code
+***********************************************/
+
+var offsetxpoint=-60 //Customize x offset of tooltip
+var offsetypoint=20 //Customize y offset of tooltip
+var ie=document.all
+var ns6=document.getElementById && !document.all
+var enabletip=false
+if (ie||ns6)
+var tipobj=document.all? document.all["dhtmltooltip"] : document.getElementById? document.getElementById("dhtmltooltip") : ""
+
+function ietruebody(){
+return (document.compatMode && document.compatMode!="BackCompat")? document.documentElement : document.body
+}
+
+function ddrivetip(thetext, thecolor, thewidth){
+if (ns6||ie){
+if (typeof thewidth!="undefined") tipobj.style.width=thewidth+"px"
+if (typeof thecolor!="undefined" && thecolor!="") tipobj.style.backgroundColor=thecolor
+tipobj.innerHTML=thetext
+enabletip=true
+return false
+}
+}
+
+function positiontip(e){
+if (enabletip){
+var curX=(ns6)?e.pageX : event.clientX+ietruebody().scrollLeft;
+var curY=(ns6)?e.pageY : event.clientY+ietruebody().scrollTop;
+//Find out how close the mouse is to the corner of the window
+var rightedge=ie&&!window.opera? ietruebody().clientWidth-event.clientX-offsetxpoint : window.innerWidth-e.clientX-offsetxpoint-20
+var bottomedge=ie&&!window.opera? ietruebody().clientHeight-event.clientY-offsetypoint : window.innerHeight-e.clientY-offsetypoint-20
+
+var leftedge=(offsetxpoint<0)? offsetxpoint*(-1) : -1000
+
+//if the horizontal distance isn't enough to accomodate the width of the context menu
+if (rightedge<tipobj.offsetWidth)
+//move the horizontal position of the menu to the left by it's width
+tipobj.style.left=ie? ietruebody().scrollLeft+event.clientX-tipobj.offsetWidth+"px" : window.pageXOffset+e.clientX-tipobj.offsetWidth+"px"
+else if (curX<leftedge)
+tipobj.style.left="5px"
+else
+//position the horizontal position of the menu where the mouse is positioned
+tipobj.style.left=curX+offsetxpoint+"px"
+
+//same concept with the vertical position
+if (bottomedge<tipobj.offsetHeight)
+tipobj.style.top=ie? ietruebody().scrollTop+event.clientY-tipobj.offsetHeight-offsetypoint+"px" : window.pageYOffset+e.clientY-tipobj.offsetHeight-offsetypoint+"px"
+else
+tipobj.style.top=curY+offsetypoint+"px"
+tipobj.style.visibility="visible"
+}
+}
+
+function hideddrivetip(){
+if (ns6||ie){
+enabletip=false
+tipobj.style.visibility="hidden"
+tipobj.style.left="-1000px"
+tipobj.style.backgroundColor=''
+tipobj.style.width=''
+}
+}
+
+document.onmousemove=positiontip
+
+</script>
+<table width="100%" border="0" cellspacing="0" cellpadding="0" height="100%">
+  <tr> 
+    <td class=maincolour height="70" valign="top"> 
+      <table width="100%" border="0" cellspacing="0" cellpadding="0" height="70">
+        <tr> 
+          <td  height="70" width=200 valign="middle" align="left">
+            <img src="../../../../../../images/ccs_logo.png"  height="70">
+          </td>
+          <td valign="top" width=512 align="left" class="maincolour">
+            <br><br><span class="style1"><div align="left"><span class="style3">Computer &#9670; Conservation &#9670; Society</span></span>
+          </td>
+          <td valign="top">
+            <table width="100%" border="0" cellspacing="0" cellpadding="15">
+              <tr> 
+                <td valign="top" align=right  class=menutext> 
+                  <script language=JavaScript>
+			        <!--
+			           d = new Date();
+			           document.write(format_time(d));
+			        // -->
+		         </script>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+  <tr> 
+    <td height="98" valign="top"> 
+      <table width="100%" border="0" cellspacing="0" cellpadding="0" height="98">
+        <tr> 
+          <td valign="top" width="82%" class=maincolour> 
+            <table width="100%" border="0" cellspacing="0" cellpadding="0" height="98">
+              <tr> 
+                <td height="73" valign="top" class=secondarycolour><img src="../../../../../../images/spacer.gif" width="1" height="73"></td>
+              </tr>
+              <tr> 
+                <td height="25"  class=menutext nowrap width="100%">
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  <a href="../../../../../software-index.htm" class=menutext>Home</a>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  <a href="../../../../../dosboxnotes.htm" class=menutext>Running DOS-based emulators</a>
+                </td>
+              </tr>
+            </table>
+          </td>
+          <td valign="top" align=right height=98 width="340" class=secondarycolour><img name="graphic1" src="../../../../../../images/bp-logo2.jpg" width="340" height="98" border="0"></td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+  <tr> 
+    <td valign="top"> 
+      <table width="100%" border="0" cellspacing="0" cellpadding="0" height="100%">
+        <tr>
+          <td valign="top" width=156 class=maincolour> 
+            <table width=156 border="0" cellspacing="0" cellpadding="0" height="100%">
+              <tr> 
+                <td width=156 class=maincolour height="140" valign="top">
+                 <script type="text/javascript" language="JavaScript">printImage();</script>
+                </td>
+              </tr>
+              <tr> 
+                <td valign="top" class=maincolour> 
+                  <table width="100%" border="0" cellspacing="0" cellpadding="3" height="100">
+                    <tr><td width=10 align=right><img src="../../../../../../images/square.gif" width=9 height=9></td><td class=menutext><a href="../../../../../ssem/base.htm" class="menutext">Manchester Baby (SSEM)</a></td></tr>
+                    <tr><td width=10 align=right><img src="../../../../../../images/square.gif" width=9 height=9></td><td class=menutext><a href="../../../../../edsac/base.htm" class="menutext">Cambridge EDSAC</a></td></tr>
+                    <tr><td width=10 align=right><img src="../../../../../../images/square.gif" width=9 height=9></td><td class=menutext><a href="../../../../../sirius/base.htm" class="menutext">Ferranti Sirius</a></td></tr>
+                    <tr><td width=10 align=right><img src="../../../../../../images/square.gif" width=9 height=9></td><td class=menutext><a href="../../../../../pegasus/base.htm" class="menutext">Ferranti Pegasus</a></td></tr>
+                    <tr><td width=10 align=right><img src="../../../../../../images/square.gif" width=9 height=9></td><td class=menutext><a href="../../../../../zebra/base.htm" class="menutext">Stantec Zebra</a></td></tr>
+                    <tr><td width=10 align=right><img src="../../../../../../images/square.gif" width=9 height=9></td><td class=menutext><a href="../../../../../ict1900/base.htm" class="menutext">ICT/ICL 1900</a></td></tr>
+                    <tr><td width=10 align=right><img src="../../../../../../images/square.gif" width=9 height=9></td><td class=menutext><a href="../../../../../elliott903/base.htm" class="menutext">Elliott 903</a></td></tr>
+                    <tr><td width=10 align=right><img src="../../../../../../images/square.gif" width=9 height=9></td><td class=menutext><a href="../../../../../atlas/base.htm" class="menutext">Ferranti Atlas 1</a></td></tr>
+                    <tr><td width=10 align=right><img src="../../../../../../images/square.gif" width=9 height=9></td><td class=menutext><a href="../../../../../mu5/base.htm" class="menutext">MU5</a></td></tr>
+                    <tr><td width=10 align=right><img src="../../../../../../images/square.gif" width=9 height=9></td><td class=menutext><a href="../../../../../kdf9/base.htm" class="menutext">KDF9</a></td></tr>
+                    <tr><td width=10 align=right><img src="../../../../../../images/square.gif" width=9 height=9></td><td class=menutext><a href="../../../../../leo3/base.htm" class="menutext">LEO III</a></td></tr>
+                    <tr><td width=10 align=right><img src="../../../../../../images/square.gif" width=9 height=9></td><td class=menutext><a href="../../../index.htm" class="menutext">Elliott Archive Home</a></td></tr>
+                    <tr><td width=10 align=right><img src="../../../../../../images/square.gif" width=9 height=9></td><td class=menutext><a href="../../../../../../index.htm" class="menutext">CCS Home</a></td></tr>
+			      </table>
+                </td>
+              </tr>
+            </table>
+          </td>
+          <td valign="top" width="1184"> 
+            <table width="100%" border="0" cellspacing="0" cellpadding="20" height="100%">
+              <tr> 
+                <td valign="top" height="420" class="text"> <!-- #BeginEditable "content" -->
+                  <H1 align=center>Elliott 900 Series Computers</H1>
+                  <H2 align=center>Software and Documentation Archive</H2>
+                  <H2 align=center>Andrew Herbert</H2>
+                  
+                  <P align=center>The content of the "<font color=blue>Volume 4E Engineering Maintenance - Peripheral Equipment</font>" folder is :</P>
+                  <table cellpadding=10>
+  <tr>
+    <th colspan=5>
+      <h2><font size=5>Files  </font></h2>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <a href="01 Contents List.pdf">01 Contents List.pdf</a>
+    </td>
+    <td>
+      <a href="02 Volume 4 Part 4 Section  - Magnetic Tape1.pdf">02 Volume 4 Part 4 Section  - Magnetic Tape1.pdf</a>
+    </td>
+    <td>
+      <a href="03 Volume 4 Section 4 Section 1 Appendices.pdf">03 Volume 4 Section 4 Section 1 Appendices.pdf</a>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <a href="04 Volume 4 Part 4 Section 1 Figures.pdf">04 Volume 4 Part 4 Section 1 Figures.pdf</a>
+    </td>
+    <td>
+      <a href="05 Volume 4 Part 3 Section 3 - Graph Plotter.pdf">05 Volume 4 Part 3 Section 3 - Graph Plotter.pdf</a>
+    </td>
+  </tr>
+</table>
+
+                  <ADDRESS><SPAN style="mso-fareast-font-family: 'Times New Roman'">
+                    Contact : <a href="mailto:andrew@herbertfamily.org.uk">Andrew Herbert</a>
+				  </SPAN></ADDRESS>
+					<!-- #EndEditable --></td>
+             </tr>
+           </table>
+         </td>
+        </tr>
+        <tr>
+          <td class=maincolour></td>
+          <td height="23" class=secondarycolour  class="text" align="center" valign="middle" nowrap>&nbsp;</td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+  <tr> 
+    <td height="43" valign="top" class=maincolour> 
+      <table width="100%" border="0" cellspacing="0" cellpadding="0" height="43">
+        <tr> 
+          <td width="152" height="23" ><img src="../../../../../../images/spacer.gif" width="152" height="8"></td>
+        </tr>
+        <tr> 
+          <td height="8">&nbsp;</td>
+          <td valign="middle" align="center" class="footer"><script src="../../../../../../copyright.js"></script>
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+</body>
+<!-- #EndTemplate --></html>
+
