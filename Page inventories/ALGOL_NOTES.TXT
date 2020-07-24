@@ -1,0 +1,69 @@
+
+        Elliott Algol Manuals.
+
+        ======================
+
+
+
+
+Elliott 903 Algol Object Code Manual June 1966, 41 pages.
+   
+Contents page.
+   
+Pages numbered -1- to -14-.
+   
+Additional page.
+   
+Pages numbered -15- to -39-.
+
+
+
+
+Elliott 903 Algol Translator description, Dec 1966, 91 pages.
+   
+Translator store map page.
+   
+Adding names to namelist, 3 pages.
+
+
+
+
+Elliott 903 Algol Translator flow charts, Dec 1966, 125 pages.
+   
+Index, 2 pages.
+   
+Flowcharts numbered (1) to (123),
+
+         in Don Hunter's handwriting.
+
+
+
+
+Elliott 903 Algol Interpreter description & flow charts, 95 pages.
+   
+Pages numbered -1- to -30-.
+   
+Flowcharts numbered Sheet 1 to Sheet 65,
+
+         not in Don Hunter's handwriting, possibly Norman Spink's.
+
+
+
+
+903 Algol Maintenance from Jan 1967 to June 1968, 38 pages.
+   
+Title page.
+   
+Summary, 3 pages.
+   
+Changes numbered change 30 to change 45.
+   
+No page for change 46, but it is in summary.
+   
+Changes numbered change 47 to change 57,
+         
+change 48 has a second page.
+   
+Letter from Don Hunter to Norman Spink.
+
+   Handwritten 5 pages.

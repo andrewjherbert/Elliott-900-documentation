@@ -1,0 +1,129 @@
+Blue Ring Binder
+
+
+Cover: MCS 920B Technical Manual
+
+Spine: 
+	VOL. 4: TECHNICAL MANUAL
+     PT 2: ADDITIONAL STORES
+	PT 3: PAPER TAPE SSYTEM
+	PT 4: POWER SUPPLIES
+	PT 5: OPERATIONAL/TEST EQ
+	MCB 143 COPY NO. A. 139
+
+Front matter: 
+
+Pencil note: C/D-007-040
+
+PART 2 THE ADDITIONAL STORE
+
+CHAPTER 1: INTRODUCTION
+		Front matter: i-v issue 1
+			Figure a
+		1-6, issue 1
+
+CHAPTER 2: POWER SUPPLIES AND INTERCONNECTIONS
+		Front matter: i,(ii),iii,iv Figure b, issue 1
+			v,(vi), issue 2
+		1-2, issue 1,3, issue 2, 4-8, issue 1
+
+CHAPTER 3: THE ADDITIONAL STORE WITH ACCESS CONTROL
+		Front matter: i, (ii), iii, (iv), v, (vi), vii,
+			(ix), issue 1
+		1-4,5 Figure f,6-7,8 Figure g,9,10 Figure h,
+		11,12 Figure i,13-15,16 Figure j,17-26, issue 1
+
+
+PART 3: PAPER TAPE EQUIPMENT
+
+CHAPTER 1: INTRODUCTION
+		Front matter: i,(ii),iii,(iv),v,(vi),
+			v Figure a,(vi), issue 1
+		1-2, issue 1
+
+CHAPTER 2: PAPER TAPE CONTROLLER MCB 60
+		Front matter: i,(ii),iii,(iv),v,(vi), issue 1
+		1-4, issue 1
+
+CHAPTER 3: CIRCUITS
+		Front matter: i,(ii),iii,(iv), issue 1
+		1,2, issue 2, 3-5, issue 1, 6, issue 2, 
+		7, issue 1, 8-10, issue 2, 11, issue 1,
+		12-13,(14), issue 2
+
+CHAPTER 4: PAPER TAPE READER MCB 70
+		Front matter: i,(ii),iii,(iv), issue 1
+		1-4, issue 1
+
+CHAPTER 5: PAPER TAPE PUNCH
+		Front matter: i,(ii),iii,(iv), issue 1
+		1,(2), issue 1
+
+
+CHAPTER 6: PROGRAM LOADING UNIT
+		Front matter: i,(ii),iii,iv,v,(vi), issue 1
+		1,2 Figure b,3,4 Figure c,5-8,9 Figure d,
+		10-14,15 Figure e,16,17 Figure f,18, issue 1
+
+CHAPTER 7: PAPER TAPE STATION MCB 66
+		Front matter: i,(ii),iii-vii,(viii),
+			ix,(x) issue 1
+		1,2 Figure g,3-12,13 Figure h,14-56, issue 1
+
+PART 4: POWER SUPPLIES
+
+CHAPTER 1: INTRODUCTION
+		Front matter: i,(ii),iii,(iv), issue 1
+		1-2, issue 1
+
+CHAPTER 2: 24V POWER SUPPLY MCB 21
+		Front matter: i,(ii),iii,(iv),v,(vi), issue 1
+		1,(2),3-11,(12), issue 1
+
+CHAPTER 3: COMPUTER POWER SUPPLY MCB 24
+		Front matter: i,(ii),iii,(iv),v,(vi), issue 1
+		1-6, issue 1
+
+CHAPTER 4: SINGLE PHASE PRIMARY POWER SUPPLY MCB 23
+		Front matter: i,(ii),iii,(iv), issue 1
+		1,2 Figure a,3-9,(10, issue 1
+
+CHAPTER 5: THREE PHASE PRIMARY POWER SUPPLY MCB 29
+		Front matter: i,(ii),iii,(iv),v,(vi), issue 1
+		1,2 Figure b,3 Figure c,4-6, issue 1, 7, issue 2,
+		8-10, issue 1
+
+CHAPTER 6: PAPER TAPE POWER SUPPLY MCB 30
+		Front matter: i,9ii),iii,(iv),v,(vi), issue 1
+		1,2 Figure d,3 Figure e,4 Figure f,5-9,(10), 
+		issue 1
+
+CHAPTER 7: PAPER TAPE POWER SUPPLY FREQUENCY INSENSITIVE MCB 32
+		Front matter: i,(ii),iii,(iv),v,(vi), issue 1
+		1-6, issue 1
+
+PART 5: OPERATIONAL/TEST EQUIPMENT
+
+CHAPTER 1: INTRODUCTION
+		Front matter: i,(ii),iii,(iv), issue 1
+		1, issue 1, 2, issue 2, 3,4, issue 1
+
+CHAPTER 2: CONTROL UNIT MCB 40, 41
+		Front matter: i,9ii),iii,iv,v,(vi), issue 1
+		1,2, issue 1, 3, issue 2, 4-6, issue 1, 7,
+		issue 2, 8-10, issue 1
+
+CHAPTER 3: DISPLAY UNIT (MCB 43, 44)
+		Front matter: i,(ii),iii,(iv),v,(vi), issue 1
+		Figure c
+		1, issue 2, 2-4, issue 1
+
+CHAPTER 4: THE MARGINAL TST UNIT MCB 52
+		Front matter: i,(ii),iii,(iv),v,(vi), issue 1
+		1 Figure d,(2),3,4,5 Figure e,6 Figure f,
+		7-9,10 Figure g,11 Figure h,12 Figure i, 13,
+		14 Figure j,15,16 figure k, issue 1
+
+CHAPTER 5; START ADDRESS PLUG, MCB 22
+		Front matter: i,9ii),iii,(iv),v,(vi), issue 1
+		1-2, issue 1

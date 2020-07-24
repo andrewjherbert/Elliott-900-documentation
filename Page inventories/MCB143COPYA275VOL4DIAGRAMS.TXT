@@ -1,0 +1,244 @@
+Blue Ring Binder
+
+
+Cover: MCS 920B Technical Manual
+
+Spine: 
+	Vol. 4 Technical Manual 
+	Logic & Circuit 
+	Diagrams
+
+	MCB 143 Copy No. A/275
+
+920B COMPUTER
+
+Contents list
+	1-4 Issue 1, 5-6 Issue 2, 7 Issue 1
+
+PART 1: CENTRAL PROCESSOR
+
+322D8025  A1	Interconnection Diagram for MCS 920B System
+322B7007  A2    Typical Board layout 920B Computer A-FA
+322C7432  A3	MCS 920B Computer Connector and Unit Layout
+322C3986  A4	920B Register Structure Block Diagram
+322C3986  A5	MCS 920B Computer Block Diagram
+322A7191  A6	920B L.S.A. Element Logic Symbols and Circuit 
+	       	Diagrams Issue 6
+	     	Sht  1 LSA 01 2 Input NAND Gate 
+			Issue 4
+		Sht  2 LSA 02 3-Input NAND Gate 
+			Issue 2
+		Sht  3 LSA 03 4-Input NAND gate + 2 Inverters 
+			Issue 2
+		Sht  4 LSA 04 Control Matrix Waveform Amplifiers 
+			Issue 2
+		Sht  5 LSA 05 Issue 2
+		Sht  6 LSA 06 Issue 4
+		Sht  7 LSA 07, 13, 34 Pulse Generator 
+			Issue 3
+		Sht  8 LSA 08 Voltage Reference Issue 3
+		Sht  9 LSA 09, 14 Pulse Generator Issue 3
+		Sht 10 LSA 11 Cable Transmitters Issue 2
+		Sht 11 LSA 12 Cable Receivers Issue 2
+		Sht 12 LSA 15 2-input NAND Gate + 2 Inverting 
+			Drivers Issue 2
+		Sht 13 LSA 16 F-Minilog Drivers Issue 3
+		Sht 14 LSA 17 paper Tape Receiver Issue 3
+		Sht 15 LSA 18 Single I/P Noise Rejection Inverter 
+			Issue 3
+		Sht 16 LSA 19 Delay Issue 3
+		Sht 17 LSA 20, 24, 25 Delay Issue 3
+		Sht 18 LSA 21 Delay Issue 3
+		Sht 19 LSA 22 Two Input Transmitters Issue 2
+		Sht 20 LSA 23 Gated Receivers Issue 3
+		Sht 21 LSA 26 2-Input NAND Gate and Single Lamp 
+			Driver Issue 3
+		Sht 22 LSA 27 Regenerable Monostable Issue 3
+		Sht 23 LSA 28 2-Input NAND Gates Issue 3
+		Sht 24 LSA 29 Teleprinter Receiver Issue 3
+		Sht 25 LSA 30 Teleprinter Line Driver + AND - 
+			OR Gate Issue 2
+		Sht 26 LSA 30 Issue 3
+		Sht 27 LSA 33 Level Shifter Issue 2
+		Sht 28 LSA 43 Voltage Rail Sensing Issue 2
+		Sht 29 LSA 44 2-Input NAND Gate Issue 2
+		Sht 30 LSA 129 Single Pulse Generator Issue 2
+322D8267  A7 	920B Register Bits 1-18
+322C8607  A8	920B Computer Overflow Logic
+322D8268  A9 	Logic of Registers Adding and Overflow Units
+322D7973 A10	920B Multiply/Divide Shift and Overflow Logic 
+			3 sheets
+322D7880 A11	920B Control Sequence Functions 0-9 2 sheets
+322D7881 A12	920B Control Sequence Functions 10-15 2 sheets
+322D7952 A13	920B Input/Output Overall Logic 2 sheets
+322D7972 A14	920B Computer Store Logic and General Flow 
+			Diagram 2 sheets
+322D8069 A15	920B Computer Manual Controls and Store 
+			Heater Logic 
+322D7907 A16	920B Computer Matrix Address Function 
+			Decode and Conditionals 
+322D7948 A17	920B Computer Initial Instructions
+322D8070 A18	920B Computer Control and Interrupt Overall 
+			Logic 2 sheets
+322D7959 A19	920B Computer Register Module and Control 
+			Waveforms 2 sheets
+322D7953 A20	920B Computer Matrices for Functions 0, 1, 2, 
+			3, 4, 5, 6, 7, 8, 9, 10 And 11 4 Sheets
+322D8606 A21	Main Timing Loop
+322D4941 A22	920B Computer Control Unit Circuit Diagram
+322D4197 A23	920B Store Control Chain (A-EB3 Unit)
+322C4195 A24	920B Computer A-EA3 Unit
+MSB 2038 A25	Sequence of Accumulator and G-Register when Reading 
+			in Tape Function 15
+322D7936 A26	Y Selection System for 920B Stores
+322D7934 A27	X1-64 Selection System for 920B Stores
+322D7930 A28	X65-128 Selection System for 920B Stores
+322C4201 A29	920B Store Circuit Diagram A-ED3
+322D8266 A30	Basic Circuit of Matrix Drive System
+322D7931 A31	920B Process Counter
+322C2781 A32	Circuit Diagram for Selection Diodes 920 A-AE Unit
+322D4199 A33	Circuit Diagram A-EC3 Unit (920B Master Drivers) 
+			Issue 4
+MSB 2023 A34	Block Diagram 920B Computer A-GZ Unit Temperature Sensing 
+			and Control
+322C4885 A35	Circuit Diagram A-GZ Unit Temp Sensing & Control) 
+			Issue 6
+
+PART 2: THE ADDITIONAL STORE
+
+322B7452  B1	Sht 1 Extra Store 8192 Word 18 bit without SAC Connector 
+			and Unit Layout
+322B8231  B1 	Sht 2 920B Computer Additional Store 16,384 Word Connector 
+			and Unit Layout
+322C7393  B2	Sht 1 920B Additional Store (without Access Control) 
+			Block Diagram
+MSD 2310  B2	Sht 2 920B 16384 Words Additional Store System 
+			Block Diagram
+332A5997  B3	Circuit Diagram for B-S1 Unit
+322B8087  B4	920B Computer Interconnection Diagram for Additional 
+			8192 Words Store
+322D5416  B5	920B Additional Store (without Access Control) 
+			System Logic
+322D5483  B6	Board A-JC Diplexing and Inverting 920B Additional 
+			Store
+322C5740  B7 	Board A-JJ Link Board Position 50
+322C5469  B8	Board A-HX Link Board Position 51
+322D5471  B9	Board A-HT Diplexing and Inverting 920B Additional 
+				Store
+322D5468 B10	Board A-HY Receivers, Transmitters and Inverters 
+				920B additional Store
+322D5467 B11	Board A-HS Output Data Transmitter 920B Additional 
+				Store
+322D5466 B12	Board A-HR Input Receiver ([NOT] FATA) 920B 
+				Additional Store
+322D5472 B13	Board A-HK Store Select logic 920B Additional Store
+322C5731 B14	Board A-FU Extra Store Transmitters Board 
+				Position 27
+322C5732 B15	Board A-FV Extra Store Receivers Board Position 26
+322B7433 B16	Extra Store 8192 Word 18 bit with SAC Connector and 
+			Unit Layout
+322D7394 B17	920B Additional Store (with Access Control) Block 
+			Diagram
+322D5417 B18	920B Additional Store (with Access Control) System 
+			Logic
+322C5489 B19	Board A-HO Priority Select Logic Board Position 40
+322C5488 B20	Board A-HN Channel Select Logic Board Position 41
+322C5487 B21	Board A-HQ Select Channel Drivers Board Function [
+			Position?] 42
+322C5486 B22	Board A-HP TR Regenerator Board Position 43
+322C5481 B23	Board A-JF Position 45 Output Transmitters 
+			Further Store
+322C4580 B24	Board A-JD Output Data Transmitters to peripheral 
+			Position 46
+322C5473 B25	Board A-HU Input Receivers Board Position 56
+322C5485 B26	Board A-JH SSI Inputs and J14-16 Inverters 
+			Position 50
+322C5484 B27	Board A-JG Position 53 Diplexing, Inverters 
+			and Transmitters
+322C5482 B28	Board A-JB Position 54 Output Data Diplexing 
+			Computer Transmitter
+322C5490 B29	Board A-JK Store Select Logic Board Position 57
+
+Blue Ring Binder
+
+
+Cover: MCS 920B Technical Manual
+
+Spine: 
+	Vol. 4 Technical Manual 
+	Logic & Circuit 
+	Diagrams
+
+	MCB 143 Copy No. A/219
+
+
+PART 3: PAPER TAPE SYSTEM
+
+MSB 2044  C1	920B Computer paper Tape Controller Connector 
+			and Unit layout
+322D4917  C2	Logic Diagram paper Tape Control Mk 1
+322C3549  C3	Logic Diagram (A-AR3) Reader Control 2
+322C5121  C4	Logic Diagram A-AQ3 Unit
+322C2481  C5	Logic Diagram A-AP3 Unit Reader Register
+322C4611  C6	Paper Tape Controller Board AFX Position 5
+322C2482  C7	Logic Diagram A-AO3 Punch Control 2
+322C2650  C8	Logic Diagram A-AN3 Punch Control 1
+322C2611  C9	Circuit - Logic Diagram A-AM3 Unit Punch Register
+322C2805 C10	920B Computer Logic Diagram A-AM3 Punch Drivers
+322D8067 C11	920B Computer Logic Diagram Program Loading Unit
+322D5942 C12	Program Loading Unit Chassis and panel Assembly
+MSC 2269 C13	Automode Connections with Program Loading 
+			Unit Fitted
+MSB 2263 C14	Automode Connections at Computer SKT11 when Start 
+			Address Plug or Program Loading Unit 
+			is connected
+	 C15	Paper tape Station MCB 66 Typical Paper Tape 
+			Station layout (Rack)
+322TD004 C16 	Paper tape Station MCB 66 Interconnections (Rack)
+322TD005 C17	Paper Tape Station MCB 66 A.C. Distribution
+322TD006 C18	Paper Tape Station MCB 66 D.C. Distribution
+322C7968 C19	Paper Tape Station MCB 66 Teleprinter 
+			and Paper Tape Control Unit   (missing)
+322TD007 C20	Paper Tape Station MCB 66 Selection and Timing
+322TD008 C21	Paper Tape Station MCB 66 Reader Control Logic
+322TD009 C22	Paper tape Station MCB 66 Data Output Transfer
+322TD010 C23	Paper Tape Station MCB 66 Punch Control Logic
+322TD011 C24	Paper Tape Station MCB 66 Logic Board Components
+322TD012 C25	paper Tape Station MCB 66 Reader/Punch Driver
+322TD013 C26 	Paper Tape Station MCB 66 Teleprinter A.C. 
+			Distribution
+322TD014 C27	Paper Tape Station MCB 66 Teleprinter D.C. 
+			Distribution
+322TD015 C28	Paper Tape Station MCB 66 Teleprinter Selection 
+			and Timing
+322TD016 C29	Paper Tape Station MCB 66 Teleprinter Control Logic
+322TD017 C30	Paper Tape Station MCB 66 Teleprinter Clock Logic
+322TD018 C31	Paper Tape Station MCB 66 Teleprinter Logic
+			Board Components (missing)
+322TD019 C32	Paper Tape Station MCB 66 Teleprinter Clock DPS 14
+322TD020 C33	Paper Tape Station MCB 66 On Line Adaptor DP4
+
+PART 4: POWER SUPPLIES
+
+322D5400  D1	920B General Schematic 24V Power Supplies
+322D4954  D2	920B Computer Power Supply (Military Pack) 
+			CCT Diagram C-H Board
+322D4983  D3	920B Computer Power Supply (Military pack) 
+			CCT Diagram A-HG Board
+322D4953  D4	Logic Diagram A-HHI Unit
+322D4972  D5	920B Computer Power Supply (Military Pack) 
+			CCT Diagram A-HJ Board
+322D7819  D6	920B Computer Power Supply mains Input MCB 24
+322D8083  D7	920B Computer Power Supply MCB 23
+322D8064  D8	920B Computer Power Supply MCB 29
+322D8038  D9	920B Computer P.T. Station Power Unit MCB 30
+322D7738 D10	Paper Tape Power Supply MCB 32
+
+PART 5: OPERATIONAL/TEST EQUIPMENT
+
+322D4973  E1	Circuit Diagram Display Unit
+322C4903  E2	Circuit Diagram Margin Test Unit
+MSB 2264  E3	Start Address Plug Connections
+
+
+

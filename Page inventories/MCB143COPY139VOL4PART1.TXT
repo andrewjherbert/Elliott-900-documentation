@@ -1,0 +1,60 @@
+Blue Ring Binder
+
+
+Cover: MCS 920B Technical Manual
+
+Spine: 
+	VOL. 4: TECHNICAL MANUAL
+      	PT 1: CENTRAL PROCESSOR
+	MCB 143 COPY NO. A. 139
+
+Front matter: 	(i), (ii),iii,(iv),v,(vi),vii,(vii), issue 1,
+		ix, x, issue 3 amendment 2, 
+		xi, (xii),xiii,(xiv),xv,(xvi), issue 1
+
+Pencil note: C/D-007-039
+
+CHAPTER 1: INTRODUCTION TO MCS 920B SYSTEM
+		1-26, issue 1
+	APPENDIX 1 920 Telecode
+		App. 1-1 - 1-6, issue 1
+	APPENDIX 2 903 TELECODE
+		App 2-1 - 2-6, issue 1
+	APPENDIX 3 920 Series Instruction Code Summary
+		App 3-1 - (3-8), issue 1
+	APPENDIX 4
+		App 4-1 - 4-2, issue 1
+
+CHAPTER 2: LOGIC ELEMENTS	
+		Front matter: i,(ii),iii,iv,v,(vi), issue 1
+		1-16, issue 1
+		Figures a,b,c,d, issue 1
+
+CHAPTER 3: THE REGISTER SYSTEM
+		Front matter  i,(ii),iii,iv,v,,(vi), issue 1
+		1-13, issue 1, 14-19,(20), issue 2
+
+CHAPTER 4: THE CONTROL SYSTEM
+		Front matter: i,(ii),iii,iv,v,vi, issue 1
+			     vii,(viii), issue 2
+		1-80, issue 1
+		figures f,g,h, issue 1
+		81-90, issue 1
+		figures i,j,k,l, issue 1
+		91-92, issue 1
+		figure m, issue 1
+		93,(94) issue 1
+
+CHAPTER 5: THE STORE
+		Front matter: i,(ii),iii,iv,v,(vi),vii,(viii), issue 1
+		1-28, issue 1
+		figures n,o,p,q,r,s,t
+
+CHAPTER 6: INTERFACE
+		Front matter: i,(ii),iii,(iv),v,(vi), issue 1
+		figures u,v,w,x, issue 1
+		5-11, issue 1
+		figure z, issue 1
+		13-57, issue 1
+
+

@@ -1,0 +1,116 @@
+Large blue (A3) folder of drawings.
+
+
+Cover: MCS 920B COMPUTER DIAGRAM
+
+Contents list
+
+920B COMPUTER
+Logic and Circuit Diagrams of MCB's on Machine No. 62
+
+Data Processing Division
+
+MCB1 - Central processor
+
+D.D.D. No 22 PL 322A8048
+
+Contents List, typed with red ink corrections 3pp single sided
+
+Drawings marked * have red ink annotations.
+
+All drawings marked in red "Latest MI Incorporated M.I. 2998.
+
+322A7191 Sht  1	920B L.S.A Element. Logic SYmbols & Circuit Diagrams
+		Issue 4 - Index sheet for LSA diagrams showing issue
+		history for each LSA
+	 Sht  2	L.S.A. Design Notes Issue 1
+	 Sht  3	L.S.A. Design Notes Issue 1
+	 Sht  4	L.S.A. Design Notes Issue 1
+	 Sht  5 L.S.A. Design Notes Issue 1
+	 Sht  6	L.S.A. Design Notes Issue 3
+	 Sht  7 LSA 01 2-input NAND Gate Issue 1
+	 Sht  8	LSA 02 3-input NAND Gate Issue 1
+	 Sht  9 LSA 03 4-input NAND Gate + 2 Inverters Issue 1
+	 Sht 10 LSA 04 Control matrix Waveform Amplifiers Issue 1
+	 Sht 11 LSA 05 Issue 1
+	 Sht 12 LSA 06 Issue 1
+	 Sht 13 LSA 07, 13, 34 Pulse Generators Issue 2
+	 Sht 14 LSA 08 Voltage Reference Issue 2
+	 Sht 15 LSA 09, 14 Pulse Generator Issue 2
+	 Sht 16 LSA 11 Cable transmitters Issue 1
+	 Sht 17 LSA 12 Cable Receivers Issue 1
+	 Sht 18 LSA 15 2-input NAND Gate + 2 Inverting Drivers Issue 1
+	 Sht 19	LSA 16 F-Minilog Drivers Issue 1
+	 Sht 20 LSA 17 Paper Tape Receiver Issue 2
+	 Sht 21 LSA 18 Single I/P Noise Rejection Inverter Issue 2
+	 Sht 22 LSA 19 Delay Issue 2
+	 Sht 23 LSA 20, 24, 25 Delay Issue 2
+	 Sht 24 LSA 21 Delay Issue 2
+	 Sht 25 LSA 22 Two Input Transmitters Issue 1
+	 Sht 26 LSA 23 Gated Receivers Issue 2
+	 Sht 27 LSA 28 2-Input NAND Gates Issue 1
+	 SHt 28 LSA 43 Voltage Rail Sensing Issue 1
+	 Sht 29 LSA 44 2-Input NAND GAte Issue 1
+322C7432  A3	MSC 920B Computer Connector and Unit Layout issue 3
+322D8267  A7	920B Register Bits 1-18 Issue 1
+322D5228   7	A-FA Board Pos 37 to 45 & 48 to 56 Registers (Bit 1-18) Issue 5, 
+	       4 sheets *
+322D5225   8	A-FB Board Pos 8, 9, 34 Initial Instructions Waveform Amplifiers Issue 2
+322D5195   9	Board A-FC Pos 4 Timing Issue 4
+322D7973 A10	920B Multiply/Divide Shift and Overflow Logic Issue 1, 3 sheets
+322D5194  10	A-FD Board Pos 3 Program Interrupt Issue 5
+322D7880 A11	920B Control Sequence Functions 0-9 Issue 2, 2 sheets
+322C5213  11	Board A-FE Pos 22 Test Process Counter Zero Issue 4
+322D7881 A12	920B Control Sequence Functions 10-15, Issue 2, 2 sheets
+322C5212  12	Board A-FF Pos 21 Control Matrix Address Logic Issue 3
+322D7952 A13	920B Input/Output Overall Logic Issue 1, 2 sheets
+322C5211  13 	Board A-FG Pos 20 Control Matrix Address Drivers ISsue 1
+322D7972 A14	920B Computer Store Logic and General Flow Diagram Issue 1, 2 sheets
+322D5189  15	Board A-FH Pos 7 Control Matrix Conditionals A, B, C Issue 3
+322D8069 A15	920B Computer Manual Controls and Store Heater Logic Issue 1
+322D5197  15	A-FI Board Pos 6 Control/Function Drive; Matrix Cond D, E Issue 3
+322D7907 A16	920B Computer Matrix Address Function Decode and Conditionals Issue 1 *
+322C5238  16	Board A-FJ Pos 47 Waveform Drivers 1 Issue 2
+322D7948 A17	920B Computer Initial Instructions Issue 1 *
+322D5237  17	Board A-FK Pos 46 Waveform Drivers 2 Issue 5
+322D8070 A18	920B Computer Control and Interrupt Overall Logic Issue 1, 2 sheets
+322D5193  18	Board A-FL Pos 2 Manual Control Logic  Issue 3
+322D7959 A19	920B Computer Register Module and Control Waveforms Issue 1, 2 sheets
+322D5248  19	A-FM Board Pos 57 Store Control & Overflow Logic Issue 5
+322D5222  20	A-FN Board Pos 31 & 32 Cable Transmitter 1 Issue 1
+322C5219  21	Board A-FO Cable Receivers 1 Issue 2
+322D4941 A22	920B Computer Control Unit Circuit Diagram Issue 7
+322D5214  22 	A-FP Board Pos 23, 24 & 25 Process Counter Issue 1
+322D4197 A23	920B Store Control Chain (A-EB3 Unit) Issue 3
+322D5221  23	Board A-FQ Pos 30 Input-Output Control Issue 4 *
+322C4195 A24	920B Computer A-EA3 Unit Issue 3
+322D5196  24	A-FR Board Pos 5 Timing Waveform Drivers Issue 4
+322C5220  25	A-FS Board Pos 29 Cable Receivers 2 Issue 1
+322D7936 A26	Y Selection System for 920B Stores Issue 1
+322C5192  26	A-FT Board Pos 1 Control Logic Key Input Issue 4
+322D7934 A27	X1-64 Selection System for 920B Stores Issue 1
+322C5210  27	Board A-GA Pos 19 Control matrix (Control Chain) Issue 3
+322D7930 A28	X65-128 Selection System for 920B Stores Issue 1 *
+322C5209  28 	Board A-GB Pos 18 Control Matrix Functions 0,1, 2, 3 & 4 Issue 2
+322C4201 A29	920B Store Circuit Diagram A-ED3 Issue 4
+322C5208  29	Board A-GC Pos 17 Control Matrix Functions 2, 10, 11 Issue 2
+322C5207  30	Board A-GD Pos 16 Control Matrix Functions 5, 6 & 9 Issue 1
+322D7931 A31	920B Process Counter Issue 1
+322C5206  31	Board A-GE Pos 15 Control Matrix Functions 7, 8 Issue 2
+322C2781 A32	Circuit Diagram for Selection Diodes 920 A-AE Unit Issue 3
+322C5205  32	Board A-GF Pos 14 Control Matrix Funtion (sic) 12 Issue 1
+322D4199 A33	Circuit Diagram A-EC3 Unit (920B Master Drivers) issue 4
+322C5024  33	Board A-GG Pos 13 Control Matrix Function 13 Issue 1
+322C5203  34	Board A-GH Pos 12 Control matrix Function 14 Issue 1
+322C4885 A35	Circuit Diagram A-GZ Unit Temp Sensing & Control) Issue 6
+322C5202  35	Board A-GI Pos 11 Control Matrix Function 14A Issue 3
+322C5201  36	Board A-GJ Pos 10 Control Matrix Function 15 Issue 2
+322C5227  37	Board A-GK Pos 36 Initial Instructions 1 Issue 3
+322C5226  38	Board A-GL Pos 35 Initial Instructions 2 Issue 1
+322D7819  39	920B Computer Power Supply Mains Input MCB24 Issue 1
+
+
+
+
+
+

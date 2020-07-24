@@ -1,0 +1,103 @@
+
+      900 Manual in Grey Ringbinder
+      =============================
+      Volume 2 : Programming Information
+      Copy No. <blank>
+
+Binder 2A
+
+This Volume Copy No. 100 card
+Catalogue of central software for 903/920B/920C/920M machines, issue B, sheet 1-5
+Specification sheet no 1558 for B.C.R.A, Software (Volume 2), Issue 1
+Specification sheet no 1558 for B.C.R.A, Daily Test Programs (Volume 3), Issue 1
+Technical Manual and Program Updating Service, SDRN/GEN/1 Ser.1, Ser.2
+Preface, SDRN/GEN/2, TM & TS 33, Pref.1
+Contents, SRDN/GEN/2
+Newsletters blue card
+
+Part 1 sec 1 loose     SRDN/MASIR/3, i-iv, 1-5 SRDN/MASIR/3, 6 SRDN/MASIR/1, 7-9 /3, 10-11 /1, 12-13 /3, 14-17 /1, 18, 18a, 18b, 18c /3, 19-24 /5, 25-35 /3 (overwritten numbers, originally 23-33 /3), 36 /2, 37-40 /5, 41-47 /3 (overwritten numbers, originally 39-45), 46 /1, 49-52 /5, 53-55 /3 (overwritten numbers, originally 51-53, then Appendix A, SRDN/SIR/10, i-iv, 1-50, then Appendix B, SRDN/SIR/10, 1, then Appendix C, SRDN/MASIR/3, C1, C2.  Also no yellow 900/903 banner on first page.
+
+Part 1 sec 2 loose   issue 4, i-ii, iii (&iv?) issue 5 (SRDN/ALGOL/13), v ((&vi) issue 4, 1-7 issue 3, 8-9 issue 4, 10 issue 2, 11 issue 3, 12 issue 2, 13 issue 3, 14-15 issue 4, 16-18 issue 2, 19-20 issue 4, 21 issue 3, 22 issue 2, 23-25 issue 4, 26 issue 3, 27-42, 42a, 42b SRDN/ALGOL/12, 43-57 (&58?) issue 4, then Appendix 1, issue 2, 1-3 (&4?), then Appendix 2, issue 4, 1-3 (&4?), then Appendix 3, issue 3, 1-3 (&4?), then Appendix 4, issue 4, 1-3, 4-7 (&8?) SDRN/ALGOL/14, then Appendix 5, SDRN/ALGOL/13, App.5-1 to App.5-6
+
+Part 1 sec 3 loose   issue 3, i-v (&vi?), 1-8, 9-20 issue 2, 21-26 issue 3, 27-32 issue 2, 33-79 (&80?) issue 3
+Part 1 sec 4 loose   issue 2, i-ii, 1-13 (&14?)
+
+Volume 2B
+
+Contents List (Volume 2B)
+
+Part 1 sec 5 loose   SDRN/903/MTFORT/2, i (&ii?), 1-13 (&14?).  Photocopy not original.  No yellow 900/903 banner on first page
+Part 1 sec 6 loose   SRDN/903/FAS/3, i-iv, 1-13 /2, 14-18 /3, 19-24 /2, 25-28 /3, 29-32 /2, 33-34 /3, 35-43 (&44?) /2.  N.B. most /2 pages are photocopies not originals.  No 900/903 yellow banner on first page
+Part 2 sec 1 loose   SRDN/903/QCHECK/3, i (&ii?), 1-8. No yellow 900/903 banner on first page
+Part 2 sec 2 booklet issue 2, i (&ii?), 1-4, back cover
+Part 2 sec 3 loose   issue 2, i (&ii?), 1-10.  Photocopy not original
+Part 2 sec 4 booklet issue 2, i (&ii?), 1-3 (&4?), back cover
+Part 2 sec 5 loose   issue 3, i (&ii?), 1-4
+Part 2 sec 6 loose   issue 3, i (&ii?), 1-4
+Part 2 sec 7 booklet issue 2, i (&ii?), 1-3 (&4?), back cover
+Part 2 sec 8 booklet issue 2, i (&ii?), 1-8, back cover
+Part 2 sec 10 booklet issue 2, i (&ii?), 1-2
+Part 2 sec 11 booklet issue 2, i (&ii?), 1-3 (&4?), back cover
+Part 2 sec 12 booklet issue 2, i (&ii?), 1-3 (&4?), back cover
+Part 2 sec 13 booklet issue 2, i (&ii?), 1-3 (&4?), back cover
+Part 2 sec 14 booklet issue 3, i (&ii?), 1-2 issue 2, 3 (&4?), back cover
+Part 2 sec 15 booklet issue 3, i (&ii?), 1-2 issue 2, 3 (&4?), back cover
+Part 2 sec 16 booklet issue 2, i (&ii?), 1-5 (&6?), back cover
+Part 2 sec 17 booklet issue 3, i (&ii?), 1-4 issue 2
+Part 2 sec 18 booklet issue 2, i (&ii?), 1-3 (&4?), back cover
+
+Volume 2C Copy No. 100
+
+Contents List (Volume 2C) one page + Cont.2 SDRN/GEN/1 with Part 7 contents
+Part 3 sec 1 booklet issue 3, i (&ii?), 1-4
+Part 3 sec 2 booklet issue 3, i-ii, 1-9 (&10)
+Part 3 sec 3 booklet issue 2, i (&ii?), 1-9 (&10?)
+Part 3 sec 4 loose   issue 2, i (&ii?), 1-2
+Part 3 sec 6 booklet issue 2, i (&ii?), 1-4, back cover
+Part 4 sec 1 booklet issue 2, i (&ii?), 1-7 (&8?), back cover
+Part 4 sec 2 booklet issue 2, i-ii, 1-6, inserted 6a, 7-9 (&10?)
+Part 4 sec 3 booklet issue 1, i (&ii?), 1-8
+Part 4 sec 4 booklet issue 1, i (&ii?), 1-7 (&8??)
+Part 5 sec 1 loose   issue 1, i (&ii?), 1-3 (&4?)
+Part 5 sec 2 loose   issue 3, i-ii, 1-12
+Part 5 sec 5 loose   issue 1, i-ii, 1-12
+Part 5 sec 6 loose   issue 1, i-ii, 1-6
+Part 6 sec 1 loose   issue 1, i-iii (&iv?), 1-4 SRDN/PERT/2, 5-6, 7 /2, 8, 9 /2, 11-16, 17 /2, 18, 19 /2, 20, 21 /2, 22-23 (&24?)
+Part 6 sec 2 loose   issue 1, i-ii, 1-12 (perforated for older style binder with 22 rings)
+Part 6 sec 3 loose   issue 2, i-ii, 1-32
+Part 6 sec 4 loose   SRDN/903/SHSRT/2, i-ii, 1-10.  Photocopy not original.  No yellow 900/903 banner.
+Part 7 sec 1 loose   issue 2, i (&ii?), 1-13 (&14?)
+Part 7 sec 2 loose   issue 2, i (&ii?), 1-11 (&12?)
+Part 7 sec 3 loose   issue 2, i (&ii?), 1-7 (&8?)
+Part 7 sec 4 loose   issue 2, i (&ii?), 1-7 (&8?)
+Part 7 sec 5 loose   issue 2, i (&ii?), 1-7 (&8?)
+Part 7 sec 6 loose   issue 2, i (&ii?), 1-3 (&4?)
+Part 7 sec 7 loose   issue 2, i (&ii?), 1-9 (&10?)
+Part 7 sec 8 loose   issue 2, i (&ii?), 1-11 (&12?)
+Part 7 sec 9 loose   issue 2, i-ii, 1-15 (&16?)
+
+Coding Sheets Volume - perforated for older style binder with 22 rings
+Printed label on spine: "Volume 2 PROGRAMMING INFORMATION / (Binder 2) / Copy No. 2B/100".  Last line crossed out and handwritten "CODING SHEETS" added.
+Contents List, issue 7, i-ii (lists entire contents of Volume 2 with interleaved e.g., "Section 10P QLN (B.1) Program Coding Sheets" entries.  Contents list is older than that of 2A/B/C above - e.g., MASIR and ALMAT not mentioned).
+Coding sheets for each part are preceded by a blue "PART" divider, e.g., "PART TWO".
+Each set of coding sheets is preceded by a blue section divider, e.g., "Section 4".
+Part 2 sec 1P loose issue 1, 1-12
+Part 2 sec 2P loose issue 1, 1-2
+Part 2 sec 3P loose issue 1, 1-16
+Part 2 sec 4P loose issue 1, 1-9
+Part 2 sec 5P loose issue 3, 1-9
+Part 2 sec 6P loose issue 3, 1-6
+Part 2 sec 7P loose issue 1, 1-3
+Section 9 divider but no content (confirmed in contents list)
+Part 2 sec 10P loose issue 1, 1-3
+Part 2 sec 11P loose issue 1, 1-3
+Part 2 sec 12P loose issue 1, 1-5
+Part 2 sec 13P loose issue 1, 1-6
+Part 2 sec 15P loose issue 1, 1-5
+Part 2 sec 16P loose issue 1, 1-8
+Part 2 sec 17P loose issue 1, 1-3
+Part 2 sec 18P loose issue 1, 1-9
+Part 3 sec 1P1  loose issue 3, 1-6 then Part 3 sec 1P2 issue 3 1-6
+Part 3 sec 6P  loose issue 1, 1-9
+
+*** EOF ***
