@@ -1,0 +1,26 @@
+XSTORE
+
+XSTORE is a store test program written by Terry Froggatt.
+
+The program runs eight "write" phases, in which
+the whole store module is first set to a known pattern.
+Each is followed by a "read" phase which, for each word,
+checks that that word is right, then inverts it and checks
+that that is right, then sets it back and checks that's OK.
+
+The first 2 phases set all zeros, and then all ones,
+so give a straighforward go/nogo test of the data bits.
+The next 2 phases write the address to the location,
+("ascending"), then the inverse of the address,
+so a different value is written to every word,
+which should flush out a dud address line driver.
+The next 2 phases use the worst-case chequerboard
+pattern specific to the store of a 920B or 903 as in X2.
+(The final 2 phases just use chequered addresses).
+
+A three-word output indicates an error, giving the address,
+the expected data, and the error (actual-expected).
+Only the first 20 errors of each phase are printed.
+A two-word output is given at the end of each phase,
+module address (8192*N) + test number (0 to 7),
+then the number of errors from that test.

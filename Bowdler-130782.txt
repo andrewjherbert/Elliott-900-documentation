@@ -1,0 +1,92 @@
+BOWDLER 13/7/82, Binary Mode 3.
+-------------------------------
+
+(Notes from T.J. Froggatt)
+
+I wrote new flowcharts for BOWDLER in the Java sea in 1974 and
+coded them up in 1976: the 1982 version only has minor changes.
+
+Relative to the version in the ACD library:
+
+The initial 903/920/ISO commands which determine the codes are
+now optional and are ignored. The steering tape and tape to be
+edited must both start with newlines (and can be in different
+codes). The steering tape is read into store at 8. The tape to
+be edited is read in at 9 for 903/ASCII/TeleType output and at
+14 for 920/BS/FlexoWriter output. Continue after haltcode at 10.
+
+Blanks Erases & CR are now ignored everywhere. (So the terminator
+sequence "^%," can no longer be inserted by putting an erase
+in it: INS ^erase%,^%, but can still be inserted partwise, e.g.
+INS ^^%, INS %,^%,). Commands INB SPE DBL DCR PBL PBR are ignored.
+
+The letters of the command mnemonics may be in either case.
+To assist in editing tapes with lower-case letters using a
+steering tape made on a TTY without lower-case, new commands
+CAM for Cases Matched & (default) CAD for Cases Distinguished
+set a flag that controls matching (but do not alter the case
+of original or inserted text).
+
+New "Identifier" commands CII CIE DII DIE RTI are provided,
+which are the same as "String" commands CSI CSE DSI DSE RTS,
+except for requiring the matched string not to have a letter
+or digit on either side of them in the tape being edited.
+This enables short identifiers to be replaced globally
+without accidentally changing parts of longer identifiers.
+
+New "Haltcode" commands CHI CHE DHI DHE RTH are provided,
+which simplify the merging of tapes (CHE on all but the last).
+COP is retained (which cancels all REP groups, then CHI).
+
+To ensure that repeditive groups can operate even on lines
+refered to by the main editing commands, the editing state
+is not advanced quite as fast as might be expected. So e.g.
+two adjacent "CLI 'begin'" commands will find the SAME line.
+
+Minor operational differences w.r.t. the A.C.D. manual:
+The tape being edited is only buffered line-at-a-time
+rather than in big chunks described in the earlier version.
+This makes more space available for the steering tape.
+The instruction count is now not output, but can be obtained by
+triggering at 11, and no erases are output at the end of editing.
+
+Normal practice would be to read in BOWDLER, then the steering
+tape, then the tape to be edited, then REPEAT everything, then
+load BINCOP and compare the two outputs before separating them.
+
+Entry Points
+------------
+
+  8.  Read Steering Tape. Errors in 920 Telecode.
+  13. Read Steering Tape. Errors in 900 Telecode.
+  9.  Read and Edit Main Tape.
+  10. Read & Edit Main Tape. Continue after Wait.
+  11. Output Instruction Count.
+
+Error Messages
+--------------
+
+A; <H> in REP.
+B: Not All REPs Cancelled.
+C: <H> in Comment.
+D: <H> in Command.
+E: Unrecognized Command.
+F: More than 120 Characters in Line.
+G: Telecode Commands not at Start.
+H: Nested REP.
+I: CAN inside REP.
+J: COP inside REP.
+K: END outside REP.
+L: Empty REP.
+M: First Instruction in REP not Copy.
+N: REP Does Not Advance.
+O: REP or CAN Label Error.
+P: CAN Label Not Declared or Cancelled.
+Q: REP Label Active in Other REP.
+R: More than 32 REPs Active.
+S: Spurious Character in Command.
+T: String Expected.
+U: More Than 3 Characters in Escape Sequence.
+V: Spurious Character After ^%.
+W: <H> Encountered While Matching.
+X: Command Buffer Full.

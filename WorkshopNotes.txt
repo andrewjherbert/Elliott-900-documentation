@@ -1,0 +1,63 @@
+Terry Froggatt 8/11/2017
+========================
+
+(Written in response to Erik Baiger reporting gross errors in the Workshop
+ATN function.)
+
+I've found a bug in Workshop.  They are summing the wrong series for
+Arctan.  It should be arctan := x - x^3/3 + x^5/5 - x^7/7...  They
+have arctan := x - x^3/3 + x^5/(3.5) - x^7/(3.5.7)...
+
+The fix is incredibly easy. In the online version swap locations 5603
+& 5604, from 13 4093, 5 4889 to 5 4889, 13 4093; in the offline
+version swap locations 5604 & 5605, from 13 4094, 5 4890 to 5 4890, 13
+4094.
+
+How did I track this down? I started by searching for the string
+"ATN".  This found a table containing the names of the maths
+functions, each followed by a jump pointing to the relevant code.
+
+It was then fairly clear that the code for ATN used an interpreter
+rather like QF, so next I looked at this. Function 4 gave me the
+format of the data. Then I modified SIM900 to trace the "floating
+accumulator" through a call of ATN(2), in parallel with studying the
+code.
+
+There's a 3-word packed mode, sign+17+18+7 mantissa, sign+10 exponent,
+and a 4-word unpacked mode, sign+17+17+17 mantissa, sign+17 exponent.
+The maths functions work in unpacked mode and they are entered and
+exited within the interpreter.  Functions 1 2 4 5 7 8 9 12 13 are
+floating arithmetic as expected, 3 floats an integer, 10 increments an
+integer and 6 integers a float.
+
+The implementation of ATN is conventional, if the operand is negative,
+take its ABS now and negate the result, if the operand is now >1.0,
+take reciprocal and subtract result from 90, if the operand is now
+>0.5, take (X-1)/(X+1) and adjust result by 45, then sum the (wrong)
+series, (then apply the adjustments).
+
+(I was initially slightly misled as to the cause of the bug, because
+the code does indeed treat 2.0 as a special case. But that is to do
+with the fact that taking a reciprocal of a number >= 2 results in a
+number <= 0.5, not <0.5, which would upset the quadrant adjustments).
+
+Someday it might be worth lifting the interpreter for use elsewhere,
+given that it will be more accurate that QF and QFMATH.  But if we did
+this, I'd make functions 3 & 6 read/write floats, and I'd make
+functions 4 & 5 read/write integers, because SIR allows literals on
+function 4 but not on function 3.
+
+Erik Baiger and Andrew Herbert 19/10/2017
+=========================================
+
+There is an error in the second example on page A12.  The data should
+be laid out in the same format as the preceding example, i.e., with a
+blank line between the third and fourth row of numbers.
+
+Note thAT the multiplication operator '*' doesn't compute the product
+of two matrixes, e.g., XIJ*YIJ produces a matrix with each element
+equal to XIJ*YIJ.  This is consistent with the specification of how
+indices are handled by the program.  to multiply two matrices use a
+construct such as: QSUMK(XIK*YKJ).
+
+(END)

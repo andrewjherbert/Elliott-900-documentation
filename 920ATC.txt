@@ -1,0 +1,1150 @@
+
+        The 920ATC Instruction Set.
+        ===========================
+        Terry Froggatt, 7th January 2017.
+
+
+Background.
+-----------
+
+In these notes, for simplicity,
+statements about the 920B also apply to the 903,
+statements about the 920C also apply to the 905.
+The reader is assumed to be familiar with these computers.
+OMP = Operators Monitor Panel.
+
+The 920ATC was designed by Maritime Aircraft Systems Division
+in Rochester, a rebranding of Airborne Computing Division,
+which had moved from Borehamwood to Rochester in around 1970.
+
+The 920ATC instruction set was based on the earlier 920A 920B 920M 920C
+series, which were products of Mobile Computing Division in Borehamwood.
+
+Following on from Airborne Computing Division's use of
+the 920B in Nimrod Mk 1 and the 920M in Jaguar,
+the 920ATC was developed for the Nimrod upgrades.
+
+I understand that folk at RAE Farnborough had told Rochester that
+they would be unlikely to be awarded the Nimrod upgrade computer
+contract unless their offering included a hardware stack and
+hardware floating point, which rival offerings did include.
+So a hardware stack and hardware floating point were "provided".
+
+The stack was somewhat impotent, being only 64 words long
+shared across all four program levels, so it was probably
+long enough to hold the data associated with expressions,
+but probably not for holding subroutine parameters, and
+it was certainly was not intended to hold subroutine links.
+
+The floating point used a rather odd format, providing a meagre
+18 mantissa bits whilst providing an excessive 18 exponent bits,
+with lazy standardisation, in contrast to the standardised 28/7
+or 35/18 formats supported by software, and there were assorted
+problems with the implementation.
+
+The Nimrod upgrade software was written in CORAL, using a compiler
+purchased from CAP Reading by RAE Farnborough. CAP developed it as
+a cross-compiler on a 1900 (sometimes at Bankside power station),
+then it was rehosted as a 905 native compiler. (I wrote SODAR to
+integrate CAP CORAL with 905 RADOS). Later it was rehosted at
+Rochester to be a 4080 cross-compiler, largely by Roger Holmes.
+
+Roger & I are both pretty sure that the compiler was never modified
+to use the stack, or to use the 18/18 floating point hardware,
+although it did compile for 28/7 packed QF format. I did write a
+version of the software interpreter QF to use the 18/18 format,
+and some optimised matrix operations and a square root routine
+in 18/18 format, all in SIR callable from CAP CORAL programs as
+code procedures. But it is unclear what, if anything, translated
+any floating constants in the CORAL code into 18/18 format. At the
+time we did consider converting constants from 28/7 to 18/18 within
+in the Loader, but Roger reports that they were not suitably tagged.
+I suppose constants could be set up using a 2-integer overlay,
+which would not be too difficult in the 18/18 unstandardised format.
+
+The fact that neither the stack or floating point hardware were
+used extensively deprives me of a constraint, when reading the
+manuals, that "it must mean this, because that would not work".
+
+
+Evolution.
+----------
+
+Trying to describe the 920ATC instruction set is somewhat like
+building a replica of Cody's "Flyer" or building a replica the
+EDSAC computer, "which version do you want". I felt it unwise
+to give details in the BCS/CCS "Our Computer Heritage" and I've
+never felt inclined to modify my "SIM900" simulator to include it.
+
+I've taken "Specification for a CPU 920ATC (with parallel peripheral
+interface), Type No. 59-031-01", 240/A01-03/00544, MASD, March 1977,
+issued to RAE Farnborough in July 1977, as the most useful source.
+On page 4, this talks of "the servicing & maintenance policy to be
+adopted in respect of the 'B' model units" and I've taken it that
+this the specification of "the 920ATC 'B' model".
+
+I also have the earlier "Electrical Design Specification for the
+920 ATC (PCB Version), Working Paper 240/107/NRD/316/011, Issue A,
+MASD, 25/9/73", which possibly may describe what presumably was
+not known as "the 920ATC 'A' model" until the B model was mooted.
+In this model there is no hardware B-register (the B-registers
+are entirely in core), and the mode bits differ significantly.
+
+I have my own notes & correspondence in a buff wallet file "920 ATC",
+covering from January 1972 to August 1976, finishing with a note
+saying that "The 920 ATC Floating Point Saga continues in the Sonics
+Cross Compiler files, especially item 828" ("Arguments for & against
+In-Line Code for Floating Point on the 920ATC'B' models") and then
+in "MASD KALMAN", a maroon ring-binder, covering work that I did
+between April 1977 and September 1978 (on a freelance basis,
+after I'd left Elliotts at the end of 1976).
+
+Included in the "920 ATC" wallet file is a 2-sheet blueprint,
+"920 ATC Microprogram, (B model Sonics)", Drawing 40SK2260, dated
+June 1975. It provides a level of detail not available in the above
+specifications, and I have used it for the explanation of the floating
+point instructions below, although there are several aspects of
+the implementation which cannot be deduced from the microprogram.
+I studied this in detail in 1977 and found problems with the
+floating point hardware which I recorded in "MASD KALMAN".
+
+Some modifications were mooted subsequent to the B-model:
+   Correcting the implementation of floating point zero,
+      although I'm not sure which problems were to be fixed and how.
+   Changing function 0 in floating mode so as not to alter Q.
+      My Kalman routines state that they assume this to be the case,
+      suggesting that it may not have been the case when I wrote them.
+      At a chance meeting (on 11th December 2016) with Ken Edwards
+      (once of RAE), he tells me that he wrote a Kalman filter for
+      the 920ATC and was unaware that there was any floating point.
+      Its is possible that the routines, which I'd been paid to write,
+      were never offered to Ken because function 0 was never altered.
+   Changing function 10 (and 15 7170) in floating mode
+      so as to add +2 rather than +1.
+   Changing B-modified function 11 so as to be a "far call"
+      (only when enabled by yet another mode bit?).
+
+However, I do not know which if any of these changes was ever
+implemented. Erik's 920ME may give us some clues, (although it uses
+an AMD chipset like the MC1800, not the 54181 ALU which I think the
+920ATC used, so the microprogram will be different). And just as
+I was unaware of the success of the 12-bit machines after I left,
+there could have been other developments that I'm unaware of.
+
+
+Q-Register Corruption.
+----------------------
+
+On 920A, functions 6,7,8,9 all corrupt Q,
+   (I forgot to mention function 6 in "Our Computer Heritage" E5X3-1).
+On 920B, just functions 7 & 9 corrupt Q.
+On 920M, only function 7 corrupts Q.
+On 920C, none of these functions corrupt Q.
+
+But on all of these 920 variants,
+B-modification (of any function) corrupts the Q-register during
+the operand address calculation, before the instruction is obeyed.
+So /12 is OK (taking operands from A & store, with result in A & Q),
+but /3 is meaningless (it corrupts Q then stores it).
+
+Although I have not yet found it in the specification,
+my own notes say that, on the 920ATC, "it seems that
+B-modification does not corrupt Q", so /3 is OK.
+My notes go on to point out that this is essential,
+because the exponent of floating point numbers is held in Q.
+If B-modification corrupted Q, it would be impossible to
+B-modify floating-point instructions (except function 4, load).
+I made extensive use of this in my optimised matrix routines.
+
+(Note that this issue is distinct from the deliberate setting
+of the Q-register by function 0, load B-register, and whether
+this is sensible in floating point mode).
+
+
+Program Counters and Store Size.
+--------------------------------
+
+On 920A 920B 920M, the SCRs (Sequence Control Register = program counter)
+for the four priority levels are held in core store locations, 0 2 4 6,
+and at the start of every instruction the appropriate Register has to
+be read from core, incremented, and written back.
+
+On 920C and 920ATC, the current level's SCR is held in what is described
+as a "hardware" register, (held on flip-flops, rather than in core store)
+making most instructions faster. When an Interrupt or Terminate causes a
+level change, the hardware register has to be written to the old level's
+SCR in core, then the new level's SCR is read into the hardware register.
+
+So whilst it was possible to write into the current level's SCR,
+on 920A 920B 920M, (perhaps to implement a switch jump), this would
+have no effect on a 920C or 920ATC. But nobody ever did this. It's
+OK to write to the SCR of other levels, typically to initialise them.
+
+The 920B supports up to 65536 words of store, addresses wrap
+round at 16 bits, and the top two address bits are ignored.
+The 920C supports up to 131072 words of store, addresses wrap
+round at 17 bits, and the top one address bit is ignored.
+I think that this difference gave rise to some problems
+running Algol on the 920C (because Algol uses the top two
+bits to distinguish different sorts of parameter addresses).
+
+The 920ATC supports up to 262144 words of store.
+I think that this difference could give rise to some problems
+running Fortran on the 920ATC (because Fortran uses the top
+bit to distinguish direct & indirect parameter addresses).
+On 920ATC, addresses can be made to wrap round at 17 bits
+when only 17 bits are needed, by unlinking two pins on the
+rear CPU connector, (see B-model specification page 17).
+
+On 920C and 920ATC, the top bit of the Sequence Control Registers
+in core is used to hold the H-bit, which is the Address Mode
+Register of that level, Relative-v-Absolute. This leads to the
+statement that, even though the 920ATC can have 262144 words
+of store for data, only the first 131072 words can hold program,
+(see B-model specification page 6 (C)).
+
+On 920ATC, the hardware SCR is described as having 18 bits,
+excluding the H-bit which is described as a separate register.
+This suggests that a program which runs entirely on top level
+could actually have code anywhere in a 262144-word store.
+(Function 11 saves the usual 13 N-bits of S in store and 4 F-bits
+rather than 5 bits in Q, so intermodule calls would need care).
+
+In my "920 ATC" wallet I have an Internal Communication from
+Howard A Jones dated 26th August 1976, which notes that
+"The specification for the 920ATC restricts the amount of program
+storage to the lower 128K words but allows extension of the memory
+for 'data only' storage up to 256K words. This is compatible with
+the 905. Under special circumstances (i.e. level 1 operation only)
+the current hardware design permits code to be put above 128K.
+This is not compatible with the 905, and is a facility which
+would appear to have limited applications". This is all true.
+
+Howard then considers how to "prevent code being placed above 128K",
+by changing either the hardware or the Coral linker, and requests
+"Modify the Linker such that software produced will run on both
+905's and existing 920ATC's" [his apostrophes]. This is very odd.
+905 software will run on a 920ATC (by unlinking two pins on the
+rear CPU connector if it happens to use the sign bit of addresses).
+But 920ATC software which puts program beyond 128K won't run on a
+905 anyway, just like 920ATC software which uses the stack or the
+floating point hardware. At most, a linker warning is needed,
+that the program will run only on top level only on a 920ATC.
+
+As recorded in emails between myself & Andrew Herbert in May 2015,
+there is a snag in the SCR implementation on the 920C & 905.
+Operating the JUMP (or JUMP II) key places the 920C or 905 onto top
+level, but it does NOT save the hardware SCR into the appropriate
+core SCR before setting the hardware SCR to the address on the WG
+keys (or 8181). On 920A 920B 920M the interrupted SCR is not lost,
+being already in core. So some correct 920A 920B 920M programs fail on
+920C=905, specifically my simulator for 12-bit 900s (for which I issued
+a patch). I don't know whether the 920ATC gets this right or not.
+
+The onboard store size of the 'A' model was 16K.
+The onboard store size of the 'B' model was 32K.
+
+
+B-Registers.
+------------
+
+On 920A 920B 920M 920C, the B-Registers for the four priority levels
+are held in core store locations, 1 3 5 7. Writing to these directly,
+rather than using function 0, is generally deprecated, (because it
+constrains the code to a given level and requires the code to be in
+the first 8192 words or to use absolute address mode), but it is
+certainly not illegal. It happens within initial instructions and
+in various loaders, and it is explicitly described in the 920M & 920C
+facts cards (for example "Multiply A by B, 12 1 or 3 or 5 or 7").
+The early 920ATC models were like this too.
+
+On 920ATC 'B' model, the current level's B-Register is held in a
+hardware register, making modified instructions faster, and for
+compatibility the 920ATC has to explicitly detect writing into the
+current B-Register address: "The contents of the current program
+level B register core location will be identical to the hardware
+B register at the end of every instruction" (see B-model specification
+page 8 (C)), except after a RESET (when the hardware B is cleared) or
+an external data transfer which includes B's core location (unlikely).
+And when an Interrupt or Terminate causes a level change, the new
+level's core B-Register is copied into the hardware register.
+
+(At points where the floating-point microcode swaps operands around,
+it would be faster to hijack the hardware B-Register as an extra
+workspace, then recover it from core. My notes show that I'd thought
+of this potential optimisation at the time, but the floating microcode
+was probably inherited from before the hardware B-register model.)
+
+
+Instruction Set.
+----------------
+
+The 920ATC (as given in the B-model specification)
+implements the instruction set of the 920C:
+    0:  Load B, Load Q
+    1:  Add
+    2:  Negate & Add, Load Q
+    3:  Store Q
+    4:  Load A
+    5:  Store A
+    6:  Collate
+    7:  Jump if A = 0 (block relative)
+    8:  Jump          (block relative)
+    9:  Jump if A < 0 (block relative)
+   10:  Count
+   11:  Store S   (13 N-bits in store, 4 F-bits in Q, /-bit not saved)
+   12:  Multiply  (leaving Q1 undefined, see notes below)
+   13:  Divide    (setting Q1 := 0, A1 := 1, as usual)
+   14 0    to 14 36  :  Left shift  (longer shifts undefined)
+   14 2048 to 14 4095:  Block transfer into memory
+   14 4096 to 14 6143:  Block transfer out of memory
+   14 8156 to 14 8191:  Right shift (longer shifts undefined)
+   15 0    to 15 2047:  Input from peripheral to A
+   15 2048 to 15 2056:  Input to CPU depending on particular OMP used
+        (No statement that the existing A is left-shifted 7 places)
+   15 4096 to 15 6143:  Output from A to peripheral
+   15 6144 to 15 6152:  Output from CPU depending on particular OMP used
+   15 7168:  Program Terminate (save H & S, restore H & S and B)
+   15 7169:  Skip if Standardised
+   15 7170:  Increment B, Skip if B's N-bits = 0
+   15 7171:  A := keys if fitted, else A := 8177
+   15 7172:  A-to-Q:  Q(18-2):=A(17-1), Q(1):=0
+   15 7173:  Q-to-A:  A(17-1):=Q(18-2), A(18):=0
+   15 7174:  A-to-B:  B:=A, Q:=A (see notes below)
+   15 7175:  B-to-A:  A:=B, Q:=B (see notes below)
+   15 7176:  Set relative addressing (on current level)
+   15 7177:  Set absolute addressing (on current level)
+   -- ----:  Program Interrupt (save H & S, restore H & S and B)
+
+There are actually some slight differences here.
+   Shifts in either direction are undefined beyond 36 places.
+      This limit also appears in 920M & 920C Facts Cards.
+   Q1 is undefined after function 12, Multiply.
+      Peter Lawrence's "Programming Compatibility of 900 Series
+      Computers" says that "Q1 := 1 if A < 0 otherwise Q1 := 0",
+      on the 920A 920B 920M, and indeed it is a consequence of
+      the Booth's algorithm used throughout the 900 series,
+      that the sign bit of one of the operands ends up in Q1.
+      The 920B microprogram starts by moving A into Q and clearing A,
+      then it adds or subtracts the store operand M to or from A,
+      in a loop which also right-shifts A & Q. But I've just
+      (12th November 2016) noticed that the 920ATC is different.
+      The 920ATC microprogram starts by placing the store operand
+      into Q, moving A to J and setting A to the inverse of A,
+      and clearing M, then it loops adding either A+1 or J
+      to M and shifting M & Q, and it finally copies M into A.
+      So it looks as though the sign bit of the store operand
+      ends up in Q1. I don't know which sign bit the 920C gives.
+   The B-model specification page 31 says that "Interrupts will
+      be permitted to become active after any instruction" whereas
+      on 920A 920B 920M 920C they are inhibited after Function 0.
+      When a program saves its Q-register with function 3, this will
+      be right shifted one place, and if this is reloaded using the
+      defined effect of function 0 or 2, a "14 1" one place left shift
+      is needed to restore the original value. If an interrupt occurs
+      just before this shift, the bottom bit (of the 17) will be lost,
+      using the interrupt instructions published in various Facts Cards,
+      which themselves use function 3 to save the lower-level Q-register.
+      Inhibiting interrupts after function 0 avoids loosing this bit
+      provided the Q-register is loaded via function 0 not function 2.
+      Certainly on the 920M Jaguar program we used admittedly slower
+      interrupt instructions which saved all 18 bits of the Q-register,
+      so that we were free to load Q with either function 0 or 2,
+      whichever was most efficient, function 2 being slightly faster.
+      Also we were then free to use all 18 bits of Q anywhere.
+      On 920ATC where the Q-register holds the floating point exponent,
+      it is essential to use the interrupt instructions which save all
+      of Q, so there is no need to inhibit interrupts after function 0.
+      There is a slight complication that programs (like "C3") which
+      use the TRACE facility do assume that function 0 cannot be TRACEd.
+   As shown above, instructions 15 7174 A-to-B & 15 7175 B-to-A on
+      920ATC also load the transferred value into the Q-register,
+      whereas neither the 920C or 905 Facts cards suggest this.
+      In my "920 ATC" wallet I have an Internal Communication from
+      Noel J Turner dated 18th March 1974, stating that the 15 7174
+      instruction on 905 has an undocumented side effect of placing
+      A into Q as well as into B. It makes no comment about 15 7175,
+      but it does note that the value loaded into Q usefully differs
+      from the shifted value loaded by the A-to-Q instruction.
+      I ran some tests on 8th February 1974 to check other aspects of
+      the 905 microcode but I can find no evidence that I checked Noel's
+      statement for 15 7174 or the equivalent statement for 15 7175.
+      It is probably wise to treat the effect of 15 7174 & 15 7175
+      on the Q-register as undefined, both on 920C=905 and on 920ATC.
+   There is no statement that the existing Accumulator is left-shifted
+      7 places before a paper tape or TeleType input; this appears
+      in the OMP specification, and is presumably implemented within
+      the OMP which does have an 18-bit interface to the 920ATC.
+      (It would not be possible to implement this shift within the
+      paper tape station of a 920B which only has an 8-bit interface).
+
+It is explicitly stated that a function 15 instructions can be
+B-modified "from one 15 instruction to another". I believe that
+a similar statement is equally true for function 14 instructions,
+since both statements are true across the rest of the 900 series.
+Thus left shifts can be B-modified into right shifts & vice versa,
+(a useful property which is not true on many other makes of computer).
+
+The 920ATC (as given in the B-model specification)
+implements these extra instructions:
+   15 7678:  Reset Overflow flag O/F, Skip if Overflow was not set.
+   15 8079:  Input fault holding register (level 2 interrupts)
+   15 8090:  Reset cycle monitor
+   15 8094:  Reset system fault
+   15 8107:  Generate internal interrupts
+                Level1 := A1, Level2 := A2, Level3 := A3
+   15 8111:  Input level 3 interrupts
+   15 8123:  Set external interrupt enable register
+   15 8126:  Set system fault (causes level 2 interrupt)
+   15 8143:  Read the four current-level mode bits & AP
+                A18:=FLP, A17:=ASM, A16:=PAR, A15:=O/F, A(7-1):=AP
+   15 8154:  Reset Accumulator pointer register, AP := 127
+   15 8171:  Set store protection register (in 2K blocks within 32K)
+   15 8187:  Set the four current-level mode bits
+                FLP:=A18, ASM:=A17, PAR:=A16, O/F:=A15
+
+
+The Mode Bits.
+--------------
+
+The 920ATC 'A' model specification of the mode bits below differs from
+the 920ATC 'B' model specification of the mode bits above:
+   15 8170:  FLP := 0, Reset floating point mode
+   15 8171:  FLP := 1, Set floating point mode
+   15 8186:  ASM := 0, Reset accumulator stacking mode
+   15 8187:  ASM := 1, Set accumulator stacking mode
+   15 8143:  Read mode bits:  A18 := FLP, A17 := ASM.
+Although the 'A' model has no instructions for setting or getting the
+PAR bit, it did have one. ("Performing any of these instructions will
+register the required incrementation by setting at [sic] latch (PAR)").
+
+All of FLP ASM PAR are described as single bits, and I know that
+the early 920ATC certainly did not have an FLP bit per level.
+In a meeting on 27th January 1976, it was recorded that "Only one
+fixed/floating point mode flag [is] provided rather than one per
+level. This incurs a software overhead in a multi level program
+when changing from fixed to floating point mode" with a proposed
+solution "This can be overcome by a minor hardware change [detail]
+in all SP division machines without impact on delivery dates.
+The opportunity would also be taken to correct a problem in the
+same area on the Accumulator Stacking Mode (ASM)". A note dated
+9th April 76 details the required specification changes.
+
+I leave it as a challenge to the reader to devise interrupt code
+to save the lower level A & Q without knowing what modes are
+currently in use, and read and save its mode bits, before
+setting the modes required for the interrupt code, and later
+to restore the lower level modes and A & Q before terminating.
+
+The 920ATC 'B' model has four mode bits per interrupt level,
+which are selected from 16 flip-flops by the interrupt level
+and so do not need to be saved and restored:
+   FLP:  The Floating Point Mode Register
+   ASM:  The Accumulator Stacking Mode Register
+   PAR:  Increment Accumulator Register
+   O/F:  Overflow Register
+All 16 bits are set to their 920C compatible states by RESET.
+I don't know if they are set by any JUMP facility in the OMP,
+if not you might have to RESET before JUMP, which would be
+inconvenient and error prone, and would also clear A & Q.
+
+Thus on the 920ATC 'B' model you cannot change one of the mode
+bits without knowing, or reading, the values of the other bits.
+(The ability to AND and OR into the mode bits would be useful).
+
+Note that the fastest way to zero the current level mode bits is
+"6 +0, 15 8187". This is because function 6 (collate), which it
+not affected by the floating mode, is significantly faster than
+function 4 (load A & Q) in floating mode, and is slightly faster
+than function 4 (load A) in fixed mode which has to test the mode.
+
+
+Accumulator Stacking Mode.
+--------------------------
+
+The 920ATC 'B' model specification pages 17 to 19 state:
+
+   The mode of operation will be determined
+   by the state of the current levels ASM bit.
+   This is loaded by instructions and read
+   by program.
+
+   The accumulator pointer register (AP) is
+   used to indicate which accumulator within the
+   stack is being operated on. The stack is
+   held in store locations 64 to 127. AP is
+   reset to 127 by CPU Reset or by a 0 15 8154
+   instruction, following the first 4 instruction
+   performed whilst ASH and PAR are set the AP will
+   be set to 64. AP can be read at any time by a
+   0 15 8143 instruction.
+
+   The accumulator pointer AP will be incremented
+   if a LOAD A is preceded by one of the following
+   arithmetic functions 1, 4, 6, 12, 13 or 14
+   (shift) instruction. Performing any of these
+   instructions with the current levels ASM bit
+   set shall register the required incrementation
+   by setting PAR on the current level. An
+   arithmetic function performed when ASM is set,
+   and of address 0, will decrement AP and place
+   the result in AP-1. Address 0 when used with
+   functions, 1, 2, 4, 6, 12 and 13 shall cause
+   the function operands to be taken from the top
+   two stack locations. Address 0 is independent
+   of the state of the modifier bit. i.e. the
+   modifier bit should be 0 for normal operation.
+   If it is required to access location 0 in ASM
+   it may be achieved by a modified instruction.
+   Specifically, the A Register shall be the top
+   stack location and the operand, normally read
+   from store, shall be read from the top less one
+   stack location. A LOAD A instruction preceded
+   by a 5, 7 or 9 instruction, shall prevent AP
+   from incrementing i.e. PAR will be reset by
+   these instructions.
+
+   NOTE:
+   Care is required in programming because
+   certain 15 instructions affect the accumulator.
+
+   The functions 0, 2, 3, 8, 10, 11, 14 (Block
+   Transfer) and 15 will have no effect on PAR.
+   Generally function 2 shall be interpreted as
+   both Negate and Add and LOAD Q. If the
+   function 2 is followed by a LOAD A instruction
+   then the effect shall be determined by the
+   state of PAR. i.e. If PAR is set function 2
+   will have the effect of a Negate and Add, or
+   if PAR is not set function 2 will have the
+   effect of LOAD Q.
+
+   Accumulator stacking mode will not affect the
+   instruction execution times except for a
+   LOAD A instruction when PAR is set.
+
+And as noted subsequently (in the specification and herein):
+
+   The facility of using floating point arithmetic
+   when in accumulator stacking mode will be provided.
+
+The fact that no timings are altered by Stacking Mode,
+except for function 4, makes me suspect that the actual
+implementation differs from the description. I think it
+likely that the "top" accumulator is not held, or duplicated,
+in the stack, but is only held in the normal A-register.
+(Only the microcode for function 4 tests PAR, see below).
+
+So my understanding of this is that, in ASM mode:
+   functions which place a result into the Accumulator set PAR,
+   functions which consume a result in the Accumulator clear PAR,
+   and the remaining functions do not alter PAR.
+If an unconsumed result is about to be overwritten by a function
+4, that function 4 pauses whilst the result is stacked; and
+operands are unstacked by unmodified instructions with N=0.
+
+It's odd that information is given about accessing location 0,
+given that the effects of doing this are already not portable.
+On the assumption that B-modification is permitted in stacking
+mode in the normal way, and that B-modified instructions often
+have N=0, I deduce that location 0 is can only be accessed using
+B-modified instructions with N>0 and the B-register set to -N.
+
+I think that the statement about function 2 is confusing.
+Surely (unless in floating point mode) function 2 always both
+Negates & Adds to the Accumulator and loads the Q-register,
+regardless of the state of PAR, and without altering PAR.
+
+Note that there are cases when the stacking logic can go wrong.
+For example, if a value is calculated in A then shifted into Q
+prior to loading A, or if a multiplication of positive integers is
+performed and saved with function 3, a spurious stack can occur.
+
+I've just (13th November 2016) found a note written by T Steve
+Chubb dated 19.2.73, saying that "Since the mini-stacks are only 16
+locations in length [per level] then an overflow is quite likely".
+Of course there is no need to statically partition the stack in
+into equal parts, or even into unequal parts, provided each level
+uses it correctly. But there is NO detection of stack overflow
+when the 64 word total is exceeded. I presume that the stack
+pointer then wraps back from 127 to 64 as it does initially.
+
+Although AP is described as a 7-bit register, I presume that
+it is really a 6-bit register plus a hard-wired +64 bit.
+
+The use of locations 64 to 127 for the stack is in direct conflict
+with their use on the 920C for controlling autonomous transfers,
+for example RADOS disk transfers use locations 88 to 95.
+
+
+Floating Point Mode.
+--------------------
+
+The 920ATC 'B' model specification pages 19 to 21 state:
+
+   This mode of operation will be determined by
+   the state of the current levels FLP bit.
+
+   The notation "a2^q" shall be read as meaning
+   that the A register contains the mantissa,
+   which shall be interpreted directly as a
+   fixed point 18 bit binary fraction using
+   'two's complement' notation for negative
+   numbers. The Q register shall contain the
+   exponent, the contents being interpreted
+   as a binary integer.
+
+   The notation m2^m+1 shall be interpreted
+   in a like manner, m being the contents of
+   store location of address M and (m + 1) being
+   the contents of store location (M + 1). The
+   store address of the operand (M) shall be
+   formed as for fixed point working.
+
+   Numbers will not be standardised at the end
+   of instructions since this only results in a
+   loss of time. Any necessary standardisation will
+   be handled at the beginning of the floating
+   point instructions.
+
+   The floating point microprogram will operate
+   to preserve maximum accuracy consistent with
+   18 bit operation. However, for the divide
+   operation, if the dividend is standardised on
+   entry to the instruction, it will be destandard-
+   ised by a shift one place right before
+   calculation commences. The divisor is
+   standardised by the microprogram before division
+   takes place.
+
+   If division by zero is called, then the
+   mantissa of the quotient will be as the
+   dividend but the exponent is set to:-
+   Quotient Exponent:=
+   Dividend Exponent - Divisor Exponent + 18
+
+   If an add or negate and add instruction is
+   called up with either of the mantissas
+   being zero then the answer given will be the
+   non-zero mantissa together with its exponent -
+   unless however the exponent of the zero
+   mantissa is more than 63 greater than the
+   non-zero mantissa's exponent when the answer
+   given will be the non-zero mantissa with an
+   exponent equal to the larger exponent minus
+   36 to 39.
+
+   The facility of using floating point arithmetic
+   when in accumulator stacking mode will be provided.
+
+   In this mode, since two word operands are
+   involved, the stack will expand and retract
+   two locations at a time. The top of stack
+   location will be used for storage of the
+   mantissa and the top less one location will
+   be used for exponent storage. In floating
+   point mode, accumulator stacking will not
+   affect the instruction times except for a Load A
+   instruction if PAR is set.
+
+Page 13 of the specification may be thought to contradict this,
+"The mantissa will be in the A register and the exponent held
+in the Q register. Both will be expressed in fixed point binary".
+However it is clear that Q represents the exponent as an Integer.
+
+The 920ATC 'B' model specification page 30 lists the
+instructions which change when in floating point mode:
+    1:  Add,                     a2^q := a2^q + m2^m+1
+    2:  Negate & Add,            a2^q := m2^m+1 - a2^q
+    3:  Convert to fixed point,  a := a * 2^(q-M), q := M
+           O/F:=1 if number is about to overflow during shifting
+    4:  Load A,                  a2^q := m2^m+1
+    5:  Store A,                 m:=a, m+1 := q
+   12:  Multiply,                a2^q := a2^q * m2^m+1
+           In multiply, the product is partially standardised
+           i.e. only up to a maximum of 18 shifts will occur
+           on a double length answer formed during the multiply
+           algorithm in order to standardise the product before
+           truncation to a single length mantissa.
+   13:  Divide,                  a2^q := a2^q / m2^m+1
+
+Page 16 of the specification explains "For convert to fixed point,
+(Function 3 in floating point mode) the number of shifts of the
+mantissa, contained in the A Register shall be equal to q-M" where
+M = the address N field of the instruction plus the contents of the
+B register if the instruction is B-modified, "always as if h = 1",
+thus clarifying that the 8K module address is never added in.
+Note that, as for shifts, M is used, not the contents of location M.
+
+
+Lazy Standardisation.
+---------------------
+
+The argument for "lazy" standardisation is only partly valid.
+It certainly only wastes time to left-shift the result of an
+add or subtract, or to left-shift the result of a multiply by more
+than 18 places, given an even chance that the result is only going
+to be right-shifted at the start of a subsequent add or subtract.
+But as a general rule, it is better to tidy up a result when it
+is calculated rather than whenever it is used, on the grounds
+that it should be used at least once, but may be used more often.
+If several items are all to be multiplied by the same value, (for
+example, by the sine or cosine of an axis rotation angle), it pays
+to standardise that value, to reduce shifting after every multiply.
+(The argument is similar to that for ADSL broadband: information
+is uploaded only once, with a view to being downloaded at least
+once, so with only limited bandwidth available, it is sensible
+to make the speeds asymmetric, with download faster than upload).
+Lazy standardisation also reduces division accuracy, see below.
+
+
+Floating Point Microcode.
+-------------------------
+
+I have a diagram "920 ATC Processor Scheme" which shows
+   A 4-word RAM containing the registers: A Q S J,
+   A separate M register which can be shifted in situ,
+   An arithmetic logic unit (5*54181?), taking one input from the
+      selected RAM register and the other from M or M-inverse.
+A Q S are known to the programmer, J & M are not.
+
+Before the individual routines are entered, the instruction has
+been read into the bus buffer, and tested for '/'. The address
+of the operand (or of the peripheral, or the shift distance) has
+been read into both J & M, but the operand has not been accessed.
+
+Microcode for Floating Function 1.
+   Read first store value into M;
+   Increment store address in J;
+   J+M+1 into J;  J-M-1 into M;  J-M-1 into J;  (thus swap J & M)
+   Q+(-1-second store value)+1 into M;
+   J+M+1 into J;  J-M-1 into M;  J-M-1 into J;  (thus swap J & M)
+   (thus J now holds the difference of the exponents)
+   J-1 into J;
+   if J was not <0 before adding -1 then
+      J+1 into J;
+      if J was <0 before adding +1 then goto EXP_EQ; end if;
+      (Q > second store value)
+      -1-J into J;  J*2 into J;  J/2 into shift counter (KSBC);
+         (shift counter now second store value - Q - 1)
+   else
+      (Q < second store value)
+      J+M+1 into J;  (Q - second store value + M)
+      J-M-1 into M;  (Q - second store value - 1)
+         and this into shift counter (KSBC);
+      Q-M-1 into Q;  (second store value)
+      J-M-1 into M;  (first store value)
+      A+M+1 into A;  A-M-1 into M;  A-M-1 into A;  (thus swap A & M)
+   end if;
+   (Larger exponent in Q, Smaller-Larger-1 in shift counter)
+   (Mantissa with larger exponent in A, other mantissa in M)
+   loop
+      Increment shift counter (1TSC);
+      if A not standardised then
+         Q-1 into Q;  A*2 into A;
+         if SM1 then goto EXP_EQ; end if;  (test shift counter)
+      else  (no need to test if standardised again)
+         loop
+            M/2 into M;
+            if SM1 then goto EXP_EQ; end if;  (test shift counter)
+            Increment shift counter (1TSC);
+               (assumed to take effect after above test)
+         end loop;
+      end if;
+   end loop;
+EXP_EQ:
+   A+M into M;
+   if signs of A & M before the add agree and after it disagree then
+      Q+1 into Q; M/2 into M;
+   end if;
+   M into A;
+I have a one-page sketched flowchart of floating functions 1 & 2,
+(which I think came with the microprogram), showing floating add
+in two symmetric parts, to be entered according to which exponent
+was greatest. This clearly disagrees with the microprogram above,
+in which the times taken by X+Y and Y+X can differ substantially.
+
+Microcode for Floating Function 2.
+   -1-A into A;  A+1 into A;  (thus A := -A)
+   if A was not <0 before adding +1 and A now is <0 then
+      Q+1 into Q;  A/2 into A(1-17);
+   end if;
+   goto Function 1;
+So if A was &400000, before and after negation, the overflow
+is corrected, by setting it to &200000 and incrementing Q.
+The reverse is not implemented (of standardising &200000 before
+negation from &600000 after negation to &400000 and decrementing Q).
+
+Microcode for Floating Function 3:
+   J+1 into M;  (spurious step shared with function 5)
+   -1-Q into M;
+   J+M into both J and M;  (target exponent -1-Q)
+   -1-J into J;            (Q-target exponent)
+   Q+M+1 into Q;           (target exponent)
+   if J<0 then
+      (Q < target exponent)
+      A into M;
+      loop
+         J+1 into J;  M/2 into M;
+         exit loop when not J<0;
+      end loop;
+      M into A;
+   else  (J >= 0)
+      (Q >= target exponent)
+      J-1 into J;
+      loop
+         exit loop when J<0;
+         J-1 into J;
+         if A is standardised then
+            set overflow flag and exit loop;
+         end if;
+         A*2 into A;
+      end loop;
+   end if;
+My understanding of this instruction is that it replaces the floating
+point number in A & Q with a (usually) different representation of
+the same floating point number, but with the given target exponent.
+If overflow occurs, the flag is set, and the shifting of A stops, but
+the microcode shows that Q has already been set to the target exponent,
+so the values of A & Q no longer correspond, and so the number is lost.
+The microcode confirms that the shifts can go in either direction,
+and there appears to be nothing to limit the shifts to 18 places.
+
+Microcode for Floating Function 4, with PAR false.
+   Read first store value into A;
+   Increment store address;
+   Read second store value into Q;
+
+Microcode for Floating Function 4, with PAR true.
+   Q+(-1-first store value) into M;
+   Increment AP;
+   Q-M-1 into Q;  (so Q now holds the first store value)
+   Q+M+1 into M;  (so M now holds the original Q)
+   Write it to stack;
+   Increment AP;
+   A into M;
+   Write it to stack;
+   Q into M;
+   M into A;  (so A now holds the first store value)
+   Increment store address;
+   Read second store value into Q;
+I have just realised for the first time (21st November 2016) that the
+stacking operations above place A & Q into store in the reverse order
+to that used by Function 5. That's OK, it assumes that they will be
+unstacked by an instruction (with N=0) which unstacks A before it
+unstacks Q (and which ignores "increment store address" herein).
+But, whilst fixed point values anywhere within the stack can be
+accessed via their (non-zero) store address if required, floating
+point values within the stack cannot be meaningfully accessed.
+
+Microcode for Floating Function 5.
+   Write A into first store location;
+   Increment store address;
+   Write Q into second store location;
+
+Microcode for Floating Function 12.
+   Set shift counter (KSBC);
+   -1-A into both A and M;
+   Read first store value into M;
+   A+1 into A;  A-1 into A;
+   if A was not <0 before adding +1 and A was <0 after adding +1 then
+      (it was &377777 then &400000, so the original A was &400000)
+      Q+1 into Q;  A/2 into A(1-17);
+   end if;
+   Q+M+1 into Q;  Q-M+1 into M;  Q-M+1 into Q;  (thus swap Q & M)
+   J+1 into J;                          (increment store address)
+   J+M+1 into J;  J-M-1 into M;  J-M-1 into J;  (thus swap J & M)
+   J-(-1-second store value)-1 into J;         (sum of exponents)
+   0 into M;
+   loop
+      Increment shift counter (1TSC);
+      Q/2 into Q;  M/2 into M;  with carry from M into Q;
+      if Q1 xor S0 then
+         exit loop when SM2;
+      else                 (not (Q1 xor S0))
+         if Q then         (M := M - original A)
+            A+M+1 into M;
+         else              (M := M + original A)
+            -1-A into A;  A+M into M;  -1-A into A;
+            (this is particularly messy, fixed-point multiply
+            can hold A in J, and so does these 3 steps in 1).
+         end if;
+      end if;
+      exit loop when SM1;
+   end loop;
+   Set shift counter (KSBC);
+   Increment shift counter (1TSC);
+   M into A;
+   loop
+      exit loop when A standardised;
+      Increment shift counter (1TSC);
+      J-1 into J;
+      Q*2 into Q;  M*2 into M;  with carry from Q into M;
+      M into A;
+      exit loop when SM1;
+   end loop;
+   J into M;  M into Q;
+
+Microcode for Floating Function 13.
+   Set shift counter (KSBC);
+   Read first store value into M;
+   J+1 into J;                          (increment store address)
+   J+M+1 into J;  J-M-1 into M;  J-M-1 into J;  (thus swap J & M)
+   loop
+      exit loop when J standardised;
+      Increment shift counter (1TSC);
+      Q+1 into Q;  J*2 into J;
+      if SM1 then
+         Q+(-1-second store value)+1 into Q;  goto END_DV;
+      end if;
+   end loop;
+   if A standardised then
+      A+M+1 into A;  A-M-1 into M;  A-M-1 into A;  (thus swap A & M)
+      Q+1 into Q;  M/2 into M;
+      A+M+1 into A;  A-M-1 into M;  A-M-1 into A;  (thus swap A & M)
+   end if;
+   Q+(-1-second store value)+1 into Q;
+   M*2 into M;  -1-J into J;  A into M;  0 into A;
+   Set shift counter (KSBC);
+   loop
+      if A19 xor M18 then  (M := M - denominator)
+         Increment shift counter (1TSC);
+         J+M+1 into M;  A*2+1 into A;  M*2 into M;
+      else                 (M := M + denominator)
+         Increment shift counter (1TSC);
+         -1-J into J;  J+M into M;  -1-J into J;  A*2 into A;  M*2 into M;
+      end if;
+      exit loop when SM1;
+   end loop;
+   A*2+1 into A;
+END_DV:
+As noted earlier "if the dividend is standardised on entry to the
+instruction, it will be destandardised by a shift one place right
+before calculation commences. The divisor is standardised by the
+microprogram before division takes place." But the dividend
+is not standardised before that one place destandardisation.
+As a consequence, forcing the 1 into the least significant bit of the
+result can have an unexpectedly large effect on what otherwise might
+be an exact result. I have a worked example in my "920 ATC" wallet
+of dividing 500 by 10: when dividing (A=500, Q=17) by (A=10, Q=17)
+the divisor is standardised to (A=81920, Q=4) giving a result of
+(A=801, Q=13) or 50.0625. If the dividend were almost standardised
+to (A=64000, Q=10) the result would be (A=102401, Q=6) or 50.0005.
+Likewise dividing 1 by 3 can give results between 0.2500 & 0.3333,
+depending on how well standardised the 1 is.
+
+
+Much Ado About Nothing.
+-----------------------
+
+I was familiar with the software floating point interpreter QF,
+for use in SIR assembly code programs, well before the hardware
+floating point for the 920ATC was first mooted, and I was aware
+that, when two numbers are added or subtracted, the mantissae
+first have to be aligned, by shifting the smaller number right
+a number of places determined by the difference of the exponents.
+
+I was also aware that this could generate shifts well in excess
+of 36 places (beyond which further shifts have no effect), but
+because the 903=920B allows shifts up to 2048 places, this never
+was a problem (just a waste of time) using the packed 28/7 format.
+Using the unpacked 35/18 format there was some risk of generating a
+block transfer instruction, but I'm not aware that this ever happened.
+The only issue of ALGOL for which I have the source potentially has
+the same problems, calculating expressions using the 35/18 format,
+although generally using variables unpacked from the 28/7 format.
+I have a note which states that shifts on a 920M are only valid up to
+48 places, and the various facts cards say that shifts are limited to
+36 or 48 places. In recognition of these problems, later versions of
+the floating point software (in the FORTRAN issued with RADOS, in
+the version of QF which we used with CAP CORAL, and in my 900 BASIC)
+took appropriate action when the exponents differed by more than 36.
+
+So when I was first told of the 18/18 format, I was worried that
+this might be implemented naively, leading to shifts, to align
+the operands in Add and Negate-&-Add, of up to 2^18-1 places
+(even though the Accumulator is all 0s or all 1s after 17 shifts),
+and taking some seconds (during which interrupts would be ignored).
+The engineers offered to avoid this by interpreting the required
+shift distance modulo 64, but of course this would lead to gross
+errors, for example adding 2^-64 to 1 would give 2. They could not
+understand why anyone would want to add two numbers whose exponents
+differed by 64 or more. I had to explain that if we could predict the
+exponents when we were writing the code, we wouldn't need floating point.
+(In my "920 ATC" wallet I have an undated Internal Communication
+from Tony Acton: "At present during Add or Negate & Add instructions
+in FLP mode the exponent difference must be restricted to 6 bits.
+Would a 12 bit difference be satisfactory i.e. exponents limited
+to 11 bits?").
+
+There is one important difference between the 920ATC hardware and
+all of the software packages. In the software, zero is represented
+with a zero mantissa and the exponent is of no consequence, and the
+arithmetic routines test for zero and take special action where needed.
+The 920ATC Function 7, jump if zero, does not have a floating point
+variant, it just tests the accumulator in fixed or floating mode.
+(In fact the 920ATC hardware has no easy way to test the accumulator
+for zero: Function 7 jumps if the accumulator is not negative but
+the accumulator minus one is negative). So from this perspective,
+920ATC floating zero has a zero mantissa and the exponent is of no
+consequence. But the hardware arithmetic routines do not test for zero.
+(Whilst explicitly adding or subtracting zero is an unlikely operation,
+subtracting a value from zero to obtain its absolute value is common).
+It follows that the exponent of zero has to be a large negative number,
+to ensure that the other operand is not right-shifted prior to an add
+or subtract. (In my Kalman routines, I used an exponent of -65536.
+Whilst -131072 might seem logical, there is no overflow checking when
+the exponents are compared). But as a consequence, the zero itself
+will be potentially subject to a long right shift.
+
+So the earlier software packages contained latent errors regarding long
+shifts but they had little impact due to the special treatment of zero,
+whereas on the 920ATC, the lack of special treatment for zero guarantees
+that there is a long shift problem. I was assured by the engineers that
+they had fixed this problem, possibly by detecting when the exponent
+difference in Function 1 is greater than 18 (or perhaps greater than
+32 or 64), and limiting the value written into the shift counter to this
+value, (which would make more sense than interpreting it modulo 64).
+
+Some uses of the shift counter are clear. It is probably
+   only a 5 or 6 bit register. It set (to something) by KSBC,
+   incremented by 1TSC (or is it ITSC?), and tested by SM1 (& SM2?).
+It is used to control the main 18-step loops in Multiply & Divide,
+   and to limit the post-standardisation in Multiply and the
+   pre-standardisation in Divide to 18 shifts, when the value is zero.
+It is set & tested by Add (and Negate & Add), although I can see nothing
+   in the microprogram to distinguish this setting (ideally to the lower
+   of 18 and the exponent difference) from the other uses which set 18.
+The J register, rather than the shift counter, is used to control
+   the loop in floating Function 3. I suspect that this instruction
+   could generate arbitrary long right shifts for any accumulator
+   value and arbitrary long left shifts if the accumulator is zero.
+
+There is a further problem with zeros (which had still not been
+resolved when I left). Explicitly coded zeros can be written with
+a large negative exponent, but zeros arising from calculation
+inherit their exponent from the operands. Thus, in W:=(X+Y)+Z,
+if X and Y happen to be equal and opposite, X+Y will have a zero
+mantissa, but its exponent could be greater than that of Z, thus
+incorrectly forcing Z to be right shifted before adding it to zero.
+The best that can be said of this is that it could be viewed
+as no worse than an error in the bottom bit of either X or Y
+(making X+Y non-zero, and shifting Z accordingly).
+
+Also the 920ATC 'B' model specification pages 19 to 21 (given above)
+indicates that these big zeros will give incorrect results, if
+"the exponent of the zero mantissa is more than 63 greater than the
+non-zero mantissa's exponent when the answer given will be the non-zero
+mantissa with an exponent equal to the larger exponent minus 36 to 39."
+
+
+Floating Point Convergence.
+---------------------------
+
+This section is not specific to 920ATC, it is also relevant
+to the software floating point package QF, as used in 900 SIR,
+ALGOL and FORTRAN. Whether in 18/18, 28/7 or 35/18 format,
+these all use 2's complement mantissae, whereas many other
+floating point implementations use sign-&-magnitude mantissa.
+
+When a positive mantissa is shifted right a long way it becomes
+zero, whereas a negative mantissa never becomes zero, no matter
+how far it is shifted right; it becomes and then remains all 1s.
+
+When it first becomes all 1s it is still correct, representing
+a negative value somewhere between the bottom bit inclusive an
+zero exclusive, depending on the value of the bits shifted out.
+But after another shift, the value represented is between half
+of a bottom bit and zero, and so should be replaced by zero.
+
+In 900 BASIC, which effectively uses 29/8 & 35/13 formats,
+I've been careful to do this, and I've documented an important
+consequence of this within the user manual, which I was able
+exploit when implementing the mathematical functions within BASIC:
+
+"When two numbers are added or subtracted, if one is negligible
+compared with the other, the result is exactly as if the one number
+were zero (regardless of the signs of the numbers). This property
+of the floating point arithmetic enables the summing of series
+to be terminated as soon as the term has no effect on the sum;
+without waiting until the term itself underflows to zero,
+and without resorting to a machine-dependent "epsilon"."
+
+From the RADOS source files for the FORTRAN library, I can see
+that this 900 FORTRAN limits right shifts to 36 places, likewise
+for a version of QF interpreter used in 28/7 format with CAP CORAL,
+shifts are limited to 32 places. In both cases, operands requiring
+more than this many right shifts are treated as if zero.
+
+But in the 920ATC hardware, in the SIR QF interpreter, and in the
+only issue of the ALGOL interpreter for which I have the source,
+no special action is taken, so negative values, however small,
+always cause some negative drift.
+
+
+Initial Instructions.
+---------------------
+
+920A, 920B=903, 920M, 920C=905, all have built-in Initial
+Instructions, which appear to occupy locations 8180 to 8191,
+and hide the core store locations in that address range.
+Sometimes, and always on machines with more than 8K of store,
+they can be turned off, to avoid having a gap in the store,
+either with the program terminate instruction 15 7168, (or,
+but only on 920C=905, by selecting absolute addressing, 15 7177).
+
+Programs frequently use multiple entry points, to select options
+and to initiate actions, especially when a no TeleType is available,
+and these reactivate initial instructions, even though entry point
+8181 for initial instructions has not been selected. Which is why
+the 16K versions of ALGOL, FORTRAN, and MASIR make more use of
+the assumed TeleType to select options and actions.
+
+The 920ATC 'A' model specification section 1.5 "Program Loading"
+states that "Programs will be loaded from punched tape via the
+OMP connector. Initial instructions will first be loaded into
+memory under control of the OMP or program loading unit. Control
+will then be transferred to the initial instructions program
+for reading in the tape."
+
+Thus, initial instructions are initially copied from the OMP
+into core store locations 8180 to 8191, overwriting whatever
+is there, but then they may themselves be overwritten by the
+actions of the loaded program, with no need to "turn them off".
+
+I can find no mention of initial instructions in the 920ATC
+'B' model specification, so I assume that by then they were
+viewed as entirely a matter for the OMP.
+
+
+Operators Monitor Panel Options.
+--------------------------------
+
+The 920ATC 'B' model specification Appendix B states
+"Four OMP options are available with different interface facilities
+for use with Paper Tape Stations, Teletype, VDUs etc."
+
+OMP type 25-017-02 interface to PTS 240/131-03/0231/A/G01.
+   Supports 15 2048 (with 7-place shift) and 15 6144 only.
+
+OMP type 25-017-01 interface to PTS 240/131-03/0231/A/G01 [plus]
+One V24 interface to device such as a Teletype at 110 bits/sec.
+   Supports 15 2048 & 15 2052 (with 7-place shift) and 15 6144 & 15 6148,
+   also 15 2049, giving teleprinter status only, in bits A3 & A4.
+
+OMP type 90-168-01 interface to PTS 240/131-03/0231/A/G01 [plus]
+Four V24 interfaces for 4 devices at any combination of rates
+from 9600, 4800, 2400, 1200, 600, 300, and 110 bits/sec.
+   Tape input  at 2048, V24 inputs  at 2050 2052 2054 2056,
+   Tape output at 6144, V24 outputs at 6146 6148 6150 6152,
+   Status at 2049 2051 2053 2055, Control at 6145.
+
+OMP type 25-017-04 = OMP type 90-168-01 in free standing enclosure.
+
+In my "920 ATC" wallet file, I have an Internal Communication
+which I wrote on 1/10/75, querying whether these OMPs had
+the usual Tape-v-TeleType Override switches. The answer was
+essentially "No, but we could provide them on a separate panel".
+
+
+*** EOF ***

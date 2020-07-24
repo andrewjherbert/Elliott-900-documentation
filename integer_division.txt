@@ -1,0 +1,933 @@
+
+        Integer Division in 900 Algol.
+        ==============================
+        Terry Froggatt, May 2014.
+
+
+Introduction.
+-------------
+
+I recently wrote a "Countdown Numbers Game Solver" for the
+Elliott 900-Series, in the SIR symbolic assembly language.
+This program needed exact integer division with remainder,
+which is not quite directly supported by the hardware.
+In turn this prompted me to check how the high-level languages
+Algol & Fortran supported integer division on these machines.
+I discovered that none was correct for all legal inputs.
+
+
+What the hardware does.
+-----------------------
+
+Multiplication on the Elliott 900-Series 18-bit computers takes
+two 18-bit twos-complement signed numbers, one in the A-register
+and one in a store location, and it returns a 35-bit signed number,
+with the sign and most significant 17 bits in the A-register and
+with the least significant 17 bits in the leftmost 17 bits of
+the Q-register. Overflow can only occur for -131072 * -131072.
+When the operands and results are to be viewed as integers,
+it is usual to follow the multiplication with a 17-place
+left shift, placing the integer result in the A-register,
+and there are considerably more overflow situations.
+
+At its simplest, division is the reverse of this. The 35-bit
+signed dividend is placed with its sign and most significant 17
+bits in the A-register and with the least significant 17 bits in
+the leftmost 17 bits of the Q-register, and the divisor is taken
+from a store location. The division algorithm naturally places
+the result in the Q-register and the remainder in the A-register.
+But then for convenience the result is moved into the A-register,
+so inconveniently the remainder is lost. The division will overflow
+when the divisor is zero and can overflow in many other situations.
+
+The "Mathematical Justification of the Process of Division"
+is given in the blue MCS 920B Technical Manual MCB 143
+volume 4 part 1 chapter 4 pages 76-78.
+
+The division algorithm shifts each bit into the result
+as it is calculated, without needing any carrying, and the
+algorithm could calculate an arbitrary number of result bits.
+In fact the algorithm stops after calculating the sign and
+16 more bits of the potentially infinitely long result, which
+could be followed at most by an infinite sequence of ones, or at
+least by an infinite sequence of zeros. To avoid any bias in the
+error, the remaining 18th bit is set to the average, namely a one
+(followed by an infinite sequence of zeros). It would have been
+more accurate to calculate the 18th bit in the normal way, and
+then round it by adding one (with carry) if the 19th bit is a one.
+This would not have added much to the instruction timing, but it
+would have increased the microcode and the overflow-bits logic.
+
+When the operands and results are to be viewed as integers, only
+division by zero, and division of -131072 by -1, can overflow.
+Placing the dividend into the A-register, and shifting it right
+17 places before dividing, will give the nearest odd number to the
+correct result. The usual solution to this is to treat division
+by zero, or by plus or minus one, as special cases (implemented
+as error, no-op or negate, respectively). In the remaining cases,
+the magnitude of the divisor is two or more, so only a 16-place
+shift is needed before the division to ensure that the division
+result does not overflow, and the remaining shift can be performed
+after the division, shifting the odd one out of the rightmost bit.
+
+There is a final complication. Any number which has a finite
+fractional part in a given base has two representations in that
+base. So, in decimal, 1/3 = 0.3333 recurring is unique, but
+3/3 = finite 1 can be either 0.9999 recurring or 1.0000 recurring.
+So, although division is stated above as giving the sign and next
+16 bits of the infinite result and giving the nearest odd number
+to the correct result, when that correct result is exactly even
+there are two possible results (differing by two). The division
+algorithm actually rounds up if the divisor is positive and it
+rounds down if the divisor is negative. So (with 17-place shifts)
+   +36/+6 = +7,  -36/-6 = +5,  -36/+6 = -5,  +36/-6 = -7.
+
+The normal requirement for integer division in high-level languages
+is rounding towards zero. Incidentally this means that division by
+powers of two cannot in general be implemented by a right shift.
+
+
+ACD library "ALGOL TAPE II B 19/5/69, Telecode".
+------------------------------------------------
+
+From a source file for the 920-code (Flexowriter) version
+of the Algol Interpeter (which Borehamwood supplied to ACD
+so that ACD could fix a problem related to 920M side effects),
+now archived in BOX_A1\920ALGII\II_B.1=2, 22,957 bytes,
+(this extract is best found by searching for NNN):
+
+DIV
+          4     +6
+          2     SP
+          5     W
+          1     +3
+          5     SP
+          0     W
+          /4    3
+          7     PRIM30+17
+          5     WS1
+          2     +1
+          7     ;+20
+          1     -2
+          7     ;+20
+          /4    0
+          9     NNN
+          /4    3
+          9     NNN+8
+          4     +0
+          5     WS2
+          /4    0
+          0     +0
+          14    8176
+          13    WS1
+          14    8191
+          5     WS1
+          4     WS2
+          9     NNN+17
+          4     WS1
+          0     W
+          /5    0
+
+          8     NXPORD
+          +0    ( SPARE LOCN.)
+
+          /4    0
+          2     +0
+          /5    0
+          1     =/0 0
+          7     PRIM30+17
+          8     ;-7
+NNN       /4    3
+          9     ;+10
+          /4    0
+          2     +0
+          /5    0
+          4     =/0 0
+          5     WS2
+          8     DIV+20
+          2     +0
+          5     WS1
+          8     ;-5
+          2     +0
+          5     WS1
+          /4    0
+          2     +0
+          /5    0
+          8     DIV+18
+          4     WS1
+          2     +0
+          8     NNN-10
+
+Rearranged to show the flow more clearly:
+
+DIV   4    +6
+      2    SP
+      5    W
+      1    +3
+      5    SP
+        |
+      0    W
+      /4   3   (bottom)
+      7    PRIM30+17 ----------------------> overflow divide by 0
+      5    WS1
+      2    +1
+      7    ;+20 ---------------------------> to 8 NXPORD below
+      1    -2
+      7    ;+20 ------> /4   0
+        |               2    +0
+        |               /5   0
+        |               1    =/0 0
+        |               7    PRIM30+17 ----> overflow -131072/-1
+        |               8    ;-7 ----------> to 8 NXPORD below
+        |
+      /4   0   (top)
+      9    NNN -------------------------> /4   3
+        |                                 9    ;+10 ------> 2    +0
+      /4   3   (bottom)                   /4   0            5    WS1
+      9    NNN+8 -----> 2    +0           2    +0           /4   0
+        |               5    WS1          /5   0            2    +0
+        |               8    ;-5 -------> 4    =/0 0        /5   0
+        |                                 5    WS2          8    DIV+18?
+        |                                 8    DIV+20?        |
+        |                                   |                 |
+      (+/+)             (+/-)             (-/+)             (-/-)
+        |                                   |                 |
+(17)  4    +0 <-----------------------------+-----------------/
+      5    WS2                              |
+        |                                   |
+(19)  /4   0  <-----------------------------/
+      0    +0
+      14   8176
+      13   WS1
+      14   8191
+      5    WS1
+        |
+      4    WS2
+      9    NNN+17 ----> 4    WS1
+      4    WS1          2    +0
+      0    W <--------- 8    NNN-10
+      /5   0
+      8    NXPORD -------------------------> return
+
+The jump "8 DIV+20" is clearly wrong because it bypasses the reading
+of the dividend at "(19) /4 0", resulting in a division into "=/0 0".
+The jump "8 DIV+18" is probably also wrong because it results in the flag
+WS2 being set to an arbitrary (but usually positive) value rather than
+to zero. The lines in the diagram show what was presumably intended.
+
+It is fairly obvious what has happened here: it looks as though DIV
+was originally a subroutine, and has been changed into a routine.
+This explains why the DIV label is on a line of its own, rather than
+on the same line as the first instruction: it would have originally
+had a "+0" (probably) or a ">1" (preferably) alongside it for the link.
+The above jumps would work if a "14 0" instruction had been inserted here.
+
+The exit code has been changed from what would have been
+          0     DIV
+          /8    1
+into
+          8     NXPORD
+          +0    ( SPARE LOCN.)
+and the spare location has been retained to avoid changing the jumps "8 ;-7",
+"8 NNN-10", & the second "7 ;+20". In fact the "8 ;-7" & the first "7 ;+20"
+which both jump to the jump "8 NXPORD" could now jump to NXPORD directly.
+
+Two of the "/4 3" could be replaced by the slighly faster "4 WS1".
+The two "5 WS2" could become one by converging the paths sooner.
+By inserting "2 +0, /5 0" at NNN, the two subsequent "/4 0, 2 +0, /5 0"
+could be eliminated.
+
+Even with a "14 0" instruction inserted at the start, the
+above code still fails when either of the operands is -131072.
+
+
+MECSL 920-code (Flexowriter) binaries.
+--------------------------------------
+
+Long after ACD=MASD had switched from using Flexowriter binaries
+using the above source, to using MASD versions of the MECSL Teletype
+binaries listed below, MECSL issued updated Flexowriter binaries.
+The division routine in this interpreter has not been inspected.
+
+
+MASD 903-code (Teletype) binaries.
+----------------------------------
+
+"903 ALGOL INTERPRETER 1/1/74, Binary Mode 3"
+derived from MECSL issue 6,
+now archived in BOX_A1\903ALGOL\INTERPRE.1=2, 16,044 bytes.
+
+"903 ALGOL 16K LONG PROG 1/1/74, Binary Mode 3"
+derived from MECSL issue 6,
+now archived in BOX_A1\903ALGOL\16K_LP.1=2, 18,255 bytes.
+
+"903 ALGOL 16K LOAD-&-GO 1/1/74, Binary Mode 3"
+derived from MECSL issue 5,
+now archived in BOX_A1\903ALGOL\16K_LG.1=2, 34,273 bytes.
+
+The division routines were extracted using SIM900 blind
+   SIM900 >filename.TMP
+   INTER OPASC PIP filename.1
+   LOAD DISPLAY 8 16383 QUIT
+then searching for the relevant "14 8176" and editing.
+
+INTERPRE:               16K_LP:                 16K_LG:
+---------               -------                 -------
+(1035)    4 3771        (1091)    4 4401        (935)     4 3662
+(1036)    2 136         (1092)    2 136         (936)     2 36
+(1037)    5 180         (1093)    5 180         (937)     5 80
+(1038)    1 3772        (1094)    1 4402        (938)     1 3663
+(1039)    5 136         (1095)    5 136         (939)     5 36
+(1040)    0 180         (1096)    0 180         (940)     0 80
+(1041)    /4 3          (1097)    /4 3          (941)     /4 3
+(1042)    7 1565        (1098)    7 1621        (942)     7 1484
+(1043)    5 191         (1099)    5 191         (943)     5 91
+(1044)    1 3768        (1100)    1 4390        (944)     1 3659
+(1045)    7 1726        (1101)    7 1876        (945)     7 1639
+(1046)    1 3773        (1102)    1 4403        (946)     1 3664
+(1047)    7 1067        (1103)    7 1123        (947)     7 967
+(1048)    4 3758        (1104)    4 4388        (948)     4 3649
+(1049)    5 192         (1105)    5 192         (949)     5 92
+(1050)    4 191         (1106)    4 191         (950)     4 91
+(1051)    9 1073        (1107)    9 1129        (951)     9 973
+(1052)    /4 0          (1108)    /4 0          (952)     /4 0
+(1053)    9 1080        (1109)    9 1136        (953)     9 980
+(1054)    /4 0          (1110)    /4 0          (954)     /4 0
+(1055)    0 3758        (1111)    0 4388        (955)     0 3649
+(1056)    14 8176       (1112)    14 8176       (956)     14 8176
+(1057)    13 191        (1113)    13 191        (957)     13 91
+(1058)    14 8191       (1114)    14 8191       (958)     14 8191
+(1059)    0 180         (1115)    0 180         (959)     0 80
+(1060)    /5 0          (1116)    /5 0          (960)     /5 0
+(1061)    4 192         (1117)    4 192         (961)     4 92
+(1062)    7 1726        (1118)    7 1876        (962)     7 1639
+(1063)    /4 0          (1119)    /4 0          (963)     /4 0
+(1064)    2 3758        (1120)    2 4388        (964)     2 3649
+(1065)    /5 0          (1121)    /5 0          (965)     /5 0
+(1066)    8 1726        (1122)    8 1876        (966)     8 1639
+(1067)    /4 0          (1123)    /4 0          (967)     /4 0
+(1068)    2 3758        (1124)    2 4388        (968)     2 3649
+(1069)    /5 0          (1125)    /5 0          (969)     /5 0
+(1070)    1 3757        (1126)    1 4387        (970)     1 3648
+(1071)    7 1565        (1127)    7 1621        (971)     7 1484
+(1072)    8 1726        (1128)    8 1876        (972)     8 1639
+(1073)    2 3758        (1129)    2 4388        (973)     2 3649
+(1074)    5 191         (1130)    5 191         (974)     5 91
+(1075)    9 1089        (1131)    9 1145        (975)     9 989
+(1076)    /4 0          (1132)    /4 0          (976)     /4 0
+(1077)    9 1081        (1133)    9 1137        (977)     9 981
+(1078)    10 192        (1134)    10 192        (978)     10 92
+(1079)    8 1054        (1135)    8 1110        (979)     8 954
+(1080)    10 192        (1136)    10 192        (980)     10 92
+(1081)    2 3758        (1137)    2 4388        (981)     2 3649
+(1082)    /5 0          (1138)    /5 0          (982)     /5 0
+(1083)    9 1085        (1139)    9 1141        (983)     9 985
+(1084)    8 1054        (1140)    8 1110        (984)     8 954
+(1085)    0 3758        (1141)    0 4388        (985)     0 3649
+(1086)    4 3773        (1142)    4 4403        (986)     4 3664
+(1087)    13 191        (1143)    13 191        (987)     13 91
+(1088)    8 1058        (1144)    8 1114        (988)     8 958
+(1089)    /2 0          (1145)    /2 0          (989)     /2 0
+(1090)    7 1092        (1146)    7 1148        (990)     7 992
+(1091)    4 3768        (1147)    4 4390        (991)     4 3659
+(1092)    1 3759        (1148)    1 4389        (992)     1 3650
+(1093)    8 1059        (1149)    8 1115        (993)     8 959
+
+These all appear to be the equivalent to one another and to the
+following source files which I received almost four decades later.
+
+
+903 "ALGOL Sources.zip"
+-----------------------
+
+From: Andrew Herbert <andrew@herbertfamily.org.uk>
+Subject: ALGOL Sources
+Date: Thu, 1 Aug 2013 00:03:57 +0100
+
+"Attached are the sources needed to build the Issue 6 2 pass and
+Large Program Systems. These were built by using the Issue 6 Translator
+and Interpreter source tapes I found in Don [Hunter]'s stuff and then
+disassembling the binary images of the distributed tapes.
+You should be able to find what you need from these."
+
+Length  Size  Ratio   Date    Time    CRC-32   Name
+------  ----- -----   ----    ----   --------  ----
+140386  26017  82%  08-07-13  22:01  3d5a8bff  ALG16KLP(ISS6).900
+ 10611   2615  76%  07-06-13  02:17  2b23ab39  ALG1_SYMBOLS.900
+  2697    600  78%  07-06-13  02:12  d7da6c05  ALG_8K_DUMP.900
+  1334    310  77%  07-06-13  03:07  9f2b7dc5  ALG_8K_T23.900
+ 80408  12183  85%  23-07-13  14:16  4bc35d4a  INTERPR(ISS6).900
+ 17817   3454  81%  23-07-13  21:23  2eff66eb  LIBRARY(ISS6).900
+135740  19846  86%  23-07-13  14:16  a3b575d4  TRANSLAT(ISS6).900
+
+The integer division from ALG16KLP follows, the integer division
+from INTERPR is equivalent, except for having a sparser layout:
+
+DIV       4     +6
+          2     SP
+          5     W
+          1     +3
+          5     SP
+          0     W
+          /4    3
+          7     INTOVR
+          5     WS1
+          1     -1
+          7     NXPORD
+          1     +2
+          7     KMIN1
+          4     +0
+          5     WS2
+          4     WS1
+          9     KKNEG
+          /4    0
+          9     JJNEG
+DIVPOS    /4    0
+          0     +0
+          14    8176
+          13    WS1
+          14    8191
+JKRES     0     W
+          /5    0
+          4     WS2
+          7     NXPORD
+          /4    0
+          2     +0
+          /5    0
+          8     NXPORD
+KMIN1     /4    0
+          2     +0
+          /5    0
+          1     =/0 0
+          7     INTOVR
+          8     NXPORD
+KKNEG     2     +0
+          5     WS1
+          9     KKS
+          /4    0
+          9     JJNEG+1
+          10    WS2
+          8     DIVPOS
+JJNEG     10    WS2
+          2     +0
+          /5    0
+          9     ;+2
+          8     DIVPOS
+          0     +0
+          4     +2
+          13    WS1
+          8     JKRES-1
+KKS       /2    0
+          7     ;+2
+          4     -1
+          1     +1
+          8     JKRES
+
+Rearranged to show the flow more clearly:
+
+DIV   4    +6
+      2    SP
+      5    W
+      1    +3
+      5    SP
+        |
+      0    W
+      /4   3   (bottom)
+      7    INTOVR -------------------------> overflow divide by 0
+      5    WS1
+      1    -1
+      7    NXPORD -------------------------> return
+      1    +2
+      7    KMIN1 -----> /4   0
+        |               2    +0
+        |               /5   0
+      4    +0           1    =/0 0
+      5    WS2          7    INTOVR -------> overflow -131072/-1
+        |               8    NXPORD -------> return
+        |
+      4    WS1
+      9    KKNEG ----------------------------> 2    +0
+        |                                      5    WS1
+      /4   0   (top)                           9    KKS ----\
+      9    JJNEG -----> 10   WS2               /4   0       |
+        |               2    +0 <------------- 9    JJNEG+1 |
+        |               /5   0                 10   WS2     |
+        |               9    ;+2 ----\         8    DIVPOS  |
+        |               8    DIVPOS  |           |          |
+        |                 |          |           |          |
+        |<----------------<----------+-----------/          |
+      /4   0                         |                      |
+      0    +0                      0    +0                /2   0
+      14   8176                    4    +2           /--- 7    ;+2
+      13   WS1                     13   WS1          |    4    -1
+      14   8191 <----------------- 8    JKRES-1      \--> 1    +1
+      0    W <------------------------------------------- 8    JKRES
+      /5   0
+        |
+      4    WS2
+      7    NXPORD -------------------------> return
+      /4   0
+      2    +0
+      /5   0
+      8    NXPORD -------------------------> return
+
+The two "13 WS1" cannot become one by converging the paths sooner,
+   if only because an "8" instruction corrupts Q on a 920A.
+"8 JKRES" could be changed to "8 JKRES+1", bypassing the
+   "0 W", because the B-register is still W on this path.
+
+When both operands are -131072, this code correctly returns +1.
+When just the divisor is -131072, this code correctly returns +0.
+When just the dividend is -131072, the A&Q registers
+   are set to +2 & +0 respectively before the division,
+   correctly representing +131072 right shifted 16 places,
+   but when the divisor is +2 or -2,
+   the division +262144/+2 overflows to -131071, so:
+      -131072/-2 gives -65536 not +65536,
+      -131072/+2 gives +65536 not -65536.
+
+This can be cured by altering the special case code to:
+          0     +0
+          4     +2
+          13    WS1
+          14    8191
+          6     &377777
+          8     JKRES
+A simpler solution is to just insert a "6 &377777" between the
+label JKRES and the previous "14 8191" instruction, remembering
+to change "8 JKRES-1" into "8 JKRES-2" (or labelling the
+"14 8191" instructon "SHIFTR" as in the Rados version below),
+although this solution does slow down the normal cases too.
+
+
+MECSL 905 RADOS Fortran Library.
+--------------------------------
+
+"RDL004/2, 19.6.72"
+   in black marker with blue slash, "Obsolete" in scarlet marker,
+now archived in BOX_C3\MECSL905\RDL0042.1=2, 31,499 bytes.
+
+"RADOS FORTRAN LIBRARY -
+   INTRINSICS(2) INTRINSICS(1) SERVICE ROUTINES, SOURCE 6.3.73 RDL004/2"
+   in green marker, "MASTER" in black marker, "(ISS 4)" in green marker,
+with a troublesome legible header
+   [RDL 004 2 RADOS FORTRAN LIBRARY] >3" gap [ISSUE 4]
+now archived in BOX_C3\MECSL905\RDL00424.1=2, 31,870 bytes.
+
+There are only minor differences between these two files, and
+none of the differences affect the Integer Division subroutine,
+(multiple blank lines are reduced to single blank lines below,
+and one blank line has been inserted before the workspaces):
+
+*NOMEM
+*CHECKW 600000
+
+*PROG QID
+
+[ "QID QRR]
+
+(ROUTINE FOR INTEGER DIVIDE)
+
+QID  +0
+ 5  SRX
+ 0  QID
+/4  1
+ 9  SRLAB
+ 1  SRX
+ 5  LS1
+ 0  LS1
+ /4  0
+SRLAB
+ 1  SRX
+ 5  LS1
+ 0  QID
+ /4  2
+ 9  SR2
+ 1  SRX
+ 5  LS2
+ 0  LS2
+ /4  0
+ SR2
+ 1  SRX
+ 5  LS2
+
+ 0  LS1
+/4  0
+ 5  JJ
+ 0  LS2
+/4  0
+ 5  KK     (ACTUAL ARGS. NOW STORED IN JJ,KK)
+
+ 4  KK
+ 7  INTOVR   (KK=0)
+ 5  WS1
+ 4  JJ
+ 7  EXIT+1   (JJ=0)
+ 4  KK
+ 1  -1
+ 7  EXIT
+ 1  +2
+ 7  KMINI   (KK=-1)
+ 4  +0
+ 5  WS2
+ 4  WS1
+ 9  KKNEG   (KK  MODULUS)
+ 4  JJ
+ 9  JJNEG   (JJMODULUS)
+DIVPOS
+ 4  JJ      (DIV FOR 16 SIG BIN)
+ 0  +0      (DIGIT QUOTIENT)
+14  8176
+13  WS1
+SHIFTR
+14  8191
+JKRES
+ 5  JJ
+ 4  WS2
+ 7  EXIT
+ 4  JJ      (NEGATE QUOTIENT)
+ 2  +0
+ 5  JJ
+EXIT
+ 4  JJ      (QUOTIENT IN A)
+ 0  QID
+/8  3
+
+KMINI
+ 4  JJ
+ 2  +0      (KK=-1)
+ 5  JJ
+ 1  &400000
+ 7  INTVR1   (IF JJ=-131072)
+ 8  EXIT
+
+KKNEG
+ 2  +0      (MODULUS KK)
+ 5  WS1
+ 9  KKS      (KK=-131072)
+ 4  JJ
+ 9  JJNEG+1
+10  WS2
+ 8  DIVPOS
+
+JJNEG
+10  WS2      (MODULUS  JJ)
+ 2  +0
+ 5  JJ
+ 9  ;+2
+ 8  DIVPOS
+ 0  +0
+ 4  +2      (JJ=-131072)
+13  WS1
+ 8  SHIFTR
+
+KKS
+ 2  JJ      (KK=-131072)
+ 7  ;+2     (JJ=-131072)
+ 4  -1
+ 1  +1
+ 8  JKRES
+
+SRX  +0
+LS1  +0
+LS2  +0
+WS1  +0
+WS2  +0
+PIN1  0  LS1
+PIN2  0  LS2
+JJ  +0
+KK  +0
+
+INTOVR
+ 4  \EDZ   (DVO)
+ 5  PARAM2
+ 4    PIN2
+ 5  PARAM4
+ 8  ERROR
+
+INTVR1
+ 4  \EDI
+ 5  PARAM2
+ 4  PIN1
+ 5  PARAM4
+
+ERROR
+CALLG(QRR)
+\QID
+PARAM2  +0
+     0  QID
+PARAM4  +0
+    +0
+ 4  +0
+ 5  JJ
+8  EXIT
+
+%
+
+Rearranged to show the flow more clearly,
+read top into JJ & bottom into KK then:
+
+      4    KK   (bottom)
+      7    INTOVR -------------------------> overflow divide by 0
+      5    WS1
+      4    JJ
+      7    EXIT+1 -------------------------> below
+      4    KK
+      1    -1
+      7    EXIT ---------------------------> below
+      1    +2
+      7    KMIN1 -----> 4    JJ
+        |               2    +0
+        |               5    JJ
+      4    +0           1    &400000
+      5    WS2          7    INTVR1 -------> overflow -131072/-1
+        |               8    EXIT ---------> below
+        |
+      4    WS1
+      9    KKNEG ----------------------------> 2    +0
+        |                                      5    WS1
+      4    JJ   (top)                          9    KKS ----\
+      9    JJNEG -----> 10   WS2               4    JJ      | 
+        |               2    +0 <------------- 9    JJNEG+1 |
+        |               5    JJ                10   WS2     |
+        |               9    ;+2 ----\         8    DIVPOS  |
+        |               8    DIVPOS  |           |          |
+        |                 |          |           |          |
+        |<----------------<----------+-----------/          |
+      4    JJ                        |                      |
+      0    +0                      0    +0                2    JJ
+      14   8176                    4    +2           /--- 7    ;+2
+      13   WS1                     13   WS1          |    4    -1
+      14   8191 <----------------- 8    SHIFTR       \--> 1    +1
+      5    JJ   <---------------------------------------- 8    JKRES
+        |
+      4    WS2
+      7    EXIT ---\
+      4    JJ      |
+      2    +0      |
+      5    JJ      |
+EXIT  4    JJ <----/
+(+1)  0    QID
+      /8   3 ------------------------------> return
+
+This appears to be the same as the above 903 Algol source,
+except that it treats top=0 unnecessarily as a special case,
+costing three instructions "4 JJ, 7 EXIT+1, 4 KK", which are not
+in the right place to force the indeterminate case 0/0 to zero.
+The first "4 KK", which follows "5 KK", is also unnecessary.
+
+Both this Fortran and the above 903 Algol use labels like JJNEG & KKNEG,
+but only the Fortran has variables JJ & KK. They are accessed as stack
+offsets in the Algol, suggesting that the Algol was edited from the
+Fortran, although the fact that the SHIFTR label in the Fortran
+appears as JKRES-1 in the Algol suggests the opposite, or a common
+ancestor. The two versions will differ in the Q-register contents.
+
+
+CAP 920C Coral.
+---------------
+
+According to the 1974 & 1976 User Manuals, 1.1.9.5.2 page 33:
+"The 920C hardware always causes the result of a division to
+contain bit 17 set to 1." "However, the 920C Compiler has
+incorporated an algorithm to produce the correct result -
+the dividend is doubled and the quotient is halved. It must
+be noted that in extreme cases this could mean the loss of the
+sign of the dividend and therefore produce corrupted results.
+No such algorithm is applied to the division of fixed numbers
+since bit 17 is rarely significant."
+
+The 1974 version then also states that "Integer division
+with a negative divisor should be avoided since it sometimes
+produces undefined results due to hardware overflow",
+but this was deleted from the 1976 version, because
+it is not undefined, even if it is best avoided.
+
+
+An Alternative Approach.
+------------------------
+
+Apart from CORAL, all of the above integer division routines
+convert negative operands to positive operands before the division,
+then correct the sign afterwards. This does ensure that division
+is symmetric about zero, as required by high level languages,
+even though the Elliott hardware is not symmetric.
+But it is possible to avoid all of this sign-changing.
+
+We want divisions of +25 to +29 by +5 to give result +5
+So before the final right shift the result must be +11.
+The hardware will give nearest odd, rounded up if even:
+   +60/+5 = +12.0 = +13,  +50/+5 = +10.0 = +11,
+   +59/+5 = +11.8 = +11,  +49/+5 = + 9.8 = + 9.
+So +25 to +29 has to be mapped onto +50 to +59.
+Double & optionally add +1.
+
+We want divisions of -25 to -29 by -5 to give result +5
+So before the final right shift the result must be +11.
+The hardware will give nearest odd, rounded down if even:
+   -61/-5 = +12.2 = +13,  -51/-5 = +10.2 = +11,
+   -60/-5 = +12.0 = +11,  -50/-5 = +10.0 = + 9.
+So -25 to -29 has to be mapped onto -51 to -60.
+Add -1 giving -26 to -30, double & optionally add +1.
+
+We want divisions of -25 to -29 by +5 to give result -5
+So before the final right shift the result must be -9.
+The hardware will give nearest odd, rounded up if even:
+   -51/+5 = -10.2 = -11,  -41/+5 = - 8.2 = - 9,
+   -50/+5 = -10.0 = - 9,  -40/+5 = - 8.0 = - 7.
+So -25 to -29 has to be mapped onto -41 to -50.
+Add +4 giving -21 to -25, double & optionally add +1.
+
+We want divisions of +25 to +29 by -5 to give result -5
+So before the final right shift the result must be -9.
+The hardware will give nearest odd, rounded down if even:
+   +50/-5 = -10.0 = -11,  +40/-5 = - 8.0 = - 9,
+   +49/-5 = - 9.8 = - 9,  +39/-5 = - 7.8 = - 7.
+So +25 to +29 has to be mapped onto +40 to +49.
+Add -5 giving +20 to +24, double & optionally add +1.
+
+In all four cases, the "double & optionally add +1" is implemented
+by the 14 8176 instruction that moves the dividend from A into A&Q,
+without bothering to clear the Q-register beforehand. Usefully, this
+also means that the B-register can hold the stack pointer throughout.
+
+In general: if the dividend was negative, add -1 to the dividend;
+   if the operand signs differed, add the divisor to the dividend.
+These adjustments take the dividend towards (or through) zero,
+   except when both operands are negative,
+   where adding -1 to a dividend of -131072 overflows.
+
+When the dividend is -131072, the A&Q registers
+   are set to -3 & -1 respectively before the division,
+   correctly representing -131073 right shifted 16 places,
+   (with the optionally added +1 and the ignored bottom bit
+   both set, avoiding the need for yet another literal, -4,
+   note that an interrupt might clear the bottom bit here)
+   but when the divisor is -2,
+   the division -262145/-2 overflows to -131071,
+   hence the "6 &377777" after the "14 8191".
+
+This gives the following coding for Algol:
+
+DIV       4     SP
+          1     -3
+          5     SP
+          1     -3
+          5     W
+
+          0     W
+          /4    3
+          5     WS1
+          9     DENNEG
+
+          7     INTOVR
+          1     -1
+          7     NXPORD
+          /4    0
+          9     SHIFTR-2
+          8     SHIFTR
+
+DENNEG    1     +1
+          7     NEGATE
+          /4    0
+          9     ;+2
+          8     SHIFTR-1
+          1     -1
+          9     SHIFTR
+
+          2     -1
+          4     -3
+          13    WS1
+          14    8191
+          6     &377777
+          8     EXIT
+
+NEGATE    /4    0
+          2     &400000
+          7     INTOVR
+          1     &400000
+          8     EXIT
+
+(-2)      1     -1
+(-1)      1     WS1
+SHIFTR    14    8176
+          13    WS1
+          14    8191
+EXIT      /5    0
+          8     NXPORD
+
+Rearranged to show the flow more clearly:
+
+DIV   4    SP
+      1    -3
+      5    SP
+      1    -3
+      5    W
+        |
+      0    W
+      /4   3   (bottom)
+      5    WS1
+      9    DENNEG -------------------\
+      7    INTOVR ---> overflow      |
+      1    -1                      1    +1
+      7    NXPORD ---> return      7    NEGATE -------\
+        |                            |                |
+      /4   0   (top)               /4   0           /4   0
+      9    SHIFTR-2 --\            9    ;+2           |
+      8    SHIFTR ----+---\   /--- 8    SHIFTR-1      |
+                      |   |   |    1    -1            |
+                      |   |<--+--- 9    SHIFTR        |
+      1    -1   <-----/   |   |      |                |
+      1    WS1  <---------+---/    2    -1            |
+      14   8176 <---------/        4    -3            |
+      13   WS1                     13   WS1         2    &400000
+      14   8191                    14   8191        7    INTOVR ---> overflow
+        |                          6    &377777     1    &400000
+        |                          8    EXIT        8    EXIT
+        |                            |                |
+        |<---------------------------<----------------/
+      /5   0
+      8    NXPORD ---> return
+
+As well as avoiding all of the sign-changing, this code has
+   three minor improvements relative to earlier versions.
+The initial adjustment of SP & setting of W
+   uses "add" rather than the slightly slower "negate & add",
+   and uses the literal -3 twice rather than two different literals.
+The tests for the divisor special cases (+1, +0, -1) are moved
+   to follow the divisor sign test, so fewer tests are performed.
+The NEGATE code is rearranged to share the "/5 0" with other branches.
+   (With earlier versions, the result is written back even if overflow
+   occurs, here it is not, but the stack is already right).
+
+The 903 Algol version above, plus the one-word correction,
+   used 60 instructions. This version uses 40 instructions.
+The NEGATE code could probably be eliminated by sharing code
+   with the Integer Unary Negate operator, NEGI = PRIM15.
+
+
+Test Program.
+-------------
+
+The errors noted in the above routines were demonstrated
+with a SIR test program containing 10 versions of the code,
+invoked from a PC using a modified REMOTE link program,
+for each of 496 dividends and 135 non-zero divisors,
+taking just under three hours to run.
+
+Total Tests: 66960
+Failures:
+   Test A: 33048   of Algol II, as written above.
+   Test B:   629   of Algol II, with 14 0 added after DIV label.
+   Test C:   629   of later Algol, with -131072 tests patched out.
+   Test D:     3   of later Algol, as written above.
+   Test E:     3   of Rados Fortran library, as written above.
+   Test F:     1   as Test E, with correction to special case.
+   Test G:     1   as Test E, with one-instruction correction.
+   Test H:    68   as Test J, without special case, & setting Q all 0s.
+   Test I:    68   as Test J, without special case, & setting Q all 1s.
+   Test J:     1   of Alternative Approach, as written above, Q undefined.
+-131072/-1 is reported as a failure in all cases.
+
+
+*** EOF ***
