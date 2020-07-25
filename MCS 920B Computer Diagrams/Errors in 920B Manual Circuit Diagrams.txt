@@ -1,0 +1,23 @@
+Circuit Diagram Errors.
+-----------------------
+
+(from Terry Froggatt)
+
+On circuit diagram A19,
+	for FTM read MTF, on input 4 to LSA D.
+On circuit diagram A24,
+	two inhibit driver diodes are drawn the wrong way round,
+	I think D12 & D13 are wrong, and D10 & D11 are right.
+On circuit diagram C26,
+	in the blue ringbinders, where it is at issue 3,
+	the CVT chassis is shown as connected to mains neutral,
+	whereas in reality I assume it is connected to mains earth.
+The same error occurs in the grey ringbinders 4.1.3 & 4.1.4,
+	figure 3 issue 3, whilst the connection is absent at issue 2.
+On circuit diagram B10 sheet 2,
+	pin 13 for BD POS 53 is shown as connected to 53/AE
+	(on the same board) which probably should be 57/AE,
+	pin 10 is called RGS but probably should be RGS-bar.
+On circuit diagram 32,
+	in 32 is shown connected to +6v
+	whereas in reality it is connected to 0v.
