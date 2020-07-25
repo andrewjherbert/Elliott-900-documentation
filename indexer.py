@@ -53,7 +53,7 @@ def indexPath (path, name, depth):
 #            os.remove (pn)
 #            continue
 
-        if nl == 'index.htm' or nl == 'indexer.py':
+        if nl == 'index.htm' or nl = 'index.html' or nl == 'indexer.py':
             continue
 
         size = os.path.getsize (pn)
