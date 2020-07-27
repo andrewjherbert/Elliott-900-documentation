@@ -30,10 +30,14 @@ def indexPath (path, name, depth):
                     indexPath (pn, n, depth+1)
         return
 
+    parent = '../' * (depth-1)
+
     outfile = open (path + '/index.htm', 'w')
-    outfile.write ('<!DOCTYPE html>\n')
     outfile.write ('<html>\n')
     outfile.write ('<body>\n')
+    outfile.write ('<IMG alt="Elliott 900 Banner" src="' + parent +
+                   ('Elliott%20900%20banner.jpg"'
+                    ' width=631 height=239>'))
     outfile.write ('<H1>Contents of ' + name + '</H1>')
     outfile.write ('<table>\n')
 
@@ -53,7 +57,7 @@ def indexPath (path, name, depth):
 #            os.remove (pn)
 #            continue
 
-        if nl == 'index.htm' or nl = 'index.html' or nl == 'indexer.py':
+        if nl == 'index.htm' or nl == 'index.html' or nl == 'indexer.py':
             continue
 
         size = os.path.getsize (pn)
@@ -84,6 +88,8 @@ def indexPath (path, name, depth):
         outfile.write ('</tr>\n')
 
     outfile.write ('</table>\n')
+    outfile.write (('<br><br><br><a href="..">BACK TO PARENT</a>'
+                   '&nbsp&nbsp&nbsp<a href="') + parent + '">BACK TO TOP</a>')
     outfile.write ('</body>\n')
     outfile.write ('</html>\n')
     outfile.close ()
