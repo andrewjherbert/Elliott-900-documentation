@@ -1,12 +1,14 @@
 # INDEXER - program to insert HTML index files in Elliott Archive "Manuals"
 # directory tree
-# Andrew Herbert 23/07/2020
+# Andrew Herbert 06/04/2023
 
 import os.path
 import sys
 
 mb        = 1000000
 hundredmb = 100 * mb
+
+excludes = ['Annotated_Algol_System']
 
 def fullName (path, name):
     return path + '/' + name
@@ -17,6 +19,14 @@ def ignore (path):
 
 def indexPath (path, name, depth):
 
+    global excludes
+    
+    print("Indexing path =", path, "name = ", name, "depth = ", depth);
+    
+    if name in excludes:
+    	print(name, 'excluded')
+    	return
+    	
     filenames = os.listdir (path)
     filenames.sort ()
 
@@ -58,7 +68,7 @@ def indexPath (path, name, depth):
 #            continue
 
         if nl == 'index.htm' or nl == 'index.html' or nl == 'indexer.py':
-            continue
+            ignore(pn)
 
         size = os.path.getsize (pn)
         if size >= hundredmb:
@@ -73,11 +83,8 @@ def indexPath (path, name, depth):
 
         elif os.path.isdir (pn):
             outfile.write ('<td style="padding:10px"><a href="' +
-                               n + '/index.htm">' + n + '</a></td>\n')
+                            n + '/index.htm">' + n + '</a></td>\n')
             indexPath (pn, n, depth+1)
-
-        else:
-            continue
 
         if count % 3 == 2:
             outfile.write ('</tr>\n')
