@@ -8,7 +8,7 @@ import sys
 mb        = 1000000
 hundredmb = 100 * mb
 
-excludes = ['Annotated_Algol_System']
+excludes = ['Annotated_Algol_System', 'Elliott 903 Algol Design Documents']
 
 def fullName (path, name):
     return path + '/' + name
