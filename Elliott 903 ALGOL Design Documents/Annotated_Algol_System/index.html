@@ -1,0 +1,170 @@
+<html>
+<head>
+<title>
+Elliott 903 Algol Resurrection
+</title>
+</head>
+
+<body style="margin: 0 100px 100px 100px">
+
+<h1>Elliott 903 Algol Resurrection</h1>
+
+<p>
+The two main high-level programming languages on the Elliott 903 were Algol 60 and
+FORTRAN&nbsp;II. The source code of the Algol system has survived. Unfortunately the
+source of the FORTRAN system has not.
+</p>
+<p>
+As well as the source code of the Algol system, documentation written by the
+designers of the system has also survived.  This comprises type-written notes
+describing the working of the system in some detail and hand-written flow charts
+for the main routines in the system.
+</p>
+
+<h2>Elliott 903 Algol 60</h2>
+
+<p>
+The Elliott 903 Algol 60 system implements the "IFIP Subset" of Algol 60.  The subset
+introduces various restrictions including requiring identifiers to be declared before
+first reference, recursive procedures disallowed, no <u>own</u> variables. Despite these
+restrictions, Elliott 903 Algol remains a useful language for numerical computing.
+</p>
+
+<p>
+The Elliott 903 Algol system comprises three components:
+
+<ol>
+<li>A <b>Translator</b> which reads in Algol program source code, checks it for errors and
+outputs a "intermediate tape" encoding the program as data and instructions for an
+abstract Algol machine.
+</li>
+<li>
+A runtime <b>Interpreter</b> which reads in the intermediate tape, loads it into the
+store and then executes it, simulating the operation of the abstract machine.
+</li>
+<li>
+A <b>Library</b> of procedures for mathematical functions, input-output formatting, etc.
+</li>
+</0l>
+
+<p>
+In concept Elliott Algol follows the same approach as taken by Whetstone Algol for the
+English Electric KDF9 computer, although the translator is quite different, being of the
+recursive descent type rather than table-driven.  The Elliott and Whetstone interpreters
+are however very similar.
+</p>
+
+<h2>Documentation</h2>
+
+<p>
+There is an extensive archive of Elliott documentation at
+<a href="https://andrewjherbert.github.io/Elliott-900-documentation/">
+Elliott 900 Series Computers Document Archive</a>.
+</p>
+
+<p>
+The Algol Translator and Interpreter are both written in 903 SIR.  This is described in
+Appendix A of
+<a href="https://andrewjherbert.github.io/Elliott-900-documentation/Elliott%20900%20Technical%20Manual/Volume%202A%20Programming%20Information/04%20Volume%202%20Part%201%20Section%201%20-%20MASIR.pdf">
+Elliott Technical Manual, Volume 2, Part 1, Section 1 - MASIR</a>.
+<br>
+The 903 Instruction set is described in Elliott Technical Manual, Volume 1,
+Functional Specification, Part 2, Section 1
+<a href="https://andrewjherbert.github.io/Elliott-900-documentation/Elliott%20900%20Technical%20Manual/Volume%201%20Functional%20Specification/06%20Volume%201%20Part%202%20Section%201%20-%20Registers%20and%20Basic%20Store.pdf">
+(Registers and Basic Store)</a> and Part 2, Section 2
+<a href="https://andrewjherbert.github.io/Elliott-900-documentation/Elliott%20900%20Technical%20Manual/Volume%201%20Functional%20Specification/07%20Volume%201%20Part%202%20Section%202%20-%20Word%20Format%20and%20Instruction%20Code.pdf">
+(Word Format and Instruction Code)</a>
+</p>
+
+<p>
+Programming information, including a description of the supported Algol features, the
+Library and operating instructions for the Elliott 903 Algol System is given in
+Elliott Technical Manual, Volume 2, Part 1, Section 2
+<a href="https://andrewjherbert.github.io/Elliott-900-documentation/Elliott%20900%20Technical%20Manual/Volume%202A%20Programming%20Information/05%20Volume%202%20Part%201%20Section%202%20-%20ALGOL.pdf">
+(Algol)</a>
+</p>
+
+<p>
+The original documentation for the system that has been preserved consists of:
+</p>
+
+<ol>
+<li>
+Translator
+<ul>
+<li>
+<a href="https://andrewjherbert.github.io/Elliott-900-documentation/Elliott%20903%20ALGOL%20Design%20Documents/Elliott%20903%20ALGOL%20Translator.pdf">
+Textual description (scanned document)</a>
+</li>
+<li>
+<a href="https://andrewjherbert.github.io/Elliott-900-documentation/Elliott%20903%20ALGOL%20Design%20Documents/Elliott%20903%20ALGOL%20Translator%20Flowcharts.pdf">
+Flow charts (scanned document)</a>
+</li>
+</ul>
+<li>
+Interpreter (to be added)
+</li>
+</ol>
+
+<h2>Translator</h2>
+
+<p>
+Here is an
+<a href="https://andrewjherbert.github.io/Elliott-900-documentation/Elliott%20903%20ALGOL%20Design%20Documents/Annotated_Algol_System/Translator/Translator_Description.htm">
+HTML listing of the Algol Translator document</a>.  It is a hyperlinked document so
+that you can navigate around the content and importantly so you can cross-refer back from
+the mention of an identifier in the source code to a description of it's meaning.  For
+each major subroutine described in the document there are links to the source code, also
+in HTML, and to the individual flowchart for that subroutine. There are also links back to
+the original scanned page from each page in the HTML so you can check that the HTML
+listing is consistent with the original.
+</p>
+
+<p>
+Here is the HTML source code listing:
+<a href="https://andrewjherbert.github.io/Elliott-900-documentation/Elliott%20903%20ALGOL%20Design%20Documents/Annotated_Algol_System/Translator/Translator_source.htm">
+Translator source code in HTML</a>.
+<p>
+
+<h2>Summary of Emulation Facilities</h2>
+
+<p>
+There is an
+<a href="">
+online facility</a>
+that allows you to type in an Algol program, then translate and run it.
+</p>
+
+<p>
+There are also facilities for running an emulated Elliott 903 on your own computer and
+an
+<a href="https://andrewjherbert.github.io/Elliott-900-software-archive/">
+extensive archive of Elliott software</a>,
+including all the major language systems and utility software provided by Elliotts to
+customers.
+<p>
+
+<p>
+The
+<a href="https://github.com/andrewjherbert/Elliott-900-simulator">
+most comprehensive emulator</a>
+is written for Windows 7 and Windows 10.  It includes a large suite
+of canned demonstrations of all the software in the software archive.  It comes with
+a detailed manual.  The less experienced user will probably be content to install the
+emulator and run the demonstrations.  For the more experienced user it is possible to
+write you own scripts to add further demonstrations, debug them and deal with
+conversions between the various data formats used by the emultor.
+</p>
+
+<p>
+A
+<a href="https://github.com/andrewjherbert/900-Simulator-in-C">
+simpler and more portable emulator</a>
+has been written in C and intended to run in Unix command line environments such
+as Linux and MacOS (terminal command).  It comes with a small number of
+demonstrations and by using these as an example, the more experienced user will
+be able to write their own shell scripts to run programs.
+</p>
+
+
+</body>
