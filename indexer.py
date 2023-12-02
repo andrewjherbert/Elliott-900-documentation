@@ -14,19 +14,19 @@ def fullName (path, name):
     return path + '/' + name
 
 def ignore (path):
-#	print('Ignoring', path)
+	print('Ignoring', path)
 	return
 
 def indexPath (path, name, depth):
 
     global excludes
-    
+
     print("Indexing path =", path, "name = ", name, "depth = ", depth);
-    
+
     if name in excludes:
     	print(name, 'excluded')
     	return
-    	
+
     filenames = os.listdir (path)
     filenames.sort ()
 
@@ -62,17 +62,24 @@ def indexPath (path, name, depth):
             ignore (pn)
             continue
 
+        if nl.endswith('.htm') or nl.endswith('.html') or nl.endswith('.py') or \
+               nl.endswith('.sh'):
+        	ignore(pn)
+        	continue
+
 #        if nl == 'index.htm.old':
 #            print('Deleting', pn)
 #            os.remove (pn)
 #            continue
 
-        if nl == 'index.htm' or nl == 'index.html' or nl == 'indexer.py':
-            ignore(pn)
+#        if nl == 'index.htm' or nl == 'index.html' or nl == 'indexer.py':
+#            ignore(pn)
+#            continue
 
         size = os.path.getsize (pn)
         if size >= hundredmb:
             print(pn, 'is larger than 100mb', size / mb, 'mb')
+            continue
 
         if count % 3 == 0:
             outfile.write ('<tr>\n')
