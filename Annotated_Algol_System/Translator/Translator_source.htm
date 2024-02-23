@@ -9,28 +9,32 @@
       a.chart:visited {color: brown;text-decoration:underline;}
       a.chart:active {color: red;text-decoration:underline;}
     </style>
-    <title>Elliott 903 Algol Translator Source Code</title>
   </head>
   <body>
     <H1>Elliott 903 Algol Translator - Annotated Source Code</H1>
     <p>
-    The original source was in the form of a series of reels ("volumes") of paper tape
-    punched in Elliott 903 telecode, which is similar to 7 bit ASCII with parity.
+    The original source was in the form of a series of reels ("volumes") of 
+    paper tape punched in Elliott 903 telecode, which is similar to 7 bit ASCII 
+    with parity.
     </p><p>
-    A number of helpful "21st Century" comments have been added to the original to
-    aid understanding.  These are indicated by the form ([....]) and include links to
-    images of the original type-written documentation and hand-drawn flowcharts.
+    A number of helpful "21st Century" comments have been added to the original 
+    to aid understanding.  These are indicated by the form ([....]) and include 
+    links an HTML rendering of the original type-written documentation and 
+    scanned images of the original hand-drawn flowcharts.
     </p><p>
     The annotated original source code can be viewed
     <a class=chart href="Translator_source.txt">here</a>.
     <HR>
-    This HTML listing has added line numbers and hot links for all references to labels
+    This HTML listing has added line numbers and hot links for all references to 
+    labels
     (global and local).
     <p></p>
-    You can hover and click on a reference in code such as <code>CODL</code> in
-    <code>4 <a href="#CODL">CODL</a>+1</code>
-    and jump to the defintion  of the label <code>CODL</code>.
-    When you have seen enough of it, you can use the back button to carry on where you
+    You can hover and click on a reference in code such as <code>READAL</code> 
+    in
+    <code>4 <a href="#READAL">READAL</a>+1</code>
+    and jump to the defintion  of the label <code>READAL</code>.
+    When you have seen enough of it, you can use the back button to carry on 
+    where you
     left off.
     </p>
     <hr>
@@ -38,20 +42,20 @@
 
 
     1    ([<code style=color:red>VOLUME 1</code>])
-    2
-    3
+    2    
+    3    
     4    (28 APRIL 1976 CAP DGNH 903 ALGOL TRANSLATOR "JACKDAW".)
     5    (ALGOL TRANSLATOR FOR 903/4100 CODE JUNE 1968)
-    6
+    6    
     7    ([<code style=color:red>Introductory notes, <a class=chart href="Translator_Description.htm#GENERAL">Description</a></code>])
-    8
+    8    
     9    *+8
    10    ^+8
    11    [<a href="#G_CODL">CODL</a> <a href="#G_INBUF">INBUF</a> <a href="#G_W">W</a>]
    12     <a name="G_W" class="proc">W</a>=6090
    13     <a name="G_INBUF" class="proc">INBUF</a>=6106
    14     <a name="G_CODL" class="proc">CODL</a>=6237
-   15
+   15    
    16    [<a href="#G_ADDI">ADDI</a> <a href="#G_ADDRES">ADDRES</a> <a href="#G_AR">AR</a> <a href="#G_ARITH">ARITH</a> <a href="#G_ARRCOUS">ARRCOUS</a>
    17     <a href="#G_BLANKS">BLANKS</a> <a href="#G_BN">BN</a> <a href="#G_BUFLAG">BUFLAG</a> <a href="#G_C">C</a> <a href="#G_CHKSUM">CHKSUM</a> <a href="#G_CNL">CNL</a>
    18     <a href="#G_CODE">CODE</a> <a href="#G_CODL">CODL</a> <a href="#G_CODLP">CODLP</a> <a href="#G_CONS">CONS</a> <a href="#G_CONSTA">CONSTA</a>
@@ -66,9 +70,9 @@
    27     <a href="#G_Q">Q</a> <a href="#G_R">R</a> <a href="#G_REL">REL</a> <a href="#G_SP">SP</a> <a href="#G_SPR">SPR</a>
    28     <a href="#G_SV">SV</a> <a href="#G_TITLE">TITLE</a> <a href="#G_TS">TS</a> <a href="#G_TYPBOX">TYPBOX</a> <a href="#G_TYPE">TYPE</a>
    29     <a href="#G_W">W</a> <a href="#G_WANTED">WANTED</a> <a href="#G_XX">XX</a> ]
-   30
+   30    
    31    ([<code style=color:red>ENTRY POINTS</code>])
-   32
+   32    
    33     8 <a href="#L_2_START">START</a>
    34     8 <a href="#L_2_START">START</a>
    35     8 <a href="#L_2_REPMOD">REPMOD</a>
@@ -77,7 +81,7 @@
    38     8 <a href="#L_2_OPT12">OPT12</a>
    39     8 <a href="#L_2_DUALM">DUALM</a>
    40     8 ;+0
-   41
+   41    
    42     8 <a href="#L_2_SETPERM">SETPERM</a>   (DUMP)
    43     <a name="L_2_REPMOD" class="proc">REPMOD</a>
    44     4 +18
@@ -99,7 +103,7 @@
    60     4 +16
    61     8 <a href="#L_2_START">START</a>+1
    62     8 ;+0
-   63
+   63    
    64    ([<code style=color:red>Global variables, <a class=chart href="Translator_Description.htm#GLOBALS">Description</a></code>])
    65    >+96
    66    <a name="G_OPTION" class="proc">OPTION</a> +0
@@ -209,7 +213,7 @@
   170    <a name="G_WANTED" class="proc">WANTED</a> +0
   171    <a name="G_LHTYPE" class="proc">LHTYPE</a> +0
   172    <a name="G_EXPRES" class="proc">EXPRES</a> +0
-  173
+  173    
   174     0 <a href="#G_W">W</a>+1
   175    <a name="L_2_START" class="proc">START</a> ([<a class=chart href="Flowcharts/START.pdf">Flowchart</a></code>])
   176     4 +0
@@ -280,12 +284,12 @@
   241     2 <a href="#G_NLP">NLP</a>+1
   242     7 <a href="#G_TITLE">TITLE</a>
   243     8 ;-12
-  244
+  244    
   245    <a name="L_2_SETPERM" class="proc">SETPERM</a>
   246     4 <a href="#G_NLP">NLP</a>
   247     5 <a href="#L_2_PERM">PERM</a>
   248     8 8000
-  249
+  249    
   250    [<a href="#G_TABLE">TABLE</a>]
   251    <a name="G_TABLE" class="proc">TABLE</a>
   252     /0 67
@@ -296,7 +300,7 @@
   257     2 64
   258     2 64
   259     2 2243
-  260
+  260    
   261     2 2240
   262     2 2048
   263     2 2625
@@ -305,9 +309,9 @@
   266     2 2755
   267     2 4288
   268     2 2624
-  269
+  269    
   270     8 192
-  271
+  271    
   272     8 64
   273     8 64
   274     8 192
@@ -315,7 +319,7 @@
   276     8 192
   277     8 192
   278     8 64
-  279
+  279    
   280     8 64
   281     8 192
   282     2 2240
@@ -324,7 +328,7 @@
   285     2 2368
   286     2 2368
   287     2 4288
-  288
+  288    
   289     2 128
   290     4 64
   291     4 2
@@ -333,7 +337,7 @@
   294     4 133
   295     4 134
   296     4 7
-  297
+  297    
   298     4 8
   299     4 137
   300     4 138
@@ -342,7 +346,7 @@
   303     4 13
   304     4 14
   305     4 143
-  306
+  306    
   307     4 16
   308     4 145
   309     4 146
@@ -351,7 +355,7 @@
   312     4 21
   313     4 22
   314     4 151
-  315
+  315    
   316     4 152
   317     4 25
   318     4 26
@@ -360,7 +364,7 @@
   321     2 2205
   322     2 2718
   323     2 31
-  324
+  324    
   325     /4 160
   326     /1 5153
   327     4 2082
@@ -369,7 +373,7 @@
   330     /4 5285
   331     /4 6310
   332     4 7207
-  333
+  333    
   334     5 40
   335     /5 1193
   336     /5 2218
@@ -378,7 +382,7 @@
   339     5 5165
   340     5 6190
   341     /5 7343
-  342
+  342    
   343     6 48
   344     /6 1201
   345     /6 2226
@@ -387,7 +391,7 @@
   348     6 5173
   349     6 6198
   350     /6 7351
-  351
+  351    
   352     /7 184
   353     7 1081
   354     7 2106
@@ -396,7 +400,7 @@
   357     /7 5309
   358     /7 6334
   359     7 7232
-  360
+  360    
   361     /8 64
   362     8 1185
   363     8 2210
@@ -405,7 +409,7 @@
   366     /8 5157
   367     /8 6182
   368     8 7335
-  369
+  369    
   370     9 168
   371     /9 1065
   372     /9 2090
@@ -414,7 +418,7 @@
   375     9 5293
   376     9 6318
   377     /9 7215
-  378
+  378    
   379     10 176
   380     /10 1073
   381     /10 2098
@@ -423,7 +427,7 @@
   384     10 5301
   385     10 6326
   386     /10 7223
-  387
+  387    
   388     /11 56
   389     11 1209
   390     11 2234
@@ -431,9 +435,9 @@
   392     11 4288
   393     /11 5184
   394     /11 6208
-  395
+  395    
   396     11 7363
-  397
+  397    
   398    [<a href="#G_PRINT">PRINT</a>
   399     <a href="#G_C">C</a> <a href="#G_PCHAR">PCHAR</a> <a href="#G_TABLE">TABLE</a> <a href="#G_W">W</a>]
   400    <a name="G_PRINT" class="proc">PRINT</a> ([<a class=chart href="Flowcharts/PRINT.pdf">Flowchart</a></code>])
@@ -468,7 +472,7 @@
   429     4 <a href="#G_W">W</a>+4
   430     14 6
   431     8 <a href="#L_4_NEXCH">NEXCH</a>
-  432
+  432    
   433    [<a href="#G_PCHAR">PCHAR</a>
   434     <a href="#G_C">C</a> <a href="#G_TABLE">TABLE</a> <a href="#G_W">W</a>]
   435    <a name="G_PCHAR" class="proc">PCHAR</a> ([<a class=chart href="Flowcharts/LISTAD_PCHAR.pdf">Flowchart</a></code>])
@@ -490,7 +494,7 @@
   451     15 6148
   452     4 <a href="#G_C">C</a>
   453     8 <a href="#L_5_ON">ON</a>
-  454
+  454    
   455    [<a href="#G_LISTAD">LISTAD</a>
   456     <a href="#G_C">C</a> <a href="#G_PCHAR">PCHAR</a> <a href="#G_W">W</a>]
   457    <a name="G_LISTAD" class="proc">LISTAD</a> ([<a class=chart href="Flowcharts/LISTAD_PCHAR.pdf">Flowchart</a></code>])
@@ -542,7 +546,7 @@
   503     +100
   504     +1000
   505    <a name="L_6_ZSUP" class="proc">ZSUP</a> +0
-  506
+  506    
   507    [<a href="#G_REPORT">REPORT</a>
   508     <a href="#G_BN">BN</a> <a href="#G_C">C</a> <a href="#G_LISTAD">LISTAD</a> <a href="#G_NAM">NAM</a> <a href="#G_OPTION">OPTION</a>
   509     <a href="#G_PRINT">PRINT</a> <a href="#G_PP">PP</a>]
@@ -579,8 +583,8 @@
   540     +5
   541     &004144
   542     &620000
-  543
-  544
+  543    
+  544    
   545    [<a href="#G_FAIL">FAIL</a>
   546     <a href="#G_ARITH">ARITH</a> <a href="#G_BCR">BCR</a> <a href="#G_BLANKS">BLANKS</a> <a href="#G_C">C</a> <a href="#G_CNL">CNL</a>
   547     <a href="#G_DECL">DECL</a> <a href="#G_DECSTA">DECSTA</a> <a href="#G_DECTYP">DECTYP</a> <a href="#G_DELIM">DELIM</a> <a href="#G_DEMICO">DEMICO</a>
@@ -633,7 +637,7 @@
   594    <a name="L_8_LINEX" class="proc">LINEX</a>
   595     0 <a href="#L_8_LINO">LINO</a>
   596     /8 1
-  597
+  597    
   598     10 <a href="#G_FALCOU">FALCOU</a>
   599     10 <a href="#G_FALCOU">FALCOU</a>
   600     10 <a href="#G_FALCOU">FALCOU</a>
@@ -642,7 +646,7 @@
   603     10 <a href="#G_FALCOU">FALCOU</a>
   604     10 <a href="#G_FALCOU">FALCOU</a>
   605     10 <a href="#G_FALCOU">FALCOU</a>
-  606
+  606    
   607     10 <a href="#G_FALCOU">FALCOU</a>
   608     10 <a href="#G_FALCOU">FALCOU</a>
   609     10 <a href="#G_FALCOU">FALCOU</a>
@@ -651,7 +655,7 @@
   612     10 <a href="#G_FALCOU">FALCOU</a>
   613     10 <a href="#G_FALCOU">FALCOU</a>
   614     10 <a href="#G_FALCOU">FALCOU</a>
-  615
+  615    
   616     10 <a href="#G_FALCOU">FALCOU</a>
   617     10 <a href="#G_FALCOU">FALCOU</a>
   618     10 <a href="#G_FALCOU">FALCOU</a>
@@ -660,7 +664,7 @@
   621     10 <a href="#G_FALCOU">FALCOU</a>
   622     10 <a href="#G_FALCOU">FALCOU</a>
   623     10 <a href="#G_FALCOU">FALCOU</a>
-  624
+  624    
   625     10 <a href="#G_FALCOU">FALCOU</a>
   626     10 <a href="#G_FALCOU">FALCOU</a>
   627     10 <a href="#G_FALCOU">FALCOU</a>
@@ -669,7 +673,7 @@
   630     10 <a href="#G_FALCOU">FALCOU</a>
   631     10 <a href="#G_FALCOU">FALCOU</a>
   632     10 <a href="#G_FALCOU">FALCOU</a>
-  633
+  633    
   634     10 <a href="#G_FALCOU">FALCOU</a>
   635     10 <a href="#G_FALCOU">FALCOU</a>
   636     10 <a href="#G_FALCOU">FALCOU</a>
@@ -678,7 +682,7 @@
   639     10 <a href="#G_FALCOU">FALCOU</a>
   640     10 <a href="#G_FALCOU">FALCOU</a>
   641     10 <a href="#G_FALCOU">FALCOU</a>
-  642
+  642    
   643     10 <a href="#G_FALCOU">FALCOU</a>
   644     10 <a href="#G_FALCOU">FALCOU</a>
   645     10 <a href="#G_FALCOU">FALCOU</a>
@@ -687,7 +691,7 @@
   648     10 <a href="#G_FALCOU">FALCOU</a>
   649     10 <a href="#G_FALCOU">FALCOU</a>
   650     10 <a href="#G_FALCOU">FALCOU</a>
-  651
+  651    
   652     10 <a href="#G_FALCOU">FALCOU</a>
   653     10 <a href="#G_FALCOU">FALCOU</a>
   654     10 <a href="#G_FALCOU">FALCOU</a>
@@ -696,7 +700,7 @@
   657     10 <a href="#G_FALCOU">FALCOU</a>
   658     10 <a href="#G_FALCOU">FALCOU</a>
   659     10 <a href="#G_FALCOU">FALCOU</a>
-  660
+  660    
   661     10 <a href="#G_FALCOU">FALCOU</a>
   662     10 <a href="#G_FALCOU">FALCOU</a>
   663     10 <a href="#G_FALCOU">FALCOU</a>
@@ -705,7 +709,7 @@
   666     10 <a href="#G_FALCOU">FALCOU</a>
   667     10 <a href="#G_FALCOU">FALCOU</a>
   668     10 <a href="#G_FALCOU">FALCOU</a>
-  669
+  669    
   670     10 <a href="#G_FALCOU">FALCOU</a>
   671     10 <a href="#G_FALCOU">FALCOU</a>
   672     10 <a href="#G_FALCOU">FALCOU</a>
@@ -714,7 +718,7 @@
   675     10 <a href="#G_FALCOU">FALCOU</a>
   676     10 <a href="#G_FALCOU">FALCOU</a>
   677     10 <a href="#G_FALCOU">FALCOU</a>
-  678
+  678    
   679     10 <a href="#G_FALCOU">FALCOU</a>
   680     10 <a href="#G_FALCOU">FALCOU</a>
   681     10 <a href="#G_FALCOU">FALCOU</a>
@@ -723,7 +727,7 @@
   684     10 <a href="#G_FALCOU">FALCOU</a>
   685     10 <a href="#G_FALCOU">FALCOU</a>
   686     10 <a href="#G_FALCOU">FALCOU</a>
-  687
+  687    
   688     10 <a href="#G_FALCOU">FALCOU</a>
   689     10 <a href="#G_FALCOU">FALCOU</a>
   690     10 <a href="#G_FALCOU">FALCOU</a>
@@ -732,7 +736,7 @@
   693     10 <a href="#G_FALCOU">FALCOU</a>
   694     10 <a href="#G_FALCOU">FALCOU</a>
   695     10 <a href="#G_FALCOU">FALCOU</a>
-  696
+  696    
   697     10 <a href="#G_FALCOU">FALCOU</a>
   698     10 <a href="#G_FALCOU">FALCOU</a>
   699     10 <a href="#G_FALCOU">FALCOU</a>
@@ -741,7 +745,7 @@
   702     10 <a href="#G_FALCOU">FALCOU</a>
   703     10 <a href="#G_FALCOU">FALCOU</a>
   704     10 <a href="#G_FALCOU">FALCOU</a>
-  705
+  705    
   706     10 <a href="#G_FALCOU">FALCOU</a>
   707     10 <a href="#G_FALCOU">FALCOU</a>
   708     10 <a href="#G_FALCOU">FALCOU</a>
@@ -750,7 +754,7 @@
   711     10 <a href="#G_FALCOU">FALCOU</a>
   712     10 <a href="#G_FALCOU">FALCOU</a>
   713     10 <a href="#G_FALCOU">FALCOU</a>
-  714
+  714    
   715     10 <a href="#G_FALCOU">FALCOU</a>
   716     10 <a href="#G_FALCOU">FALCOU</a>
   717     10 <a href="#G_FALCOU">FALCOU</a>
@@ -759,8 +763,8 @@
   720     10 <a href="#G_FALCOU">FALCOU</a>
   721     10 <a href="#G_FALCOU">FALCOU</a>
   722     10 <a href="#G_FALCOU">FALCOU</a>
-  723
-  724
+  723    
+  724    
   725    <a name="G_FAIL" class="proc">FAIL</a> ([<a class=chart href="Translator_Description.htm#FAIL">Description</a>, <a class=chart href="Flowcharts/FAIL.pdf">Flowchart</a></code>])
   726     4 <a href="#G_FALCOU">FALCOU</a>
   727     5 <a href="#L_8_FNO">FNO</a>
@@ -794,7 +798,7 @@
   755     1 +18
   756     5 <a href="#G_OPTION">OPTION</a>
   757     6 +1
-  758
+  758    
   759     7 ;+3
   760     11 <a href="#G_WAIT">WAIT</a>
   761     8 <a href="#G_WAIT">WAIT</a>+1
@@ -828,7 +832,7 @@
   789     5 <a href="#G_M">M</a>
   790     4 <a href="#G_E">E</a>+1
   791     5 <a href="#G_E">E</a>
-  792
+  792    
   793    <a name="L_8_OL" class="proc">OL</a>
   794     4 =3 3072
   795     5 <a href="#G_LASTDL">LASTDL</a>
@@ -936,8 +940,8 @@
   897     \<a href="#L_8_ROR">ROR</a>
   898     &005657
   899     +0
-  900
-  901
+  900    
+  901    
   902    [<a href="#G_TAKCHA">TAKCHA</a>
   903     <a href="#G_C">C</a> <a href="#G_FAIL">FAIL</a> <a href="#G_GETCHA">GETCHA</a> <a href="#G_GRPCOD">GRPCOD</a> <a href="#G_LASTCH">LASTCH</a>
   904     <a href="#G_PROC">PROC</a> <a href="#G_TABLE">TABLE</a>]
@@ -1005,7 +1009,7 @@
   966    <a name="L_9_COMA" class="proc">COMA</a>
   967     4 +12
   968     8 <a href="#L_9_BECOM">BECOM</a>+3
-  969
+  969    
   970    [<a href="#G_IDENT">IDENT</a>
   971     <a href="#G_C">C</a> <a href="#G_LASTCH">LASTCH</a> <a href="#G_M">M</a> <a href="#G_NAM">NAM</a> <a href="#G_TAKCHA">TAKCHA</a>
   972     <a href="#G_W">W</a>]
@@ -1022,7 +1026,7 @@
   983     /9 1
   984     4 <a href="#G_W">W</a>+3
   985     /8 2
-  986
+  986    
   987    <a name="G_IDENT" class="proc">IDENT</a> ([<a class=chart href="Translator_Description.htm#IDENT)">Description</a>, <a class=chart href="Flowcharts/IDENT.pdf">Flowchart</a></code>])
   988     +0
   989     4 +1
@@ -1062,7 +1066,7 @@
  1023    <a name="L_10_EXIT" class="proc">EXIT</a>
  1024     0 <a href="#G_IDENT">IDENT</a>
  1025     /8 1
- 1026
+ 1026    
  1027    [<a href="#G_EVALNA">EVALNA</a>
  1028     <a href="#G_C">C</a> <a href="#G_FAIL">FAIL</a> <a href="#G_LASTCH">LASTCH</a> <a href="#G_P">P</a> <a href="#G_TABLE">TABLE</a>
  1029     <a href="#G_TAKCHA">TAKCHA</a> <a href="#G_W">W</a>]
@@ -1117,43 +1121,43 @@
  1078     5 <a href="#G_W">W</a>+2
  1079     0 <a href="#G_EVALNA">EVALNA</a>
  1080     /8 1
- 1081
+ 1081    
  1082    <a name="L_11_T" class="proc">T</a>
  1083     +16719
  1084     +2785
  1085     +9941
  1086     +5371
- 1087
+ 1087    
  1088     +28965
  1089     +2138
  1090     +25905
  1091     +25001
- 1092
+ 1092    
  1093     +2925
  1094     +13135
  1095     +12368
  1096     +29254
- 1097
+ 1097    
  1098     +2146
  1099     +20949
  1100     +15560
  1101     +30527
- 1102
+ 1102    
  1103     +23173
  1104     +564
  1105     +1761
  1106     +8002
- 1107
+ 1107    
  1108     +20811
  1109     +35753
  1110     +35418
  1111     +35887
- 1112
+ 1112    
  1113     -106770
  1114     -111900
  1115     -127873
  1116     -110889
- 1117
+ 1117    
  1118     -117985
  1119     +27585
  1120     +24241
@@ -1164,8 +1168,8 @@
  1125     +27449
  1126     +66101
  1127     -1
- 1128
- 1129
+ 1128    
+ 1129    
  1130    [<a href="#G_NUMBER">NUMBER</a>
  1131     <a href="#G_C">C</a> <a href="#G_CONS">CONS</a> <a href="#G_CONSTA">CONSTA</a> <a href="#G_FAIL">FAIL</a> <a href="#G_GRPCOD">GRPCOD</a>
  1132     <a href="#G_LASTCH">LASTCH</a> <a href="#G_M">M</a> <a href="#G_TAKCHA">TAKCHA</a> <a href="#G_W">W</a>]
@@ -1272,7 +1276,7 @@
  1233     /8 1
  1234    <a name="L_12_PWS" class="proc">PWS</a> +0
  1235    <a name="L_12_PMKR" class="proc">PMKR</a> +0
- 1236
+ 1236    
  1237    <a name="L_12_NEGP" class="proc">NEGP</a>
  1238     4 +10
  1239     2 <a href="#G_C">C</a>
@@ -1320,7 +1324,7 @@
  1281     4 <a href="#L_12_PWS">PWS</a>
  1282     9 <a href="#L_12_NEGP">NEGP</a>
  1283     8 <a href="#L_12_PEXIT">PEXIT</a>
- 1284
+ 1284    
  1285    <a name="L_12_FAILA" class="proc">FAILA</a>
  1286     4 =15 8191
  1287     5 <a href="#G_CONSTA">CONSTA</a>
@@ -1560,7 +1564,7 @@
  1521     4 +1
  1522     5 <a href="#G_CONS">CONS</a>
  1523     8 <a href="#L_12_EXIT">EXIT</a>
- 1524
+ 1524    
  1525    [<a href="#G_BCR">BCR</a>
  1526     <a href="#G_C">C</a> <a href="#G_CONS">CONS</a> <a href="#G_CONSTA">CONSTA</a> <a href="#G_DELIM">DELIM</a> <a href="#G_EVALNA">EVALNA</a>
  1527     <a href="#G_FAIL">FAIL</a> <a href="#G_GRPCOD">GRPCOD</a> <a href="#G_IDENT">IDENT</a> <a href="#G_LASTCH">LASTCH</a> <a href="#G_LASTDL">LASTDL</a>
@@ -1640,7 +1644,7 @@
  1601    <a name="L_13_EXIT" class="proc">EXIT</a>
  1602     0 <a href="#G_BCR">BCR</a>
  1603     /8 1
- 1604
+ 1604    
  1605    <a name="L_13_FALS" class="proc">FALS</a>
  1606     4 <a href="#G_C">C</a>
  1607     8 ;+2
@@ -1683,7 +1687,7 @@
  1644     11 <a href="#G_IDENT">IDENT</a>
  1645     8 <a href="#G_IDENT">IDENT</a>+1
  1646     8 <a href="#L_13_L2">L2</a>
- 1647
+ 1647    
  1648    [<a href="#G_COMPIL">COMPIL</a>
  1649     <a href="#G_BLANKS">BLANKS</a> <a href="#G_C">C</a> <a href="#G_CODE">CODE</a> <a href="#G_LASTCP">LASTCP</a> <a href="#G_OPTION">OPTION</a>
  1650     <a href="#G_PP">PP</a> <a href="#G_PUNGRP">PUNGRP</a> <a href="#G_W">W</a>]
@@ -1737,7 +1741,7 @@
  1698     /4 1
  1699     5 <a href="#G_LASTCP">LASTCP</a>
  1700     /8 2
- 1701
+ 1701    
  1702    [<a href="#G_COMP">COMP</a>
  1703     <a href="#G_ADDI">ADDI</a> <a href="#G_BN">BN</a> <a href="#G_COMPIL">COMPIL</a> <a href="#G_LIVE">LIVE</a> <a href="#G_Q">Q</a>]
  1704    <a name="G_COMP" class="proc">COMP</a> ([<a class=chart href="Flowcharts/COMP_COMP2.pdf">Flowchart</a></code>])
@@ -1754,7 +1758,7 @@
  1715     +0
  1716     0 <a href="#G_COMP">COMP</a>
  1717     /8 1
- 1718
+ 1718    
  1719    [<a href="#G_COMP2">COMP2</a>
  1720     <a href="#G_ADDI">ADDI</a> <a href="#G_COMPIL">COMPIL</a>]
  1721    <a name="G_COMP2" class="proc">COMP2</a> ([<a class=chart href="Flowcharts/COMP_COMP2.pdf">Flowchart</a></code>])
@@ -1767,7 +1771,7 @@
  1728     +0
  1729     0 <a href="#G_COMP2">COMP2</a>
  1730     /8 1
- 1731
+ 1731    
  1732    [<a href="#G_FOMPIL">FOMPIL</a>
  1733     <a href="#G_ADDI">ADDI</a> <a href="#G_BLANKS">BLANKS</a> <a href="#G_C">C</a> <a href="#G_CODE">CODE</a> <a href="#G_COMP">COMP</a>
  1734     <a href="#G_COMPIL">COMPIL</a> <a href="#G_COMP2">COMP2</a> <a href="#G_FAIL">FAIL</a> <a href="#G_I">I</a> <a href="#G_MPRINT">MPRINT</a>
@@ -1855,7 +1859,7 @@
  1816     11 <a href="#G_COMP2">COMP2</a>
  1817     8 <a href="#G_COMP2">COMP2</a>+1
  1818     8 <a href="#L_17_EXIT">EXIT</a>
- 1819
+ 1819    
  1820    [<a href="#G_FOMCOM">FOMCOM</a>
  1821     <a href="#G_ADDI">ADDI</a> <a href="#G_FAIL">FAIL</a> <a href="#G_FOMPIL">FOMPIL</a> <a href="#G_I">I</a> <a href="#G_UPDATE">UPDATE</a>]
  1822    <a name="G_FOMCOM" class="proc">FOMCOM</a> ([<a class=chart href="Flowcharts/FOMCOM.pdf">Flowchart</a></code>])
@@ -1877,7 +1881,7 @@
  1838    <a name="L_18_EXIT" class="proc">EXIT</a>
  1839     0 <a href="#G_FOMCOM">FOMCOM</a>
  1840     /8 1
- 1841
+ 1841    
  1842    [<a href="#G_RESTO">RESTO</a>
  1843     <a href="#G_C">C</a> <a href="#G_ENDPRO">ENDPRO</a> <a href="#G_PRESTO">PRESTO</a> <a href="#G_SP">SP</a> <a href="#G_TS">TS</a>
  1844     <a href="#G_W">W</a>]
@@ -1946,7 +1950,7 @@
  1907     9 <a href="#G_ENDPRO">ENDPRO</a>
  1908     0 <a href="#G_RESTO">RESTO</a>
  1909     /8 2
- 1910
+ 1910    
  1911    [<a href="#G_UNSTAK">UNSTAK</a>
  1912     <a href="#G_ADDI">ADDI</a> <a href="#G_ADDRES">ADDRES</a> <a href="#G_BN">BN</a> <a href="#G_C">C</a> <a href="#G_COMP">COMP</a>
  1913     <a href="#G_COMPIL">COMPIL</a> <a href="#G_DIM">DIM</a> <a href="#G_FAIL">FAIL</a> <a href="#G_LASTCP">LASTCP</a> <a href="#G_LIVE">LIVE</a>
@@ -1966,9 +1970,9 @@
  1927     4 <a href="#G_TYPBOX">TYPBOX</a>
  1928     2 <a href="#G_LOKTYP">LOKTYP</a>
  1929     5 <a href="#G_W">W</a>+9
- 1930
+ 1930    
  1931    ([<code style=color:red>VOLUME 2</code>])
- 1932
+ 1932    
  1933      0 <a href="#G_UNSTAK">UNSTAK</a>
  1934     4 <a href="#G_W">W</a>+7
  1935     2 <a href="#G_SPR">SPR</a>
@@ -2033,7 +2037,7 @@
  1994     &267466  (OR)
  1995     &263467  (EQUIV)
  1996     &265470  (IMPL)
- 1997
+ 1997    
  1998     &273471  (NOT)
  1999     &302423  (ST)
  2000     &440424  (STA)
@@ -2042,17 +2046,17 @@
  2003     &032040  (-)
  2004     &024042  (*)
  2005     &036344  (/)
- 2006
+ 2006    
  2007     &174247  (^)
  2008     &072055  (=)
  2009     &260057  (NE)
  2010     &074061  (>)
- 2011
+ 2011    
  2012     &256063  (GE)
  2013     &070051  (<)
  2014     &254053  (LE)
  2015     &312014  (DIV)
- 2016
+ 2016    
  2017    <a name="L_20_TABEND" class="proc">TABEND</a>
  2018     +0
  2019     0 ;-25
@@ -2073,7 +2077,7 @@
  2034     1 <a href="#G_DIM">DIM</a>
  2035    <a name="L_20_BLOGGS" class="proc">BLOGGS</a>
  2036     5 <a href="#G_LIVE">LIVE</a>
- 2037
+ 2037    
  2038     11 <a href="#G_COMP">COMP</a>
  2039     8 <a href="#G_COMP">COMP</a>+6
  2040     8 <a href="#L_20_BACK">BACK</a>
@@ -2193,7 +2197,7 @@
  2154    <a name="L_20_INC" class="proc">INC</a>
  2155     10 <a href="#G_LIVE">LIVE</a>
  2156     8 <a href="#L_20_BLOGGS">BLOGGS</a>+1
- 2157
+ 2157    
  2158    [<a href="#G_EXP">EXP</a>
  2159     <a href="#G_C">C</a> <a href="#G_E">E</a> <a href="#G_FAIL">FAIL</a> <a href="#G_P">P</a> <a href="#G_PROC">PROC</a>
  2160     <a href="#G_TS">TS</a> <a href="#G_UNSTAK">UNSTAK</a>]
@@ -2233,47 +2237,47 @@
  2194     2 +2
  2195     7 <a href="#G_FAIL">FAIL</a>-55
  2196     8 <a href="#L_21_EXIT">EXIT</a>
- 2197
+ 2197    
  2198    [<a href="#G_PAMTAB">PAMTAB</a>]
  2199    <a name="G_PAMTAB" class="proc">PAMTAB</a>
  2200     &116524  (IPZ)
  2201     &115124  (BPZ)
- 2202
+ 2202    
  2203     &106507  (I)
  2204     &105107  (B)
- 2205
+ 2205    
  2206     &106106  (R)
  2207     &306102  (VR)
- 2208
+ 2208    
  2209     &046504  (IA)
  2210     &045104  (BA)
- 2211
+ 2211    
  2212    &046104  (RA)
  2213     &246100  (VRA)
- 2214
+ 2214    
  2215     &036504  (IP)
  2216     &035104  (BP)
- 2217
+ 2217    
  2218     &036104  (RP)
  2219     &116124  (RPZ)
- 2220
+ 2220    
  2221     &020104  (P)
  2222     &100124  (PZ)
- 2223
+ 2223    
  2224     &040205  (SW)
  2225     &246500  (VIA)
- 2226
+ 2226    
  2227     &100205  (L)
  2228     &300201  (VL)
- 2229
+ 2229    
  2230     &000040  (STR)
  2231     &245100  (VBA)
- 2232
+ 2232    
  2233     &306502  (VI)
  2234     &305102  (VB)
  2235     -1
- 2236
- 2237
+ 2236    
+ 2237    
  2238    [<a href="#G_PRAMCH">PRAMCH</a>
  2239     <a href="#G_ADDI">ADDI</a> <a href="#G_BN">BN</a> <a href="#G_C">C</a> <a href="#G_COMP">COMP</a> <a href="#G_COMPIL">COMPIL</a>
  2240     <a href="#G_COMP2">COMP2</a> <a href="#G_CONS">CONS</a> <a href="#G_DIM">DIM</a> <a href="#G_FAIL">FAIL</a> <a href="#G_FOMCOM">FOMCOM</a>
@@ -2373,7 +2377,7 @@
  2334     8 <a href="#L_23_WTHREE">WTHREE</a>
  2335     8 <a href="#L_23_WFOUR">WFOUR</a>
  2336     8 <a href="#L_23_WFIVE">WFIVE</a>
- 2337
+ 2337    
  2338    <a name="L_23_EX" class="proc">EX</a>
  2339     4 <a href="#G_W">W</a>
  2340     2 +1
@@ -2386,7 +2390,7 @@
  2347    &106100
  2348     &106500
  2349     &105100
- 2350
+ 2350    
  2351    <a name="L_23_EXIT" class="proc">EXIT</a>
  2352     4 <a href="#G_W">W</a>+14
  2353     7 <a href="#L_23_REXIT">REXIT</a>
@@ -2437,7 +2441,7 @@
  2398     7 <a href="#G_FAIL">FAIL</a>-5
  2399     6 +16
  2400     0 <a href="#L_23_FRED">FRED</a>
- 2401
+ 2401    
  2402     7 <a href="#L_23_FUNNY">FUNNY</a>
  2403     /8 1
  2404    <a name="L_23_WZERO" class="proc">WZERO</a>
@@ -2590,7 +2594,7 @@
  2551    <a name="L_23_PAGTWO" class="proc">PAGTWO</a>
  2552     0 <a href="#G_W">W</a>+11
  2553     /8 ;+1
- 2554
+ 2554    
  2555     8 <a href="#L_23_NZ">NZ</a>
  2556     8 <a href="#L_23_N1">N1</a>
  2557     8 <a href="#L_23_N2">N2</a>
@@ -2599,7 +2603,7 @@
  2560     8 <a href="#L_23_N5">N5</a>
  2561     8 <a href="#L_23_N6">N6</a>
  2562     8 <a href="#L_23_N7">N7</a>
- 2563
+ 2563    
  2564    <a name="L_23_N1" class="proc">N1</a>
  2565     4 <a href="#G_W">W</a>+10
  2566     7 ;+2
@@ -2627,7 +2631,7 @@
  2588     11 <a href="#G_COMP2">COMP2</a>
  2589     8 <a href="#G_COMP2">COMP2</a>+1
  2590     8 <a href="#L_23_EXIT">EXIT</a>
- 2591
+ 2591    
  2592    <a name="L_23_PROCED" class="proc">PROCED</a> ([<a class=chart href="Translator_Description.htm#PROCED">Description</a></code>])
  2593     11 <a href="#G_RESTO">RESTO</a>
  2594     8 <a href="#G_RESTO">RESTO</a>+1
@@ -2710,7 +2714,7 @@
  2671     8 <a href="#G_FAIL">FAIL</a>-5
  2672     4 <a href="#G_W">W</a>
  2673     8 <a href="#L_23_COMEX">COMEX</a>
- 2674
+ 2674    
  2675    [<a href="#G_ADDI">ADDI</a>
  2676     <a href="#G_ADJI">ADJI</a> <a href="#G_C">C</a> <a href="#G_I">I</a>]
  2677    <a name="G_ADJI" class="proc">ADJI</a>  +0 ([<a class=chart href="Flowcharts/ADJI.pdf">Flowchart</a></code>])
@@ -2732,7 +2736,7 @@
  2693     5 <a href="#G_ADDI">ADDI</a>+4
  2694     0 <a href="#G_ADJI">ADJI</a>
  2695     /8 1
- 2696
+ 2696    
  2697    [<a href="#G_SEARCH">SEARCH</a>
  2698     <a href="#G_ADDI">ADDI</a> <a href="#G_ADJI">ADJI</a> <a href="#G_BN">BN</a> <a href="#G_C">C</a> <a href="#G_CHECK">CHECK</a>
  2699     <a href="#G_DECTYP">DECTYP</a> <a href="#G_DELIM">DELIM</a> <a href="#G_EXPTYP">EXPTYP</a> <a href="#G_FAIL">FAIL</a> <a href="#G_I">I</a>
@@ -2889,7 +2893,7 @@
  2850     6 +16
  2851     7 <a href="#G_FAIL">FAIL</a>-61
  2852     8 <a href="#L_25_EXIT">EXIT</a>
- 2853
+ 2853    
  2854    [<a href="#G_CHECK">CHECK</a>
  2855     <a href="#G_C">C</a> <a href="#G_CODL">CODL</a> <a href="#G_CODLP">CODLP</a> <a href="#G_NLP">NLP</a> <a href="#G_FAIL">FAIL</a>]
  2856    <a name="G_CHECK" class="proc">CHECK</a> ([<a class=chart href="Flowcharts/CHECK.pdf">Flowchart</a></code>])
@@ -2902,12 +2906,12 @@
  2863     8 <a href="#G_FAIL">FAIL</a>-85
  2864    <a name="L_26_LOCAL" class="proc">LOCAL</a>
  2865     0 <a href="#G_CODL">CODL</a>
- 2866
- 2867
+ 2866    
+ 2867    
  2868    [<a href="#G_SECODL">SECODL</a>
  2869     <a href="#G_C">C</a> <a href="#G_CHECK">CHECK</a> <a href="#G_CODL">CODL</a> <a href="#G_CODLP">CODLP</a> <a href="#G_CONS">CONS</a>
  2870     <a href="#G_CONSTA">CONSTA</a> <a href="#G_FAIL">FAIL</a> <a href="#G_NLP">NLP</a> <a href="#G_Q">Q</a>]
- 2871
+ 2871    
  2872    <a name="G_SECODL" class="proc">SECODL</a> +0 ([<a class=chart href="Translator_Description.htm#SECODL">Description</a>, <a class=chart href="Flowcharts/SECODL.pdf">Flowchart</a></code>])
  2873     4 <a href="#G_C">C</a>
  2874     5 <a href="#G_Q">Q</a>
@@ -2957,7 +2961,7 @@
  2918     8 <a href="#L_27_EXIT">EXIT</a>
  2919     10 <a href="#G_CODLP">CODLP</a>
  2920     8 <a href="#L_27_EXIT">EXIT</a>-2
- 2921
+ 2921    
  2922    [<a href="#G_STACK">STACK</a>
  2923     <a href="#G_C">C</a> <a href="#G_CODL">CODL</a> <a href="#G_FAIL">FAIL</a> <a href="#G_SP">SP</a> <a href="#G_TS">TS</a>
  2924     <a href="#G_W">W</a>]
@@ -2999,7 +3003,7 @@
  2960     4 <a href="#G_W">W</a>+6
  2961     /7 2
  2962     8 <a href="#L_28_INTER">INTER</a>
- 2963
+ 2963    
  2964    [<a href="#G_TAKID">TAKID</a>
  2965     <a href="#G_ADDI">ADDI</a> <a href="#G_BN">BN</a> <a href="#G_C">C</a> <a href="#G_COMP">COMP</a> <a href="#G_COMPIL">COMPIL</a>
  2966     <a href="#G_COMP2">COMP2</a> <a href="#G_DECTYP">DECTYP</a> <a href="#G_FAIL">FAIL</a> <a href="#G_FOMCOM">FOMCOM</a> <a href="#G_I">I</a>
@@ -3170,7 +3174,7 @@
  3131    <a name="L_29_COMX" class="proc">COMX</a>
  3132     4 =1 0
  3133     8 <a href="#L_29_COM2">COM2</a>
- 3134
+ 3134    
  3135    [<a href="#G_TAKE">TAKE</a>
  3136     <a href="#G_ARITH">ARITH</a> <a href="#G_C">C</a> <a href="#G_COMP">COMP</a> <a href="#G_COMPIL">COMPIL</a> <a href="#G_CONS">CONS</a>
  3137     <a href="#G_FAIL">FAIL</a> <a href="#G_LASTDL">LASTDL</a> <a href="#G_M">M</a> <a href="#G_P">P</a> <a href="#G_Q">Q</a>
@@ -3228,7 +3232,7 @@
  3189     4 <a href="#G_P">P</a>
  3190     7 <a href="#G_FAIL">FAIL</a>-30
  3191     8 <a href="#L_30_EXIT">EXIT</a>
- 3192
+ 3192    
  3193    [<a href="#G_TYPCHK">TYPCHK</a>
  3194     <a href="#G_COMP">COMP</a> <a href="#G_COMPIL">COMPIL</a> <a href="#G_LOKTYP">LOKTYP</a> <a href="#G_TYPBOX">TYPBOX</a>]
  3195    <a name="G_TYPCHK" class="proc">TYPCHK</a> ([<a class=chart href="Translator_Description.htm#TYPCHK">Description</a>, <a class=chart href="Flowcharts/TYPCHK.pdf">Flowchart</a></code>])
@@ -3248,7 +3252,7 @@
  3209    <a name="L_31_EXIT" class="proc">EXIT</a>
  3210     0 <a href="#G_TYPCHK">TYPCHK</a>
  3211     /8 1
- 3212
+ 3212    
  3213    [<a href="#G_UPDATE">UPDATE</a>
  3214     <a href="#G_ADDI">ADDI</a> <a href="#G_BLANKS">BLANKS</a> <a href="#G_CODE">CODE</a> <a href="#G_I">I</a> <a href="#G_OPTION">OPTION</a>
  3215     <a href="#G_PP">PP</a> <a href="#G_PUNGRP">PUNGRP</a> <a href="#G_SP">SP</a> <a href="#G_W">W</a>]
@@ -3288,7 +3292,7 @@
  3249    <a name="L_32_EXIT" class="proc">EXIT</a>
  3250     0 <a href="#G_UPDATE">UPDATE</a>
  3251     /8 1
- 3252
+ 3252    
  3253    [<a href="#G_ACTOP">ACTOP</a>
  3254     <a href="#G_BN">BN</a> <a href="#G_C">C</a> <a href="#G_E">E</a> <a href="#G_FAIL">FAIL</a> <a href="#G_LASTDL">LASTDL</a>
  3255     <a href="#G_M">M</a> <a href="#G_PRAMCH">PRAMCH</a> <a href="#G_PRMCOU">PRMCOU</a> <a href="#G_RESTO">RESTO</a> <a href="#G_SEARCH">SEARCH</a>
@@ -3367,7 +3371,7 @@
  3328     5 <a href="#G_E">E</a>
  3329     4 +5
  3330     8 <a href="#L_33_ACTEND">ACTEND</a>
- 3331
+ 3331    
  3332    [<a href="#G_ARRBND">ARRBND</a>
  3333     <a href="#G_C">C</a> <a href="#G_COMPIL">COMPIL</a> <a href="#G_DELIM">DELIM</a> <a href="#G_FAIL">FAIL</a> <a href="#G_SP">SP</a>
  3334     <a href="#G_TAKE">TAKE</a> <a href="#G_TS">TS</a> <a href="#G_TYPBOX">TYPBOX</a> <a href="#G_UNSTAK">UNSTAK</a> <a href="#G_W">W</a>]
@@ -3419,7 +3423,7 @@
  3380     1 +16
  3381     /5 0
  3382     8 <a href="#L_34_EXIT">EXIT</a>
- 3383
+ 3383    
  3384    [<a href="#G_DEC">DEC</a>
  3385     <a href="#G_BN">BN</a> <a href="#G_C">C</a> <a href="#G_CHECK">CHECK</a> <a href="#G_COMPIL">COMPIL</a> <a href="#G_DECSTA">DECSTA</a>
  3386     <a href="#G_E">E</a> <a href="#G_FAIL">FAIL</a> <a href="#G_M">M</a> <a href="#G_NLP">NLP</a> <a href="#G_P">P</a>
@@ -3503,7 +3507,7 @@
  3464     8 8191
  3465    <a name="L_35_L4" class="proc">L4</a> +0
  3466     8 <a href="#L_35_COM">COM</a>
- 3467
+ 3467    
  3468    [<a href="#G_DECL">DECL</a>
  3469     <a href="#G_ARRCOU">ARRCOU</a> <a href="#G_BN">BN</a> <a href="#G_C">C</a> <a href="#G_CODL">CODL</a> <a href="#G_CODLP">CODLP</a>
  3470     <a href="#G_DECTYP">DECTYP</a> <a href="#G_FAIL">FAIL</a> <a href="#G_I">I</a> <a href="#G_M">M</a> <a href="#G_NAM">NAM</a>
@@ -3573,8 +3577,8 @@
  3534    <a name="L_36_EXIT" class="proc">EXIT</a>
  3535     0 <a href="#G_DECL">DECL</a>
  3536     /8 1
- 3537
- 3538
+ 3537    
+ 3538    
  3539    [<a href="#G_ENDSTA">ENDSTA</a>
  3540     <a href="#G_ADDI">ADDI</a> <a href="#G_ARITH">ARITH</a> <a href="#G_BN">BN</a> <a href="#G_C">C</a> <a href="#G_COMPIL">COMPIL</a>
  3541     <a href="#G_DECSTA">DECSTA</a> <a href="#G_E">E</a> <a href="#G_EXP">EXP</a> <a href="#G_EXPTYP">EXPTYP</a> <a href="#G_FAIL">FAIL</a>
@@ -3641,7 +3645,7 @@
  3602     4 <a href="#G_C">C</a>
  3603     5 <a href="#G_ARITH">ARITH</a>
  3604     8 <a href="#L_37_EXTRA">EXTRA</a>
- 3605
+ 3605    
  3606    [<a href="#G_FORCOM">FORCOM</a>
  3607     <a href="#G_C">C</a> <a href="#G_COMP">COMP</a> <a href="#G_COMPIL">COMPIL</a> <a href="#G_DELIM">DELIM</a> <a href="#G_FAIL">FAIL</a>
  3608     <a href="#G_LOKTYP">LOKTYP</a> <a href="#G_OUT">OUT</a> <a href="#G_RESTO">RESTO</a> <a href="#G_SP">SP</a> <a href="#G_TAKE">TAKE</a>
@@ -3697,7 +3701,7 @@
  3658     0 <a href="#G_SP">SP</a>
  3659     /10 1
  3660     8 <a href="#G_OUT">OUT</a>
- 3661
+ 3661    
  3662    [<a href="#G_FCLAPS">FCLAPS</a>
  3663     <a href="#G_C">C</a> <a href="#G_FAIL">FAIL</a> <a href="#G_NLP">NLP</a> <a href="#G_W">W</a> <a href="#G_WM">WM</a>
  3664     <a href="#G_WMESS">WMESS</a>]
@@ -3785,7 +3789,7 @@
  3746     11 <a href="#G_WMESS">WMESS</a>
  3747     8 <a href="#G_WMESS">WMESS</a>+1
  3748     8 <a href="#L_39_BACK">BACK</a>
- 3749
+ 3749    
  3750    [<a href="#G_STATRM">STATRM</a>
  3751     <a href="#G_ADDRES">ADDRES</a> <a href="#G_BN">BN</a> <a href="#G_COMPIL">COMPIL</a> <a href="#G_DECTYP">DECTYP</a> <a href="#G_ENDSTA">ENDSTA</a>
  3752     <a href="#G_FAIL">FAIL</a> <a href="#G_INOUT">INOUT</a> <a href="#G_MIDTRM">MIDTRM</a> <a href="#G_NCLAPS">NCLAPS</a> <a href="#G_RESTO">RESTO</a>
@@ -3800,7 +3804,7 @@
  3761     8 <a href="#G_FAIL">FAIL</a>-93
  3762     11 <a href="#G_ENDSTA">ENDSTA</a>
  3763     8 <a href="#G_ENDSTA">ENDSTA</a>+1
- 3764    <a name="G_MIDTRM" class="proc">MIDTRM</a>
+ 3764    <a name="G_MIDTRM" class="proc">MIDTRM</a> 
  3765     4 +1
  3766     11 <a href="#G_UNSTAK">UNSTAK</a>
  3767     8 <a href="#G_UNSTAK">UNSTAK</a>+1
@@ -3814,7 +3818,7 @@
  3775     &001000
  3776     0 <a href="#G_ADDRES">ADDRES</a>
  3777     11 <a href="#G_NCLAPS">NCLAPS</a>
- 3778
+ 3778    
  3779     8 <a href="#G_NCLAPS">NCLAPS</a>+1
  3780     4 <a href="#G_ADDRES">ADDRES</a>
  3781     5 ;+5
@@ -3824,7 +3828,7 @@
  3785     /15 10
  3786     +0
  3787     8 <a href="#G_MIDTRM">MIDTRM</a>
- 3788
+ 3788    
  3789    [<a href="#G_INOUT">INOUT</a>
  3790     <a href="#G_ADDI">ADDI</a> <a href="#G_C">C</a> <a href="#G_COMP">COMP</a> <a href="#G_COMPIL">COMPIL</a> <a href="#G_E">E</a>
  3791     <a href="#G_EXPRES">EXPRES</a> <a href="#G_FAIL">FAIL</a> <a href="#G_FOMPIL">FOMPIL</a> <a href="#G_LASTDL">LASTDL</a> <a href="#G_M">M</a>
@@ -3856,13 +3860,13 @@
  3817     +0
  3818     5 <a href="#G_W">W</a>+11
  3819     4 <a href="#G_MREAD">MREAD</a>
- 3820
+ 3820    
  3821    ([<code style=color:red>VOLUME 3</code>])
- 3822
+ 3822    
  3823      7 <a href="#L_41_RZ">RZ</a>
  3824     4 <a href="#G_LASTDL">LASTDL</a>
  3825     2 =7 5120
- 3826
+ 3826    
  3827     7 ;+5
  3828     2 =6 4096
  3829     7 <a href="#L_41_L5">L5</a>
@@ -3873,7 +3877,7 @@
  3834     8 <a href="#G_TAKE">TAKE</a>+1
  3835     4 <a href="#G_E">E</a>+1
  3836     5 <a href="#G_E">E</a>
- 3837
+ 3837    
  3838     4 <a href="#G_TYPBOX">TYPBOX</a>
  3839     7 ;+2
  3840     4 +1
@@ -3925,7 +3929,7 @@
  3886     8 <a href="#L_41_COM">COM</a>
  3887    <a name="L_41_L3" class="proc">L3</a>
  3888     4 <a href="#G_EXPRES">EXPRES</a>
- 3889
+ 3889    
  3890     9 <a href="#L_41_L4">L4</a>
  3891     4 <a href="#G_ADDI">ADDI</a>+3
  3892     6 &010000
@@ -3935,7 +3939,7 @@
  3896     4 <a href="#G_EXPRES">EXPRES</a>
  3897     9 <a href="#G_FAIL">FAIL</a>-3
  3898     8 <a href="#L_41_L1">L1</a>
- 3899
+ 3899    
  3900    [<a href="#G_NCLAPS">NCLAPS</a>
  3901     <a href="#G_BN">BN</a> <a href="#G_C">C</a> <a href="#G_CNL">CNL</a> <a href="#G_CODL">CODL</a> <a href="#G_FAIL">FAIL</a>
  3902     <a href="#G_NLP">NLP</a> <a href="#G_RCLAPS">RCLAPS</a> <a href="#G_W">W</a> <a href="#G_WM">WM</a> <a href="#G_WMESS">WMESS</a>]
@@ -3997,7 +4001,7 @@
  3958     0 <a href="#G_NCLAPS">NCLAPS</a>
  3959     /8 1
  3960    (*)
- 3961
+ 3961    
  3962    [<a href="#G_ARRAY">ARRAY</a>
  3963     <a href="#G_ARENT2">ARENT2</a> <a href="#G_ARRCOU">ARRCOU</a> <a href="#G_C">C</a> <a href="#G_DEC">DEC</a> <a href="#G_DECTYP">DECTYP</a>
  3964     <a href="#G_FAIL">FAIL</a> <a href="#G_OUT">OUT</a> <a href="#G_STACK">STACK</a>]
@@ -4027,7 +4031,7 @@
  3988    <a name="L_43_RAR" class="proc">RAR</a>
  3989     4 &046100
  3990     8 <a href="#L_43_RETURN">RETURN</a>
- 3991
+ 3991    
  3992    [<a href="#G_BOOL">BOOL</a> <a href="#G_INT">INT</a> <a href="#G_REAL">REAL</a>
  3993     <a href="#G_BCR">BCR</a> <a href="#G_C">C</a> <a href="#G_DEC">DEC</a> <a href="#G_DECL">DECL</a> <a href="#G_DECTYP">DECTYP</a>
  3994     <a href="#G_DELIM">DELIM</a> <a href="#G_FAIL">FAIL</a> <a href="#G_OUT">OUT</a> <a href="#G_OUT2">OUT2</a> <a href="#G_W">W</a>]
@@ -4075,7 +4079,7 @@
  4036     8 <a href="#L_44_BACK">BACK</a>
  4037     5 <a href="#G_DECTYP">DECTYP</a>
  4038     8 <a href="#G_OUT">OUT</a>
- 4039
+ 4039    
  4040    [<a href="#G_BEGIN">BEGIN</a>
  4041     <a href="#G_C">C</a> <a href="#G_DECSTA">DECSTA</a> <a href="#G_E">E</a> <a href="#G_F">F</a> <a href="#G_FAIL">FAIL</a>
  4042     <a href="#G_M">M</a> <a href="#G_OUT">OUT</a> <a href="#G_PROC">PROC</a> <a href="#G_STACK">STACK</a> <a href="#G_TS">TS</a>]
@@ -4099,7 +4103,7 @@
  4060     &100000
  4061     8 7168
  4062     8 <a href="#G_OUT">OUT</a>
- 4063
+ 4063    
  4064    [<a href="#G_DO">DO</a>
  4065     <a href="#G_ADDRES">ADDRES</a> <a href="#G_ARITH">ARITH</a> <a href="#G_BN">BN</a> <a href="#G_C">C</a> <a href="#G_COMPIL">COMPIL</a>
  4066     <a href="#G_E">E</a> <a href="#G_F">F</a> <a href="#G_FORCOM">FORCOM</a> <a href="#G_OUT">OUT</a> <a href="#G_RESTO">RESTO</a>
@@ -4132,7 +4136,7 @@
  4093     5 <a href="#G_F">F</a>
  4094     5 <a href="#G_ARITH">ARITH</a>
  4095     8 <a href="#G_OUT">OUT</a>
- 4096
+ 4096    
  4097    [<a href="#G_ELSE">ELSE</a>
  4098     <a href="#G_ADDRES">ADDRES</a> <a href="#G_ARITH">ARITH</a> <a href="#G_C">C</a> <a href="#G_COMPIL">COMPIL</a> <a href="#G_E">E</a>
  4099     <a href="#G_ENDSTA">ENDSTA</a> <a href="#G_EXPTYP">EXPTYP</a> <a href="#G_FAIL">FAIL</a> <a href="#G_INOUT">INOUT</a> <a href="#G_OUT">OUT</a>
@@ -4193,7 +4197,7 @@
  4154     8 8191
  4155    <a name="G_LIVE" class="proc">LIVE</a> +0
  4156     8 <a href="#G_OUT">OUT</a>
- 4157
+ 4157    
  4158    [<a href="#G_END">END</a>
  4159     <a href="#G_BCR">BCR</a> <a href="#G_BN">BN</a> <a href="#G_C">C</a> <a href="#G_COMPIL">COMPIL</a> <a href="#G_DELIM">DELIM</a>
  4160     <a href="#G_ENDPRO">ENDPRO</a> <a href="#G_END40F">END40F</a> <a href="#G_ENT2">ENT2</a> <a href="#G_FAIL">FAIL</a> <a href="#G_M">M</a>
@@ -4207,7 +4211,7 @@
  4168     4 +0
  4169     5 <a href="#G_NAM">NAM</a>+1
  4170     5 <a href="#G_NAM">NAM</a>+2
- 4171
+ 4171    
  4172     4 &014500
  4173     11 <a href="#G_REPORT">REPORT</a>
  4174     8 <a href="#G_REPORT">REPORT</a>+1
@@ -4278,7 +4282,7 @@
  4239     4 +1
  4240     5 <a href="#G_W">W</a>+12
  4241     8 <a href="#L_48_LOOP">LOOP</a>
- 4242
+ 4242    
  4243    [<a href="#G_FOR">FOR</a>
  4244     <a href="#G_ARITH">ARITH</a> <a href="#G_BCR">BCR</a> <a href="#G_BN">BN</a> <a href="#G_C">C</a> <a href="#G_CHECK">CHECK</a>
  4245     <a href="#G_COMPIL">COMPIL</a> <a href="#G_DECSTA">DECSTA</a> <a href="#G_DELIM">DELIM</a> <a href="#G_E">E</a> <a href="#G_EXP">EXP</a>
@@ -4346,7 +4350,7 @@
  4307     4 <a href="#G_ARITH">ARITH</a>+1
  4308     5 <a href="#G_ARITH">ARITH</a>
  4309     8 <a href="#G_OUT">OUT</a>
- 4310
+ 4310    
  4311    [<a href="#G_GOTO">GOTO</a>
  4312     <a href="#G_C">C</a> <a href="#G_DECSTA">DECSTA</a> <a href="#G_E">E</a> <a href="#G_EXP">EXP</a> <a href="#G_EXPTYP">EXPTYP</a>
  4313     <a href="#G_FAIL">FAIL</a> <a href="#G_M">M</a> <a href="#G_OUT">OUT</a> <a href="#G_STACK">STACK</a> <a href="#G_SV">SV</a>]
@@ -4369,7 +4373,7 @@
  4330     4 &140200
  4331     5 <a href="#G_EXPTYP">EXPTYP</a>
  4332     8 <a href="#G_OUT">OUT</a>
- 4333
+ 4333    
  4334    [<a href="#G_IF">IF</a>
  4335     <a href="#G_ARITH">ARITH</a>  <a href="#G_C">C</a> <a href="#G_DECSTA">DECSTA</a> <a href="#G_DECTYP">DECTYP</a> <a href="#G_E">E</a>
  4336     <a href="#G_EXP">EXP</a> <a href="#G_EXPTYP">EXPTYP</a> <a href="#G_FAIL">FAIL</a> <a href="#G_LASTDL">LASTDL</a> <a href="#G_M">M</a>
@@ -4423,7 +4427,7 @@
  4384     6 =7 0
  4385     7 <a href="#L_51_AVOID">AVOID</a>
  4386     8 <a href="#G_FAIL">FAIL</a>-100
- 4387
+ 4387    
  4388    [<a href="#G_PROCED">PROCED</a>
  4389     <a href="#G_ADDI">ADDI</a> <a href="#G_BCR">BCR</a> <a href="#G_BN">BN</a> <a href="#G_C">C</a> <a href="#G_COMP">COMP</a>
  4390     <a href="#G_COMPIL">COMPIL</a> <a href="#G_DEC">DEC</a> <a href="#G_DECL">DECL</a> <a href="#G_DECSTA">DECSTA</a> <a href="#G_DECTYP">DECTYP</a>
@@ -4645,12 +4649,12 @@
  4606     &144324
  4607     &134244
  4608     &162304
- 4609
+ 4609    
  4610     &204005
  4611     &172010
  4612     &224010
  4613     &210002
- 4614
+ 4614    
  4615     -1
  4616    <a name="L_52_FOUND" class="proc">FOUND</a>
  4617     4 <a href="#G_W">W</a>+2
@@ -4710,7 +4714,7 @@
  4671     6 &040020
  4672     7 <a href="#L_52_COMBIN">COMBIN</a>
  4673     8 <a href="#L_52_PROCAR">PROCAR</a>
- 4674
+ 4674    
  4675    <a name="L_52_SWITCH" class="proc">SWITCH</a>
  4676     4 +1
  4677     8 ;+2
@@ -4838,7 +4842,7 @@
  4799     4 <a href="#G_M">M</a>
  4800     7 <a href="#G_OUT">OUT</a>
  4801     8 <a href="#G_OUT2">OUT2</a>
- 4802
+ 4802    
  4803    [<a href="#G_STEP">STEP</a>
  4804     <a href="#G_ARITH">ARITH</a> <a href="#G_C">C</a> <a href="#G_COMPIL">COMPIL</a> <a href="#G_DELIM">DELIM</a> <a href="#G_F">F</a>
  4805     <a href="#G_FAIL">FAIL</a> <a href="#G_G">G</a> <a href="#G_LOKTYP">LOKTYP</a> <a href="#G_OUT">OUT</a> <a href="#G_RESTO">RESTO</a>
@@ -4907,7 +4911,7 @@
  4868     &100000
  4869    <a name="G_LIVE" class="proc">LIVE</a> +0
  4870     8 <a href="#G_OUT">OUT</a>
- 4871
+ 4871    
  4872    [<a href="#G_SWITCH">SWITCH</a>
  4873     <a href="#G_BCR">BCR</a> <a href="#G_C">C</a> <a href="#G_CODL">CODL</a> <a href="#G_CODLP">CODLP</a> <a href="#G_DEC">DEC</a>
  4874     <a href="#G_DECL">DECL</a> <a href="#G_DECTYP">DECTYP</a> <a href="#G_DELIM">DELIM</a> <a href="#G_E">E</a> <a href="#G_FAIL">FAIL</a>
@@ -4961,7 +4965,7 @@
  4922     4 <a href="#G_E">E</a>+1
  4923     5 <a href="#G_E">E</a>
  4924     8 <a href="#G_OUT">OUT</a>
- 4925
+ 4925    
  4926    [<a href="#G_THEN">THEN</a>
  4927     <a href="#G_ARITH">ARITH</a> <a href="#G_C">C</a> <a href="#G_COMPIL">COMPIL</a> <a href="#G_E">E</a> <a href="#G_EXPTYP">EXPTYP</a>
  4928     <a href="#G_FAIL">FAIL</a> <a href="#G_OUT">OUT</a> <a href="#G_PP">PP</a> <a href="#G_RESTO">RESTO</a> <a href="#G_SP">SP</a>
@@ -5004,7 +5008,7 @@
  4965     &111000
  4966     7 8191
  4967     8 <a href="#G_OUT">OUT</a>
- 4968
+ 4968    
  4969    [<a href="#G_BECOMS">BECOMS</a>
  4970     <a href="#G_ADDI">ADDI</a> <a href="#G_C">C</a> <a href="#G_DECSTA">DECSTA</a> <a href="#G_DECTYP">DECTYP</a> <a href="#G_E">E</a>
  4971     <a href="#G_F">F</a> <a href="#G_FAIL">FAIL</a> <a href="#G_LHTYPE">LHTYPE</a> <a href="#G_M">M</a> <a href="#G_MPRINT">MPRINT</a>
@@ -5059,7 +5063,7 @@
  5020     2 <a href="#G_LHTYPE">LHTYPE</a>
  5021     7 <a href="#L_56_EXIT">EXIT</a>
  5022     8 <a href="#G_FAIL">FAIL</a>-112
- 5023
+ 5023    
  5024    [<a href="#G_SEMICO">SEMICO</a>
  5025     <a href="#G_ADDRES">ADDRES</a> <a href="#G_BN">BN</a> <a href="#G_C">C</a> <a href="#G_COMPIL">COMPIL</a> <a href="#G_DECL">DECL</a>
  5026     <a href="#G_DECSTA">DECSTA</a> <a href="#G_DEMICO">DEMICO</a> <a href="#G_FAIL">FAIL</a> <a href="#G_FCLAPS">FCLAPS</a> <a href="#G_LASTDL">LASTDL</a>
@@ -5101,7 +5105,7 @@
  5062     11 <a href="#G_FCLAPS">FCLAPS</a>
  5063     8 <a href="#G_FCLAPS">FCLAPS</a>+1
  5064     8 <a href="#G_OUT">OUT</a>
- 5065
+ 5065    
  5066    [<a href="#G_AOP">AOP</a>
  5067     <a href="#G_C">C</a> <a href="#G_DELIM">DELIM</a> <a href="#G_E">E</a> <a href="#G_EXP">EXP</a> <a href="#G_FAIL">FAIL</a>
  5068     <a href="#G_LASTDL">LASTDL</a> <a href="#G_M">M</a> <a href="#G_OUT">OUT</a> <a href="#G_STACK">STACK</a> <a href="#G_TAKE">TAKE</a>
@@ -5168,7 +5172,7 @@
  5129     4 =/2 1024
  5130     5 <a href="#G_DELIM">DELIM</a>
  5131     8 <a href="#L_58_MIN">MIN</a>
- 5132
+ 5132    
  5133    [<a href="#G_RLT">RLT</a>
  5134     <a href="#G_ARITH">ARITH</a> <a href="#G_C">C</a> <a href="#G_DELIM">DELIM</a> <a href="#G_E">E</a> <a href="#G_EXP">EXP</a>
  5135     <a href="#G_FAIL">FAIL</a> <a href="#G_OUT">OUT</a> <a href="#G_STACK">STACK</a> <a href="#G_TAKE">TAKE</a> <a href="#G_TYPBOX">TYPBOX</a>
@@ -5198,7 +5202,7 @@
  5159     +0
  5160     +0
  5161     8 <a href="#G_OUT">OUT</a>
- 5162
+ 5162    
  5163    [<a href="#G_LOGOP">LOGOP</a>
  5164     <a href="#G_ARITH">ARITH</a> <a href="#G_C">C</a> <a href="#G_DELIM">DELIM</a> <a href="#G_E">E</a> <a href="#G_EXP">EXP</a>
  5165     <a href="#G_FAIL">FAIL</a> <a href="#G_LASTDL">LASTDL</a> <a href="#G_M">M</a> <a href="#G_OUT">OUT</a> <a href="#G_STACK">STACK</a>
@@ -5249,7 +5253,7 @@
  5210     4 <a href="#G_M">M</a>
  5211     7 <a href="#L_60_YES">YES</a>
  5212     8 <a href="#G_FAIL">FAIL</a>-59
- 5213
+ 5213    
  5214    [<a href="#G_LSBRAK">LSBRAK</a>
  5215     <a href="#G_ADDI">ADDI</a> <a href="#G_ARITH">ARITH</a> <a href="#G_BN">BN</a> <a href="#G_C">C</a> <a href="#G_DECL">DECL</a>
  5216     <a href="#G_DECSTA">DECSTA</a> <a href="#G_DECTYP">DECTYP</a> <a href="#G_E">E</a> <a href="#G_EXPTYP">EXPTYP</a> <a href="#G_FAIL">FAIL</a>
@@ -5367,8 +5371,8 @@
  5328    <a name="L_61_LIV" class="proc">LIV</a> +0
  5329    <a name="L_61_LIVO" class="proc">LIVO</a> +0
  5330     8 <a href="#L_61_TWO">TWO</a>
- 5331
- 5332
+ 5331    
+ 5332    
  5333    [<a href="#G_RSBRAK">RSBRAK</a>
  5334     <a href="#G_ADDI">ADDI</a> <a href="#G_ADJI">ADJI</a> <a href="#G_ARENT2">ARENT2</a> <a href="#G_ARITH">ARITH</a> <a href="#G_ARRCOU">ARRCOU</a>
  5335     <a href="#G_BCR">BCR</a> <a href="#G_C">C</a> <a href="#G_COMP">COMP</a> <a href="#G_COMPIL">COMPIL</a> <a href="#G_DECTYP">DECTYP</a>
@@ -5532,7 +5536,7 @@
  5493     11 <a href="#G_COMP">COMP</a>
  5494     8 <a href="#G_COMP">COMP</a>+5
  5495     8 <a href="#G_OUT">OUT</a>
- 5496
+ 5496    
  5497    [<a href="#G_COLON">COLON</a>
  5498     <a href="#G_ADDI">ADDI</a> <a href="#G_ARRBND">ARRBND</a> <a href="#G_BN">BN</a> <a href="#G_C">C</a> <a href="#G_CHECK">CHECK</a>
  5499     <a href="#G_CODL">CODL</a> <a href="#G_CODLP">CODLP</a> <a href="#G_DECSTA">DECSTA</a> <a href="#G_DECTYP">DECTYP</a> <a href="#G_EXP">EXP</a>
@@ -5607,7 +5611,7 @@
  5568     1 =/0 0
  5569     /5 <a href="#G_CODL">CODL</a>
  5570     8 <a href="#G_OUT">OUT</a>
- 5571
+ 5571    
  5572    [<a href="#G_COMMA">COMMA</a>
  5573     <a href="#G_ACTOP">ACTOP</a> <a href="#G_ARITH">ARITH</a> <a href="#G_ARRBND">ARRBND</a> <a href="#G_ARRCOU">ARRCOU</a> <a href="#G_C">C</a>
  5574     <a href="#G_DECL">DECL</a> <a href="#G_DECTYP">DECTYP</a> <a href="#G_E">E</a> <a href="#G_EXPTYP">EXPTYP</a> <a href="#G_F">F</a>
@@ -5634,9 +5638,9 @@
  5595     8 <a href="#G_FORCOM">FORCOM</a>+1
  5596     4 =/0 6144
  5597     1 <a href="#G_TYPBOX">TYPBOX</a>
- 5598
+ 5598    
  5599    ([<code style=color:red>VOLUME 4</code>])
- 5600
+ 5600    
  5601      5 ;+4
  5602     11 <a href="#G_STACK">STACK</a>
  5603     8 <a href="#G_STACK">STACK</a>+4
@@ -5662,8 +5666,8 @@
  5623     11 <a href="#G_DECL">DECL</a>
  5624     8 <a href="#G_DECL">DECL</a>+1
  5625     8 <a href="#G_OUT">OUT</a>
- 5626
- 5627
+ 5626    
+ 5627    
  5628    [<a href="#G_LRBRAK">LRBRAK</a> <a href="#G_I">I</a>
  5629     <a href="#G_ADDI">ADDI</a> <a href="#G_ARITH">ARITH</a> <a href="#G_BN">BN</a> <a href="#G_C">C</a> <a href="#G_COMPIL">COMPIL</a>
  5630     <a href="#G_DECSTA">DECSTA</a> <a href="#G_DECTYP">DECTYP</a> <a href="#G_DELIM">DELIM</a> <a href="#G_E">E</a> <a href="#G_EXP">EXP</a>
@@ -5863,8 +5867,8 @@
  5824     1 =0 1024
  5825     7 <a href="#L_65_ENZ">ENZ</a>
  5826     8 <a href="#G_FAIL">FAIL</a>-25
- 5827
- 5828
+ 5827    
+ 5828    
  5829    [<a href="#G_RRBRAK">RRBRAK</a>
  5830     <a href="#G_ACTOP">ACTOP</a> <a href="#G_ADDI">ADDI</a> <a href="#G_ADJI">ADJI</a> <a href="#G_ARITH">ARITH</a> <a href="#G_BCR">BCR</a>
  5831     <a href="#G_BLANKS">BLANKS</a> <a href="#G_BN">BN</a> <a href="#G_C">C</a> <a href="#G_CODE">CODE</a> <a href="#G_COMP">COMP</a>
@@ -5979,7 +5983,7 @@
  5940     4 <a href="#G_TYPBOX">TYPBOX</a>+1
  5941     5 <a href="#G_TYPBOX">TYPBOX</a>
  5942     8 <a href="#G_OUT">OUT</a>
- 5943
+ 5943    
  5944    <a name="G_QUOTE" class="proc">QUOTE</a> ([<a class=chart href="Translator_Description.htm#QUOTE">Description</a>, <a class=chart href="Flowcharts/QUOTE.pdf">Flowchart</a></code>])
  5945     4 <a href="#G_M">M</a>
  5946     7 ;+2
@@ -6116,7 +6120,7 @@
  6077     1 =3 3072
  6078     7 <a href="#G_OUT2">OUT2</a>
  6079     8 <a href="#G_FAIL">FAIL</a>-105
- 6080
+ 6080    
  6081    [<a href="#G_AOP">AOP</a> <a href="#G_ARRAY">ARRAY</a> <a href="#G_BCR">BCR</a> <a href="#G_BEGIN">BEGIN</a> <a href="#G_BECOMS">BECOMS</a>
  6082     <a href="#G_BOOL">BOOL</a> <a href="#G_C">C</a> <a href="#G_COMPIL">COMPIL</a> <a href="#G_COMMA">COMMA</a> <a href="#G_COLON">COLON</a>
  6083     <a href="#G_DECSTA">DECSTA</a> <a href="#G_DELIM">DELIM</a> <a href="#G_DO">DO</a> <a href="#G_E">E</a> <a href="#G_ELSE">ELSE</a>
@@ -6273,7 +6277,7 @@
  6234     4 <a href="#G_STEP">STEP</a>
  6235     5 <a href="#G_AOP">AOP</a>+1
  6236     -1
- 6237
+ 6237    
  6238    [<a href="#G_WAIT">WAIT</a>]
  6239    <a name="G_WAIT" class="proc">WAIT</a> +0
  6240     4 <a href="#G_WAIT">WAIT</a>
@@ -6281,7 +6285,7 @@
  6242     1 =8 1
  6243     5 9
  6244     8 ;+0
- 6245
+ 6245    
  6246    [<a href="#G_BLANKS">BLANKS</a>
  6247     <a href="#G_C">C</a> <a href="#G_W">W</a>]
  6248    <a name="G_BLANKS" class="proc">BLANKS</a> +0 ([<a class=chart href="Flowcharts/PUNGRP_PUNCHA_BLANKS.pdf">Flowchart</a></code>])
@@ -6294,7 +6298,7 @@
  6255     9 ;-4
  6256     0 <a href="#G_BLANKS">BLANKS</a>
  6257     /8 1
- 6258
+ 6258    
  6259    [<a href="#G_PUNCHA">PUNCHA</a>
  6260     <a href="#G_C">C</a> <a href="#G_CHKSUM">CHKSUM</a> <a href="#G_W">W</a>]
  6261    <a name="G_PUNCHA" class="proc">PUNCHA</a> +0 ([<a class=chart href="Flowcharts/PUNGRP_PUNCHA_BLANKS.pdf">Flowchart</a></code>])
@@ -6310,7 +6314,7 @@
  6271     15 6144
  6272     0 <a href="#G_PUNCHA">PUNCHA</a>
  6273     /8 1
- 6274
+ 6274    
  6275    [<a href="#G_PUNGRP">PUNGRP</a>
  6276     <a href="#G_C">C</a> <a href="#G_CODE">CODE</a> <a href="#G_MFAIL">MFAIL</a> <a href="#G_OPTION">OPTION</a> <a href="#G_PUNCHA">PUNCHA</a>
  6277     <a href="#G_W">W</a>]
@@ -6341,7 +6345,7 @@
  6302    <a name="L_71_EXIT" class="proc">EXIT</a>
  6303     0 <a href="#G_PUNGRP">PUNGRP</a>
  6304     /8 1
- 6305
+ 6305    
  6306    [<a href="#G_GETCHA">GETCHA</a>
  6307     <a href="#G_BUFLAG">BUFLAG</a> <a href="#G_C">C</a> <a href="#G_FAIL">FAIL</a> <a href="#G_GRPCOD">GRPCOD</a> <a href="#G_INBUF">INBUF</a>
  6308     <a href="#G_LASTCH">LASTCH</a> <a href="#G_LINE">LINE</a> <a href="#G_TABLE">TABLE</a> <a href="#G_W">W</a> <a href="#G_WAIT">WAIT</a>]
@@ -6497,8 +6501,8 @@
  6458     4 <a href="#G_W">W</a>+9
  6459     7 <a href="#L_72_NEXCHA">NEXCHA</a>
  6460     8 <a href="#L_72_RETURN">RETURN</a>
- 6461
- 6462
+ 6461    
+ 6462    
  6463    [<a href="#G_ENDPRO">ENDPRO</a>
  6464     <a href="#G_BCR">BCR</a> <a href="#G_BLANKS">BLANKS</a> <a href="#G_C">C</a> <a href="#G_CHKSUM">CHKSUM</a> <a href="#G_CODE">CODE</a>
  6465     <a href="#G_CODL">CODL</a> <a href="#G_CODLP">CODLP</a> <a href="#G_COMPIL">COMPIL</a> <a href="#G_DELIM">DELIM</a> <a href="#G_FAIL">FAIL</a>
@@ -6539,7 +6543,7 @@
  6500     14 13
  6501     9 <a href="#L_73_REPEND">REPEND</a>
  6502    <a name="L_73_DUAL" class="proc">DUAL</a>
- 6503
+ 6503    
  6504     11 <a href="#L_73_PUNGLB">PUNGLB</a>
  6505     8 <a href="#L_73_PUNGLB">PUNGLB</a>+1
  6506     \<a href="#L_73_QAC">QAC</a>
