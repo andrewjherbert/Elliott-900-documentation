@@ -1,25 +1,48 @@
 <html>
 <head>
 <title>
-Elliott 903 Algol Resurrection
+Annotated Elliott 903 Algol System
 </title>
 </head>
 
 <body style="margin: 0 100px 100px 100px">
 
-<h1>Elliott 903 Algol Resurrection</h1>
+<h1>Annotated Elliott 903 Algol System</h1>
 
 <p>
-The two main high-level programming languages on the Elliott 903 were Algol 60 and
-FORTRAN&nbsp;II. The source code of the Algol system has survived. Unfortunately the
-source of the FORTRAN system has not.
+This document is an overview of an annotated version of original Elliott documents
+describing the Algol 60 system developed for the Elliott 903 computer from the 1960s.
 </p>
+
 <p>
-As well as the source code of the Algol system, documentation written by the
+The Elliott 903 Algol system was written under contract to Elliott Automation by CAP
+(Computer Analysts and Programmers), an external software house. The primary authors of
+the system were Don Hunter and Norman Spink.
+</p>
+The source code of the Algol system has survived as a collection of paper tapes,
+containing in total around 15,000 lines of Elliott 903 Symbolic Input Routine (SIR)
+assembly code. The code is very terse, with limited layout and almost no comments.
+The system was punched in this form to reduce the amount of paper tape handling
+required to build the system and also because it was Elliott practice to write separate
+documents describing the code and to draw flowcharts to aid explanation.
+</p>
+
+<p>
+As well as the source code of the Algol system, the documentation written by the
 designers of the system has also survived.  This comprises type-written notes
 describing the working of the system in some detail and hand-written flow charts
 for the main routines in the system.
 </p>
+
+<p>
+In the "annotated" Elliott Algol System, as described in this note, the original documents
+have been converted to HTML and/or PDF so that they can be read using a modern web
+browser. Additionally, to aid intelligibility, HTML "links" have been set up so that the
+reader can cross-reference  blocks of source code with the corresponding descriptions,
+specifications and flowcharts.  Similarly links are provided in the descriptions and
+specifications to cross refer to the source code they describe. Within the source code
+itself, each use of an identifier is a hot link to the definition of that identifier
+(e.g., as a constant, variable or subroutine) in the source.
 
 <h2>Elliott 903 Algol 60</h2>
 
@@ -31,45 +54,80 @@ restrictions, Elliott 903 Algol remains a useful language for numerical computin
 </p>
 
 <p>
-The
-<a href="../Elliott 900 Technical Manual/Volume 2A Programming Information/05 Volume 2 Part 1 Section 2 - ALGOL.pdf">
-programmer's manual for Elliott 903 Algol</a> describes the facilities and restrictions
-of Elliott 903 Algol and instructions for operating the paper tape based Algol 60 system.
-It should be read first to understand the overall structure and operation of the
-Elliott Algol 60 system.
+The Elliott 903 Algol system is described in the
+<a href="https://andrewjherbert.github.io/Elliott-900-documentation/Elliott%20900%20Technical%20Manual/index.htm">
+Elliott 900 Technical Manual</a>. <a href="https://andrewjherbert.github.io/Elliott-900-documentation/Elliott%20900%20Technical%20Manual/Volume%202A%20Programming%20Information/05%20Volume%202%20Part%201%20Section%202%20-%20ALGOL.pdf">
+Volume 2, Section 1, Part 2</a> describes the facilities and restrictions of Elliott 903
+Algol and instructions for operating the paper tape based Algol 60 system. It should be
+read first to understand the overall structure and operation of the Elliott Algol 60
+system.
+</p>
+
+ <p>
+<a href="https://andrewjherbert.github.io/Elliott-900-documentation/Elliott%20900%20Technical%20Manual/Volume%202A%20Programming%20Information/04%20Volume%202%20Part%201%20Section%201%20-%20MASIR.pdf">
+Volume 2, Part 1, Section 1</a>  Appendix A describes the SIR assembly code notation.
 </p>
 
 <p>
-The Elliott 903 Algol system comprises three components:
-
-<ol>
-<li>A <b>Translator</b> which reads in Algol program source code, checks it for errors and
-outputs a "intermediate tape" encoding the program as data and instructions for an
-abstract Algol machine.
-</li>
-<li>
-A runtime <b>Interpreter</b> which reads in the intermediate tape, loads it into the
-store and then executes it, simulating the operation of the abstract machine.
-</li>
-<li>
-A <b>Library</b> of procedures for mathematical functions, input-output formatting, etc.
-</li>
-</ol>
-
-<p>
-In concept Elliott Algol follows the same approach as taken by Whetstone Algol for the
-English Electric KDF9 computer, although the translator is quite different, being of the
-recursive descent type rather than table-driven.  The Elliott and Whetstone interpreters
-are however very similar.
+<a href="https://andrewjherbert.github.io/Elliott-900-documentation/Elliott%20900%20Technical%20Manual/Volume%201%20Functional%20Specification/07%20Volume%201%20Part%202%20Section%202%20-%20Word%20Format%20and%20Instruction%20Code.pdf">
+Volume 1, Part 2, Section 2</a> describes the architecture and instruction code of the
+Elliott 903.
 </p>
 
 <p>
-Central to the Elliott 903 Algol system is the Object Code generated by the Translator
-and executed by the Interpreter. The
-<a href="../Elliott 903 ALGOL Design Documents/Elliott 903 ALGOL Object Code.pdf">
-Algol Object Code Manual</a> should be read before
-diving into the code and documentation of the Translator and Interpreter.
+Readers unfamiliar with the 903 and SIR should read the above two documents before
+going on to explore the Algol system in detail.
 </p>
+
+<h2>The Elliott 903 Algol System</h2>
+
+<p>
+The Elliott Algol system is self-evidently based on the KDF9 Whetstone Algol System, as
+described in Randell, B. and Russell, L.J., "Algol 60 Implementation", A.P.I.C. Studies in
+Data Processing, No. 5, Academic Press, London and New York, 1964. Algol source code is
+translated to a pseudo-code for execution by a stack-based runtime interpreter.  While the
+KDF9 translator uses a precedence grammar for parsing, the Elliott Algol translator is
+recursive descent in nature. The pseudo-codes are very similar, including the names of the
+primitive operations.  The Elliott interpreter is a little simpler than the KDF9 version,
+due to the restrictions imposed on Elliott Algol.
+</p>
+
+<p>
+In addition to the translator and  interpreter there is a runtime library containing the
+standard Algol 60 functions, such as entier, sin, cos, etc., and additional procedures
+and functions defined by Elliotts mostly concerned with input-output. Sadly source code
+for the library has not been found and so is not included.
+</p>
+
+<p>
+The simplest version of the Elliott Algol system is a two-pass system intended to be run
+on an Elliott 903 with 8K of memory: other versions for machines with larger memories
+are described in the Elliott Technical Manual. The first pass embodies the translator and
+emits the pseudo code as an intermediate tape for subsequent reading the the interpreter.
+It is the code for the two-pass system that has been annotated.
+</p>
+
+<p>
+To understand the Elliott Algol system start by reading the
+<a href="Object%20Code/Elliott%20903%20ALGOL%20Object%20Code%20Manual.pdf">
+Elliott 903 Object Code Manual</a> as this defines the interface between the Translator
+and the Interpreter.
+</p>
+
+<p>
+To understand how the pseudo code is generated, read the
+<a href="Translator/Translator_Description.htm">translator description</a>
+in parallel with the
+<a href="Translator/Translator_source.htm">annotated translator source code</a>.
+</p>
+
+<p>
+To understand how the pseudo code is executed, read the
+<a href="Interpreter/Interpreter_Description.htm">interpreter description</a>
+in parallel with the
+<a href="Interpreter/Interpreter_source.htm">annotated interpreter source code</a>.
+
+
 
 <p>
 NOTE: The source code for the Elliott Algol system is the last major version (Issue 6)
@@ -91,28 +149,6 @@ validated against the issued binary paper tapes.
 There is an extensive archive of Elliott documentation at
 <a href="../Elliott-900-documentation/">
 Elliott 900 Series Computers Document Archive</a>.
-</p>
-
-<p>
-The Algol Translator and Interpreter are both written in 903 SIR.  This is described in
-Appendix A of
-<a href="../Elliott%20900%20Technical%20Manual/Volume%202A%20Programming%20Information/04%20Volume%202%20Part%201%20Section%201%20-%20MASIR.pdf">
-Elliott Technical Manual, Volume 2, Part 1, Section 1 - MASIR</a>.
-<br>
-The 903 Instruction set is described in Elliott Technical Manual, Volume 1,
-Functional Specification, Part 2, Section 1
-<a href="../Elliott%20900%20Technical%20Manual/Volume%201%20Functional%20Specification/06%20Volume%201%20Part%202%20Section%201%20-%20Registers%20and%20Basic%20Store.pdf">
-(Registers and Basic Store)</a> and Part 2, Section 2
-<a href="../Elliott%20900%20Technical%20Manual/Volume%201%20Functional%20Specification/07%20Volume%201%20Part%202%20Section%202%20-%20Word%20Format%20and%20Instruction%20Code.pdf">
-(Word Format and Instruction Code)</a>
-</p>
-
-<p>
-Programming information, including a description of the supported Algol features, the
-Library and operating instructions for the Elliott 903 Algol System is given in
-Elliott Technical Manual, Volume 2, Part 1, Section 2
-<a href="../Elliott%20900%20Technical%20Manual/Volume%202A%20Programming%20Information/05%20Volume%202%20Part%201%20Section%202%20-%20ALGOL.pdf">
-(Algol)</a>
 </p>
 
 <p>

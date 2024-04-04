@@ -1,0 +1,1174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<title>Elliott 903 Algol Interpreter Description</title>
+
+<style>
+.red {
+    color: red
+    }
+
+.ul {
+    text-decoration-line: underline;
+    }
+
+.center {
+	text-align: center;
+	}
+
+.courier {
+    font-family: 'Courier New';
+    font-size: 10pt;
+    }
+
+</style>
+
+</head>
+
+<body style="margin-left:2cm;width:16.5cm" class="courier">
+<p class="center red">
+    <u>ELLIOTT 903 ALGOL INTERPRETER</u>
+</p>
+
+<p class="indent red">
+    This document is a lightly edited transcription of a type-written original
+    document describing the Elliott 903 Algol Interpreter program.
+</p>
+<p class="indent red">
+    References to identifiers in the text are hyperlinked the definition of the
+    identifier in the document. An identifier may name a data item or a subroutine.
+</p>
+
+<p class="indent red">
+    The descriptions of subroutines are annotated with a "flowchart" link
+    and a "code" link.  The flowchart link transfers to a scan of the hand drawn
+    flowchart from an accompanying document to the orginal of this document. The code link
+    transfers to the location of the declaration of the label in the source code.
+</p>
+
+<p class="indent red">
+    To show where page breaks occur in the original document, page links are
+    shown in this document in the form [--PAGE nn--].  Clicking on these
+    links transfers to a scanned image of the page from the original document.
+</p>
+
+<p class="indent red">
+    The source code also includes "flowchart" links for global subroutine
+    identifiers and also "description" links that transfer to a scan of the
+    pages in the original document describing the identifier.
+</p>
+
+<p class="indent red">
+    To understand the Elliott 903 Algol interpreter start reading this document
+    linearly from the beginning, following the top down flow of the original
+    document.  Follow hyperlinks to refer to the definition of unfamiliar
+    identifiers and the back button to  return. For global subroutines use code
+    links to see the corresponding source code  and flowchart links to
+    understand the logic of the code.
+</p>
+
+<p class="indent red">
+    The interpreter executes orders in an intermediate object code produced by the
+    translator. This intermediate code is described in the
+    <a href="../Object Code/Elliott 903 ALGOL Object Code Manual.pdf">
+    Object Code Manual</a>.
+</p>
+
+<p class="indent red">
+    The original description can be viewed in its entirety here:
+    [<a href="../Interpreter/Interpreter_Description.pdf">link</a>]
+</p>
+
+<p class="indent red">
+    The original flowcharts  can be viewed in their entirety here:
+    [<a href="Interpreter_Flowcharts.pdf">link</a>]
+</p>
+
+<p class="indent red">
+    The source code can be viewed in its entirety here as raw text:
+    [<a href="Interpreter_source.txt">link</a>]
+</p>
+
+<p class="indent red">
+    The source code can be viewed in its entirety here as HTML with hot links:
+    [<a href="Interpreter_source.htm">link</a>]
+</p>
+
+<p class="indent red">
+    To see how to build the Elliott Algol system using
+    <a href="https://github.com/andrewjherbert/Elliott-900-simulator">
+    my 903 emulator</a> download this file:
+    [<a href="https://andrewjherbert.github.io/Elliott-900-software-archive/ARCHIVE/SCRIPTS/903ALGOL/BUILD_ALG2PASS(ISS6).DAT">BUILD_ALG2PASS(ISS6).DAT</a>]
+
+<p class="indent red">
+    N.B. Additional explanatory text, like this, that did not appear in the
+    original document is coloured red.
+</p>
+
+<p class="indent red">
+    Andrew Herbert April 2024
+</p>
+<br><br><hr><br><br>
+<pre style=line-height:1.5 class=courier>
+<p><a href="Description Pages/page0.jpg">[--PAGE 1--]</a></p>
+                    <u>THE 903 ALGOL INTERPRETER</u>
+
+                            <u>CONTENTS</u>
+
+Part 1: Introduction and Basic Routines,
+        1.1.  Introduction
+        1.2.  Initial Addresses
+        1.3.  Special entry points to the Algol loader
+        1.4.  The Pord Evaluation Routine
+
+Part 2: The Algol Arithmetic Narrative.
+        2.1.  Service Routines
+        2.2.  Arithmetic Primitives
+
+Part 3: The Organisation Routines.
+
+Part 4: Subroutines used by the Organisation Routines.
+        4.1.  <a href=#FAILEN>FAILEN</a>               The Error Display subroutine.
+        4.2.  <a href=#ENFAIL>ENFAIL</a>
+        4.3.  <a href=#CONTIN>CONTIN</a>
+        4.4.  <a href=#STSUBRT>STSUBRT</a>              Assignment subroutine
+        4.5.  <a href=#W345R>W345R</a>
+        4.6.  <a href=#RICONV>RICONV</a>
+        4.7.  <a href=#ITRSB1>ITRSB1</a>
+        4.8.  <a href=#NEGR>NEGR</a>
+        4.9.  <a href=#FINDFP>FINDFP</a>
+        4.10. <a href=#GARAD>GARAD</a>
+        4.11. <a href=#AINDSB>AINDSB</a>
+
+Part 5: The Input-Output Routines.
+        5.1. <a href=#INOUT>INOUT</a>
+        5.2. Character input and output
+             5.2.1. <a href=#OTCHA>OTCHA</a>
+             5.2.2. <a href=#GECHAR>GECHAR</a>
+<p><a href="Description Pages/page1.jpg">[--PAGE 2--]</a></p>
+        5.3.  Output number routine
+        5.4.  Input number routine
+        5.5.  Other INOUT routines.
+
+<p><a href="Description Pages/page2.jpg">[--PAGE 3--]</a></p>
+                            THE 903 ALGOL INTERPRETER
+
+Part 1:  Introduction and Basic Routines
+
+<div id="Introduction"></div>         1.1. Introduction.
+
+              The Algol Interpreter is used to run a 903 Algol program
+in the form of object code produced by the Translator. This description
+should be read in conjunction with the Elliott 903 Algol Object Code Manual
+(June 1966).
+
+              The Translator reads Algol source text, checks it and converts
+it into an object code program which consists of parameter words (pords), data
+and workspace. In the basic Algol system for 8K store, this object code is
+punched in relocatable binary form on paper tape.
+
+              The Interpreter reads the program output by the Translator, assembles
+it into store, and obeys the object code by interpreting the pords in a manner
+similar to the computer logic obeying machine code instructions.
+
+            The Interpreter consists of:-
+
+         1) The Algol Loader (based on the SIR relocatable binary loader).
+
+         2) The Pord Evaluation routine, which sets up the initial states and
+            then 'obeys' each pord.
+
+         3) A set of subroutines.
+
+           To interpret an individual pord, the Evaluation routine
+           selects one of a large number of sub-routines according to the
+           code value in the pord. These routines (not necessarily written
+           in standard subroutine form) together form the great bulk of the
+           Interpreter. They are subdivided into 3 classes:-
+
+               a)   The Arithmetic subroutines, which act on integer, real
+                    and boolean values; performing addition, multiplication,
+                    exponentiation, equivalence, etc.
+
+               b)   The organisation routines, which perform various tasks such
+                    as transferring values to and from the Stack, setting up stack
+                    entries for procedure calls, making branches in the pord
+<p><a href="Description Pages/page3.jpg">[--PAGE 4--]</a></p>
+               b Contd.)
+                    program, etc.
+
+               c)   The input-output routines.
+
+<div id="InitialAddresses"></div>         1.2.  Initial Addresses.
+
+               The store from location 8 to location 123 contains a set of
+entry points, starting addresses and working locations, whose absolute
+addresses are required to be known, The position of each item is fixed and
+must not be moved, as any such change would make it necessary to change the
+majority of all library and users machine code procedures. Certain locations
+in this range have been left spare, any further items requiring fixed locations
+may be allocated to these positions or locations immediately above 123, Any
+new program or additional instruction in existing routines, must be placed at
+a higher position in store.
+
+               A brief description of the store from locations 0 to 123 is given
+below. For further details the program coding and the individual program
+descriptions should be consulted.
+
+<u>Address</u>
+
+0 to 7         These locations are not referred to explicitly at any point
+               in the Interpreter, They are used only implicitly as the
+               5.C.R. and B registers of whatever level the interpreter
+               is obeyed from, normally level 1.
+
+   8           Entry to <a href=#READAL>READAL</a> (see 1.3.1.)
+
+   9           Entry to <a href=#CONTIN>CONTIN</a> (see 4.3.)
+
+  10           Entry to <a href=#EXECUT>EXECUT</a> (see 1.4.)
+
+  11           Entry to loader to input a relocatable binary tape
+               related to the previous tape input.   (see 1.3.2.)
+
+  12           Entry to <a href=#LIBENT>LIBENT</a> (see 1.3.3.)
+
+  13           Entry to <a href=#READOL>READOL</a> (see 1.3.4.)
+
+<p><a href="Description Pages/page4.jpg">[--PAGE 5--]</a></p>
+<u>Address</u>
+
+14 & 15        (Spare at Issue 1)
+
+16 & 17        <span class=red>(Spare in Issue 6)</span>
+
+18 to 20       (Spare in Issue 1)
+
+21 to 25       are reserved for special entry points or addresses for
+               individual users machine code programs.
+<div id=STKMOD></div>
+   26          Labelled STKMOD, this location holds either zero or the address
+               at which the stack is required to start. If zero the stack
+               will start at the first free location given by the loader after
+               all programs and data have been loaded. It holds zero in the
+               first version of Algol. If an extra store module was to be used
+               to hold the stack it might be set to +8192 for example.
+<div id=STKEND></div>
+   27          Labelled STKEND, this location holds the address of the block
+               following the area reserved for the stack. Its current value is
+               +8177.
+<div id=WARNAD></div>
+   28          Labelled WARNAD, this location holds an address somewhat lower
+               than the beginning of the Algol Loader. If on entry to a
+               procedure or creation of an array the stack pointer exceeds this
+               address <a href=#WARN>WARN</a> is set non zero. (See 1.3.1. for the effect
+               of this). Note that the stack can grow a short distance beyond
+               WARNAD without setting <a href=#WARN>WARN</a> due to ordinary statements.  If the
+               stack is not in the first module WARNAD should be set equal to <a href=#STKEND>STKEND</a>.
+<div id=PDADD></div>
+   29          Labelled PDADD, this location is used by the loader as the first
+               address for storing Algol pords. It normally holds the first
+               free location after the Algol Library functions.
+<div id=STACKA></div><div id=STACKADD></div>
+   30          STACKA, is filled by the loader with the next free location after
+
+<p><a href="Description Pages/page5.jpg">[--PAGE 6--]</a></p>
+<u>Address</u>
+
+   30 (Contd.) any program or data read in. (Later renamed STKADD.)
+<div class=red>
+In the Issue 6 Interpreter the following identifiers are positioned from location 131
+onwards.
+</div><div id=BASE></div>
+  131          Is labelled BASE, for access to 32 and 33, and also holds the
+               address of the first free location after the interpreter.
+<div><span id=QACODL></span><span id=QAVNDA></span></div>
+  132 & 133    are filled by the loader with the addresses corresponding to
+               QACODL and QAVNDA, the Object Data Load (constants) and the
+               Notional Data Area (variables), respectively.
+<div id=WARN></div>
+  134          WARN (See 28, <a href=#WARNAD>WARNAD</a>).
+<div id=PP></div>
+  135          PP (Pord Pointer) holds the address of the next pord to be
+               obeyed.
+<div id=SP></div>
+  136          SP (Stack Pointer) holds the address of the 'top' of the stack,
+               the location pointed to and all higher locations are free.
+<div id=EP></div>
+  137          EP (Entry Pointer) holds the address of the stack entry made on
+               entry to the current block.
+<div id=FP></div>
+  138          FP (Formal Pointer) holds the address of the result space
+               (followed by parameters, if any) of the current procedure.
+               In issue 2 it will only be set for machine code procedures.
+<div id=BN></div>
+  137          BN holds the current block and is always an exact multiple of
+               16.
+
+140 to 155     hold addresses of various routines that are required by library
+               programs. See the program sheets for details.
+
+156 to 165     are special workspace locations required by library programs
+               to be in fixed locations.
+
+166 to 179     are further program addresses and workspace locations required
+               by library programs, plus some spare locations.
+
+180 to 123     are workspace locations which are uséd by library programs and
+               which may also be used by users machine code subroutines. They
+               may be used freely by machine code procedures so long as these
+
+<p><a href="Description Pages/page6.jpg">[--PAGE 7--]</a></p>
+<u>Address</u>
+
+180 to 223 (Contd.)
+               do not call interpreter subroutines. If they do call
+               such subroutines the user should consult the subroutine
+               specifications and the program sheets where necessary.
+
+
+
+          1.3. Special entry points to the Algol Loader.
+<div id=READAL></div>               1.3.1. READAL.
+
+               [<a href=Interpreter_source.htm#G_READAL>CODE</a>][<a href=Flowcharts/READAL.pdf>FLOWCHART</a>]
+
+                      This routine is the most commonly used entry to the
+               loader. It causes the store pointer to be reset to the first
+               free location after the library, thus preserving the library in
+               store but overwriting previous Algol object code programs.
+               The dictionary pointers are set to preserve the Library
+               dictionary only.
+
+                      Before entering the Loader <a href=#WARN>WARN</a> is tested. If non-zero
+               previous Algol program has overwritten the Loader. In this
+               case the message 'RELOAD TAPE 2' is displayed and the program
+               exits to STOP.
+<div id=STARTC></div>               1.3.2. Entry at 11 (Input related tape).
+
+                      This entry goes direct to the loader without testing
+               <a href=#WARN>WARN</a> and does not reset the store or dictionary pointers. It
+               must only be used after an entry at 8 or 13.
+<div id=LIBENT></div><div id=READLB></div>
+               1.3.3. LIBENT. (later renamed READLB.)
+
+               [<a href=Interpreter_source.htm#L_1_READLB>CODE</a>][<a href=Flowcharts/READLB.pdf>FLOWCHART</a>]
+
+                      This routine tests <a href=#WARN>WARN</a> as in 1.3.1. above. If <a href=#WARN>WARN</a>
+               is zero the Loader is entered at a point which causes the entire
+               dictionary to be deleted and the store pointer reset to the first
+               free location following the Interpreter. A marker is set (in
+               location 75) to indicate that the current tape supplies the
+               Library. This effectively causes the store pointer and
+               dictionary beginning pointer to be preserved and used for
+               subsequent entries to <a href=#READAL>READAL</a>.
+
+<p><a href="Description Pages/page7.jpg">[--PAGE 8--]</a></p>
+<div id=READOL></div>               1.3.4. READOL.
+
+               [<a href=Interpreter_source.htm#L_1_READOL>CODE</a>][<a href=Flowcharts/READOL.pdf>FLOWCHART</a>]
+
+                      This entry is used to input a program which does not
+               need the Library or has the necessary Library functions on its
+               own tape. It performs the same operations as <a href=#LIBENT>LIBENT</a> (1.3.3)
+               except that the marker to indicate Library input is not set.
+               Thus the Library and Library dictionary are overwritten, but no
+               addresses are stored for future use,
+
+<div id=EXECUT></div>          1.4. The Pord Evaluation Routine.
+
+               EXECUT
+
+      [<a href=Interpreter_source.htm#L_1_EXECUT>CODE</a>][<a href=Flowcharts/EXECUT.pdf>FLOWCHART</a>]
+
+               This routine commences at EXECUT which sets up various initial
+       states. If BASE+2 is still +8191 a correct Algol program cannot have
+       been loaded, and the routine exits to STOP.
+
+               Otherwise the routine sets up <a href=#PP>PP</a>, <a href=#SP>SP</a> etc., and the standard
+       state for input-output. The standard presumed settings are placed in
+       the global settings position, taking as output device number the value in
+       <a href=#STODEV>STODEV</a>. This value is +1 for Punch 1 unless set by entry 16 to <a href=#CHNGOP>CHNGOP</a>.
+
+               The routine then 'obeys' the first pord by jumping to NXPORD.
+
+<div id=NXPORD></div>               NXPORD
+
+       [<a href=Interpreter_source.htm#L_1_NXPORD>CODE</a>][<a href=Flowcharts/NXPORD.pdf>FLOWCHART</a>]
+
+               NXPORD is entered from <a href=#EXECUT>EXECUT</a> and from the end of every pord
+       in the interpreter. It picks up the word pointed to by <a href=#PP>PP</a>,
+       stores the least significant 13 bits in ADPART. It increases <a href=#PP>PP</a> by one,
+       and decodes the most significant 5 bits of the current pord by jumping to
+       a 32 word lookup table FBAJ. This consists of jumps to the basic
+       interpreter function routines, which decode the value in ADPART according
+       to the individual function characteristics.
+
+
+               In the case of the two functions, <a href=#PRIM>PRIM</a> and <a href=#INOUT>INOUT</a> the address
+       part specifies one of a further set of sub-routines. INOUT is described
+       under the heading of Input-Output. <a href=#PRIM>PRIM</a> is specified further below.
+
+               All other function descriptions may be found by the reference in Section 3.
+<div id=PRIM></div>       PRIM.
+
+       [<a href=Interpreter_source.htm#L_1_PRIM>CODE</a>]  [<a href=Flowcharts/PRIM.pdf>FLOWCHART</a>]
+
+               The address part of pords with function PRIM specifies one of a
+       group of 70 primitive sub-routines, whose addresses are listed in a table PBA.
+       Primitives 1 to 29 are entered by a direct jump to the address
+
+<p><a href="Description Pages/page8.jpg">[--PAGE 9--]</a></p>
+       listed. Primitives 30 to 70 are written in standard sub-routine form
+       with the link location at the address listed. Before entry to Primitives
+       30 to 56 W is set equal to <a href=#SP>SP</a>-6 and <a href=#SP>SP</a> is reduced by 3. Before entry to
+       primitives 57 and above W is set equal to <a href=#SP>SP</a>-3.
+
+                Primitives 1 to 29 are described in the <a hef="../Elliott 903 ALGOL Object Code Manual">903 Algol Object Code</a>
+       Manual, under their individual names. Primitives 30 to 62 are described
+       in Section 2 (the Arithmetic routines).
+
+                Primitives 63 to 70 are used to place a check number next to a
+       parameter address. They use a common routine which places (N-60) in
+       location <a href=#SP>SP</a>-2, where N is the primitive number.
+
+<p><a href="Description Pages/page9.jpg">[--PAGE 10--]</a></p>
+    Part 2.    <u>903 Algol Arithmetic Narrative</u>
+
+          The Algol arithmetic can be conveniently divided into
+    a number of sub-routines, which are entered directly from the
+    pord-evaluator. These sub-routines are labelled PRIM for
+    primitive and each one has a different number associated with
+    it so that each PRIM sub-routine is unique, e.g. PRIM59
+
+    Each sub-routine performs one arithmetic operation on either
+    real numbers or integers, or in the case of the functions
+    e.g. LN for logarithm, on one number only.
+
+          Before entering any of these PRIM sub-routines, the
+    pord evaluator uses a location <a href=#SP>SP</a>, which holds the current
+    value of the stack pointer, to set a workspace location W which
+    then indicates the position in the stack of the number or
+    numbers to be operated on.
+
+           The PRIM sub-routines themselves use a few service
+    routines for organisational purposes and some double length
+    arithmetic.
+
+           Section 1 of this narrative describes these service
+    routines briefly and section 2 gives m fairly full account
+    of the PRIM S/R's.
+
+<p><a href="Description Pages/page10.jpg">[--PAGE 11--]</a></p>
+2.1. <u>Service Routines</u>
+
+                       <u>SECTION 1</u>
+
+      The name of the service routine precedes its description.
+<div id=SINGLE></div>
+<u>SINGLE</u>:     sets a real number from the stack into w/s locations
+            W5, W4, W5.
+            [<a href=Interpreter_source.htm#L_1_SINGLE>CODE</a>]
+<div id=FAIL></div>
+<u>FAIL</u>:       This is an error S/R which outputs the error number
+            in the accumulator at the time of entry and if
+            continuation is effected sets &plusmn; floating point &infin;
+            into W3, W4, W5 dependent on the sign of W3.
+            [<a href=Interpreter_source.htm#L_1_FAIL>CODE</a>]
+<div id=RSTACK></div>
+<u>RSTACK</u>:     Sets 2 real numbers from the stack into w/s
+            locations W3, W4, W5; W6, W7, W8;
+            [<a href=Interpreter_source.htm#L_1_RSTACK>CODE</a>]
+<div id=RRES></div>
+<u>RRES</u>        Sets the real number in W3, W4, W5 back into
+            the stack.
+            [<a href=Interpreter_source.htm#L_1_RRES>CODE</a>]
+<div id=SET></div>
+<u>SET</u>         Sets boolean results into the stack, Entry at
+            SET+1 sets +O into the stack indicating <u>false</u>.
+            Entry at SET+6 sets +1 into the stack indicating
+            <u>true</u>.
+            [<a href=Interpreter_source.htm#L_1_SET>CODE</a>]
+<div id=STAND></div>
+<u>STAND</u>:      Standardises the real number in W3, W4, W5.
+            If the number is too small for representation or
+            zero W3, W4, W5 are all set zero. If the number
+            is too large then an error is indicated using
+            <a href=#FAIL>FAIL</a> (as above).
+            [<a href=Interpreter_source.htm#L_1_STAND>CODE</a>]
+<div id=SHIFT1></div>
+<u>SHIFT1</u>:     Halves the double-length mantissae in W3, W4; W6, W7;
+            and increments their exponents in W5, and W8
+            respectively.
+            [<a href=Interpreter_source.htm#L_1_SHIFT1>CODE</a>]
+<div id=DLMULT></div>
+<u>DLMULT</u>:     Multiplies together the double-length numbers in
+            W3, W4; W6, W7 and places the double length
+            answer in W3, W4.
+            [<a href=Interpreter_source.htm#G_DLMULT>CODE</a>]
+
+<p><a href="Description Pages/page11.jpg">[--PAGE 12--]</a></p>
+<div id=ITOR></div><u>ITOR</u>:       Changes the integers in W3, W6 to real numbers
+            and stores the standardised results in W3, W4, W5;
+            W6, W7, W9.
+            [<a href=Interpreter_source.htm#L_1_ITOR>CODE</a>]
+<div id=CHEBY></div><div id=SERIES></div>
+<u>CHEBY</u>:      Calculates the value of a chebyshev polynomial
+            whose d/l argument is stored in T, T+1.
+            The number of constants to be used is set in C, and
+            the starting location of these d/l constants, which
+            must be sequential and in order, is set in cstart.
+            Forms a sequence:
+            i.e. B<sub>r</sub>  = 2 x arg x B<sub>r+1</sub> - B<sub>r+2</sub> + C
+<div class=red>            Note: replaced by routine SERIES. SERIES expects its
+            call to be followed by the list of d/l constants,
+            terminated by +0 -1.</div>            [<a href=Interpreter_source.htm#G_SERIES>CODE</a>]
+<div id=DLDIV></div>
+<u>DLDIV</u>:      Divides the d/l number in W3, W4 by that in WS17,
+            WS18, and sets the d/ answer in W3, W4.
+            [<a href=Interpreter_source.htm#G_DLDIV>CODE</a>]
+
+<p><a href="Description Pages/page12.jpg">[--PAGE 13--]</a></p>
+2.2. <u>Arithmetic Primitives</u>
+
+              <u>SECTION 2</u>
+
+The name of the PRIM s/r precedes its description.
+
+All real numbers must be in standardised form on entry and
+are standardised before exit.
+<div id=PRIM28></div>
+<u>PRIM28</u>:     Raises a real to an integer power producing
+            a real result. <span class=red>(This PRIM was omitted in the
+            original document.)</span>
+            [<a href=Interpreter_source.htm#L_1_PRIM28>CODE</a>]
+<div id=PRIM30></div>
+<u>PRIM30</u>:     Adds 2 integers which are stored in the stack
+            and replaces the first with their sum, If over-
+            flow occurs Error 3 is indicated and a dynamic
+            stop obeyed.
+            [<a href=Interpreter_source.htm#L_1_PRIM30>CODE</a>]
+<div id=PRIM32></div>
+<u>PRIM32</u>:     Subtracts the second integer in the stack from the
+            first and replaces the first with this differences
+            Overflow is treated as in <a href=#PRIM30>PRIM30</a> above.
+            [<a href=Interpreter_source.htm#L_1_PRIM32>CODE</a>]
+<div id=PRIM34></div>
+<u>PRIM34</u>:      Multiplies two integers, held in the stack, and
+            replaces the first with their product. Overflow
+            is as for <a href=#PRIM30>PRIM30</a> above.
+            [<a href=Interpreter_source.htm#L_1_PRIM34>CODE</a>]
+<div id=PRIM 38></div>
+<u>PRIM38</u>:     Raises the first integer in the stack to the power
+            indicated by the second. The result is placed
+            where the first integer was. If overflow occurs
+            error 3 is indicated (see <a href=#PRIM30>PRIM30</a> above). If the
+            2nd integer is -ve then error 20 is indicated and
+            a dynamic stop obeyed. The following results
+            should be noted
+            0<sup>x</sup>  = O for all X
+            x<sup>0</sup>  = 1 X &ne; 0
+            [<a href=Interpreter_source.htm#L_1_PRIM38>CODE</a>]
+
+<p><a href="Description Pages/page13.jpg">[--PAGE 14--]</a></p><div  style=display:inline_block id=PRIM41></div><div  style=display:inline_block id=PRIM43></div><div  style=display:inline_block id=PRIM45></div><div  style=display:inline_block id=PRIM47></div><div  style=display:inline_block id=PRIM49></div><div  style=display:inline_block id=PRIM51></div>
+<u>PRIM41,43,45,47,49,51</u>:
+            Examines the two integers in the stack and,
+            depending on their values and the particular
+            primitive, replaces the first primitive with a Boolenn
+            result. i.e. +1 for True, and +O for False, There
+            follows a list of the primitive nos. and their
+            functions.
+            Prim41     If I<sub>1</sub> &lt; I<sub>2</sub>, then True false otherwise.  [<a href=Interpreter_source.htm#L_1_PRIM41>CODE</a>]
+              " 43           &le;                                 [<a href=Interpreter_source.htm#L_1_PRIM43>CODE</a>]
+              " 45           =                                 [<a href=Interpreter_source.htm#L_1_PRIM45>CODE</a>]
+              " 47           &ne;                                 [<a href=Interpreter_source.htm#L_1_PRIM47>CODE</a>]
+              " 49           &gt;                                 [<a href=Interpreter_source.htm#L_1_PRIM49>CODE</a>]
+              " 51           &ge;                                 [<a href=Interpreter_source.htm#L_1_PRIM51>CODE</a>]
+<div id=PRIM31></div>
+<u>PRIM31</u>:     Adds two real numbers held in the stack and
+            replaces the first with their sum, If the answer
+            is too large for representation then error 9 is
+            indicated and if continuation is affected then
+            the answer is assumed to be &plusmn; Ft. Pt. &infin;
+            [<a href=Interpreter_source.htm#L_1_PRIM31>CODE</a>]
+<div id=PRIM33></div>
+<u>PRIM33</u>:     Subtracts the second real number in the stack from
+            the first and replaces the first with this differences.
+            Overflow is as for <a href=#PRIM31>PRIM31</a> above.
+            [<a href=Interpreter_source.htm#L_1_PRIM33>CODE</a>]
+<div id=PRIM35></div>
+<u>PRIM35</u>:     Multiplies together two real numbers which are held
+            in the stack and replaces the first with their
+            product. Overflow is as for <a href=#PRIM31>PRIM31</a> above.
+            [<a href=Interpreter_source.htm#L_1_PRIM35>CODE</a>]
+<di id=PRIM37></div>
+<u>PRIM37</u>:     Divides the first real number ai the stack by the
+            second and replaces the first with the answer.
+            Overflow is as for <a href=#PRIM31>PRIM31</a> above, The following
+            results should be noted
+            X/0 gives overflow provided X &ne;
+            0/X = 0 for all X
+            [<a href=Interpreter_source.htm#L_1_PRIM37>CODE</a>]
+
+<p><a href="Description Pages/page14.jpg">[--PAGE 15--]</a></p>
+<span id=PRIM42></span><span id=PRIM44></span><span id=PRIM46></span><span id=PRIM48></span><span id=PRIM50></span><span id=PRIM52></span><u>PRIM42,44,46,48,50,52:</u>
+            Examines the 2 real numbers in the stack, and,
+            dependent on their values replaces the first with
+            a boolean result +1 for true, +0 for false. There
+            follows a list of the prim nos. and their functions.
+            PRIM42     If R<sub>1</sub> &lt; R<sub>2</sub>, then true false otherwise. [<a href=Interpreter_source.htm#L_1_PRIM42>CODE</a>]
+                44           &le;                                [<a href=Interpreter_source.htm#L_1_PRIM44>CODE</a>]
+                46           =                                [<a href=Interpreter_source.htm#L_1_PRIM46>CODE</a>]
+                48           &ne;                                [<a href=Interpreter_source.htm#L_1_PRIM48>CODE</a>]
+                50           &gt;                                [<a href=Interpreter_source.htm#L_1_PRIM50>CODE</a>]
+                52           &ge;                                [<a href=Interpreter_source.htm#L_1_PRIM52>CODE</a>]
+
+<div  style=display:inline_block id=PRIM53></div><div  style=display:inline_block id=PRIM54></div><div  style=display:inline_block id=PRIM55></div><div  style=display:inline_block id=PRIM56></div><div  style=display:inline_block id=PRIM57></div><u>PRIM53,54,55,56,57:</u>
+            Examines the 2 boolean numbers in the stack and
+            depending on their values and the primitive replaces
+            the first with a boolean result, +1 for true +0 for
+            false. There follows a list of the prim nos. and
+            their functions.
+            PRIM53 If <u>B1</u> <u>AND</u> <u>B2</u> then true, false otherwise    [<a href=Interpreter_source.htm#L_1_PRIM53>CODE</a>]
+                54       <u>OR</u>                                   [<a href=Interpreter_source.htm#L_1_PRIM54>CODE</a>]
+                55       <u>EQUIV</u>                                [<a href=Interpreter_source.htm#L_1_PRIM55>CODE</a>]
+                56       <u>IMPLIES</u>                              [<a href=Interpreter_source.htm#L_1_PRIM56>CODE</a>]
+                57       <u>NOT</u> B1                               [<a href=Interpreter_source.htm#L_1_PRIM57>CODE</a>]
+<div id=PRIM36></div>
+<u>PRIM36</u>:     Divides the first integer in the stack by the second
+            and replaces the first with the <u>real</u> answer, The
+            S/R first converts the integers to real numbers and
+            then uses <a href=#PRIM37>PRIM37</a> (see back) so that errors and special
+            cases are as for PRIM37.
+            [<a href=Interpreter_source.htm#L_1_PRIM36>CODE</a>]
+
+<p><a href="Description Pages/page15.jpg">[--PAGE 16--]</a></p>
+<div id=PRIM39></div><u>PRIM39</u>:     Raises the first integer in the stack to the power
+            indicated by the second and replaces the first with
+            real answer. Overflow is as for <a href=#PRIM31>PRIM31</a> (see back).
+            The following results should be noted
+            0<sup>x</sup> = 0    for all X
+            X<sup>0</sup> = +1.0 X &ne; 0
+            [<a href=Interpreter_source.htm#L_1_PRIM39>CODE</a>]
+<div id=PRIM40></div>
+<u>PRIM40</u>:     Raises the first real number in the stack to the
+            power indicated by the second and replaces the
+            first with this result. The subroutine uses <a href=#PRIM61>PRIM61</a>
+            (log) and <a href=#EXP>EXP</a> (exponential) so that errors which
+            occur in log and exp will also occur here. The
+            following results should be noted:
+            0<sup>x</sup> = 0    for all X
+            X<sup>0</sup> = +1.0 X &ne; 0
+            [<a href=Interpreter_source.htm#L_1_PRIM40>CODE</a>]
+<div id=PRIM58></div>
+<u>PRIM58</u>:     Replace the real number in the stack by its
+            absolute value.
+            [<a href=Interpreter_source.htm#L_1_PRIM58>CODE</a>]
+<div id=PRIM59></div>
+<u>PRIM59</u>:     Replace the real number in the stack by its entier
+            (an integer). If the result is too large for
+            integer representation then error no. 3 is indicated
+            as in <a href=#PRIM30>PRIM30</a> (see back).
+            [<a href=Interpreter_source.htm#L_1_PRIM59>CODE</a>]
+<div id=PRIM62></div>
+<u>PRIM62</u>:     Replaces the real number in the stack by
+            +1 if it is +ve.
+            +0 if it is zero.
+            -1 if it is -ve.
+            [<a href=Interpreter_source.htm#L_1_PRIM62>CODE</a>]
+<div id=PRIM61></div>
+<u>PRIM61</u>:     Replaces the real number in the stack by its
+            Logarithm, If the number is even or zero then
+            error no. 13 is indicated and on continuation the
+            result is assumed to be zero.
+            [<a href=Interpreter_source.htm#L_1_PRIM61>CODE</a>]
+
+<p><a href="Description Pages/page16.jpg">[--PAGE 17--]</a></p>
+<div id=EXP></div><u>EXP</u>:        Replaces the real number in the stack by its
+            exponential value, If the real no. is zero the
+            answer is given as +1 immediately. If the real
+            number is >+40 then error 12 is indicated and on
+            continuation the result is assumed to be &plusmn; Ft. Pt. &infin;
+            Results that are either too large or too small
+            for representation are treated as in <a href=#PRIM31>PRIM31</a>.
+            [<a href=Interpreter_source.htm#L_1_EXP>CODE</a>]
+<div id=DIV></div>
+<u>DIV</u>:        Divides the first integer in the stack by the
+            second and replaces the first with the integer result,
+            rounded towards zero if necessary. If the second
+            integer is zero or the result is too large to store
+            as an integer then error no. 3 is indicated as in
+            <a href=#PRIM30>PRIM30</a>. The ws location W is not set by the pord
+            evaluator in this routine so that on entry the
+            routine uses <a href=#SP>SP</a> (stack pointer) to set W before
+            obeying the division.
+            [<a href=Interpreter_source.htm#L_1_DIV>CODE</a>]
+
+<p><a href="Description Pages/page17.jpg">[--PAGE 18--]</a></p>
+Part 3: The Organisation Routines.
+
+These routines are adequately described in the 903 Algol
+Object Code Manual under their individual names. For further details
+the flow diagrams and program listing should be studied, Sub-routines
+used by the Organisation routines are described in Part. 4. <a href=#INOUT>INOUT</a> and
+the input-output routines are described in Part 5.
+
+<p><a href="Description Pages/page18.jpg">[--PAGE 19--]</a></p>
+<u>Part 4: Subroutines used by the Organisation routines</u>
+<div id=FAILEN></div>
+    4.1. FAILEN.
+
+[<a href=Flowcharts/FAILEN.pdf>FLOWCHART</a>]  [<a href=Interpreter_source.htm#G_FAILEN>CODE</a>]
+
+         This subroutine prints information when a run time error is found
+by any interpreter routine.
+
+    Entry:    Place link in PAUSRT jump to FAILEN with an error number
+              in the accumulator as a positive interger.
+
+    Exit:     Exit is standard with W and W3 holding the same value as on
+              entry.
+    Process:  The routine displays the readings:-
+
+              ERROR BN PP RETURN followed on a new line by the given
+              error number, the current block name and pord pointer, and
+              the address in the second word of the stack entry for the current
+              block. The error display is preceded by output of 16 blanks
+              on the punch.
+
+              After output the routine comes to a program wait. Since the
+              link is in PAUSRT re-entry at 9 causes exit from the subroutine
+              (see <a href=#CONTIN>CONTIN</a> 4.3.). If the error is one from which recovery is-
+              not possible the subroutine entry should be followed by a stop.
+
+    Workspace:The global and local print settings are left unchanged by this
+              routine, W3 is reset to its initial value. W1, W2 and W4 to
+              W10, SBW and SBW5; WS and ADPART are all left undefined.
+<div id=ENFAIL></div><div id=SPARE></div><div id=ERROR></div>
+    4.2. ENFAIL.
+
+[<a href=Flowcharts/ENFAIL.pdf>FLOWCHART</a>] ENFAIL:[<a href=Interpreter_source.htm#L_1_ENFAIL>CODE</a>] SPARE:[<a href=Interpreter_source.htm#L_1_SPARE>CODE</a>] FAIL:[<a href=Interpreter_source.htm#L_1_FAIL>CODE</a>]
+
+              Entry is by direct jump to ENFAIL with an error number in
+the accumulator. A standard entry is made to FAILEN followed by a stop.
+This entry is used for non recoverable errors. Another entry is ERROR which
+is used for compiler errors, e.g. incompatible data. SPARE is entered from
+all spare positions in the primitive and pord function tables (representing
+another compiler error).
+
+<p><a href="Description Pages/page19.jpg">[--PAGE 20--]</a></p>
+<div id=CONTIN></div>    4.3. CONTIN.
+
+[<a href=Flowcharts/CONTIN.pdf>FLOWCHART</a>]  [<a href=Interpreter_source.htm#G_HALTCH>CODE</a>]
+
+<div class=red>Note: CONTIN is not declared as a label in the source: the code described
+here is located at HALTCH+5.</div>
+         This is entered from the program entry address 9. Its entry
+parameter is the line in PAUSRT which is always set before the interpreter
+enters a program Wait. A jump is made to one plus the address in PAUSRT
+Before exit PAUSRT is set to cause STOP on re-entry, so that if
+the computer should stop for reason other than a program Wait (e.g. output —
+device in Manual) re-entry at 9 will have no effect. Note that the
+program can always be restarted by entry at 10.
+<div id=STSUBRT></div>
+    4.4. STSUBRT (Assign).
+
+[<a href=Flowcharts/STSUBRT.pdf>FLOWCHART</a>]  [<a href=Interpreter_source.htm#L_1_STSUBRT>CODE</a>]
+
+         This subroutine assigns a given real or integer value to a
+given address, with optional packing if the value is real.
+
+    Entry:    Store the link in STSUBRT.
+              Enter at:-
+              1) STSUBRT +1 with the address at (SP) -6 and the value
+                 at (SP) -3.
+              2) STSUBRT +7 with the address at (PKDADD) and the value at
+                 the address held in the accumulator,
+              3) STSUBRT +15 with the address at (PKDADD) and the value
+                 in W3, W4, and W5.
+
+    Exit:     Exit is standard if entry (1) is used.
+              SP: = SP-3 and W: = SP-6
+
+    Process:  If the given address is that of a constant (bit 17=1) a non-
+              recoverable error indication is given. If the address is that
+              of a real value (bit 18=1) the given value in 3 locations is
+              packed into 2 locations, with rounding to the nearest 2<sup>-27</sup>,
+              If the exponent is less than 2<sup>-64</sup> zero is assigned, if greater than
+              <sup>+63</sup> the error for floating point overflow is given and +0.99999999*
+              2<sup>63</sup> is assigned. If the location following the address is negative
+              the number is assigned without packing.
+<div id=W345R></div>
+    4.5 W345R.
+
+[<a href=Interpreter_source.htm#L_1_W345R>CODE</a>]
+
+        This subroutine copies a real value (in unpacked form) from a given
+
+<p><a href="Description Pages/page20.jpg">[--PAGE 21--]</a></p>
+position into locations W3, W4 and W5.
+
+    Entry:     Store link in SBLNK and use entry:-
+               1) W345R copies the topmost value in the stack.
+               2)  W345R1 copies the value whose address is held in the accumulator.
+               3)  W34R2 as for (2) with address in B register.
+
+    Exit:      Standard.
+
+    Workspace: W3, W4, W5. Also W entry (1) or (2) used.
+<div id=RICONV></div>
+    4.6. RICONV.
+
+    [<a href=Flowcharts/RICONV.pdf>FLOWCHART</a>][<a href=Interpreter_source.htm#L_1_RICONV>CODE</a>]
+
+       The subroutine converts the real number in W3, W4, W5 to integer
+form, The process used gives the Algol automatic type conversion (integer: =
+entier (real + 0.5)).
+
+    Entry:     Store line in SBLNK1 and enter at RICONV.
+
+    Error:     If the number is greater than 131071.5 or less than -131071.5 the
+               error for integer overflow is given, Continuation is not
+               possible.
+    Exit:      Standard, with the integer in the Accumulator and W3.
+    Workspace: W3, W4, W5, SBW.
+<div id=ITRSB1></div>
+    4.7. ITRSB1
+
+    <span class=red> This routine does not exist in the Issue 6 Interpreter.</span>
+
+<p><a href="Description Pages/page21.jpg">[--PAGE 22--]</a></p>
+<span id=NEGR></span><span id=NEGR1></span>    4.8. NEGR1.
+
+    [<a href=Flowcharts/NEGR1.pdf>FLOWCHART</a>]  [<a href=Interpreter_source.htm#L_1_NEGR1>CODE</a>]
+
+         This subroutine negates a given real value in standard unpacked
+floating point form.
+
+    Entry:     Store link in SBLNK enter at:-
+                1)  NEGR1 with the address of the real value in W.
+                2)  NEGR6 with the address in the B register.
+
+    Exit:       Standard, with the negated number in the original position.
+    Workspace:  Entry (1) W. Entry (2) none.
+<div id=FINDFP></div>
+    4.9. FINDFP.
+
+    [<a href=Flowcharts/FINDFP.pdf>FLOWCHART</a>]  [<a href=Interpreter_source.htm#L_1_FINDFP>CODE</a>]
+
+         This subroutine finds the formal pointer corresponding to a given
+block number.
+
+    Entry:      Standard subroutine entry, place link in FINDFP and enter at
+                FINDFP +1. ADPART contains the given block number BN<sup>1</sup> and
+                n (the procedure parameter number) in the least significant
+                4 bits.
+
+    Exit:       Exit is standard, with 3n + FP<sup>1</sup> in the Accunulator,
+                where FP<sup>1</sup> is the formal pointer corresponding to BN<sup>1</sup>.
+
+    Errors:     If the given block name is not found a "compiler error" is
+                printed (recovery not possible).
+    Workspace:  SUBWK1, SBW1.
+<div id=GARAD></div>
+    4.10. GARAD.
+    <div class=red> This routine does not exist in the Issue 6 Interpreter.</div>
+<p><a href="Description Pages/page22.jpg">[--PAGE 23--]</a></p>
+<div id=AINDSB>    4.11. AINDSB.</div>
+        [<a href=Flowcharts/AINDSB.pdf>FLOWCHART</a>][<a href=Interpreter_source.htm#L_1_AINDSB>CODE</a>]
+
+         This subroutine finds the absolute address of an array element,
+given the indices in the stack. It is used by <a href="../Object Code/PORDS.htm#INDA">INDA</a> and <a href="../Object Code/PORDS.htm#INDR">INDR</a> pord functions.
+
+    Entry:    Standard, place link in AINDSB and enter at AINDSB+1.  ADPART
+              holds n, the number of dimensions, and the indices are held in
+              stack at the positions SP -3n, SP -3n+3,......,  SP-3.
+              The array address is at SP-3n—3.
+
+    Exit:     Standard, with the element address in the Accumulator, If a
+              real array, bit 20 has value 1.
+
+    Error:    If the array element falls outside the limits of the array a
+              non-recoverable error is given. (Array index wrong).
+<p><a href="Description Pages/page23.jpg">[--PAGE 24--]</a></p>
+Part 5: <u>The Input-Output Routines.</u>
+
+<div id=INOUT>    5.1. INOUT.</div>
+    [<a href=Interpreter_source.htm#L_1_INOUT>CODE</a>]  [<a href=Flowcharts/INOUT.pdf>FLOWCHART</a>]
+
+           This routine is used to call a further set of subroutines,
+depending on the value in the address part of the pord. It determines
+whether the Inout number is greater than 15 to inform the setting procedures
+that a local or global setting is required. The address of the particular
+Inout routine required is obtained from a table at INOUT 3. by All the routines
+are entered as subroutines with a common link at IOLNK. However, only numbers
+1 to 4 make use of IOLNK on exit, all the others exit direct to NXPORD.
+
+     5.2 Character input and output.
+
+         All input and output via paper tape station is done through the
+subroutines <a href=#GECHAR>GECHAR</a> or <a href=#OTCHA>OTCHA</a>. (This includes output to the teleprinter and
+line printer where fitted.). The only exceptions to this rule are the
+output of blanks to the punch in <a href="../Object Code/PORDS.htm#FINISH">FINISH</a> and <a href=#FAILEN>FAILEN</a> and the input of tape by
+the Algol Loader.
+
+<div id=OTCHA>          5.2.1.   OTCHA.</div>
+                   [<a href=Interpreter_source.htm#G_OTCHA>CODE</a>]  [<a href=Flowcharts/OTCHA.pdf>FLOWCHART</a>]
+
+                      This subroutine outputs one character to the current
+                 output device. It is identical. in the 920 version to
+                 the standard 903 version.
+
+                 Entry:      Store link in OTCHA and enter at OTCHA 1
+                             (OTCHA +1), with the character to be output
+                             held in the Accumulator and the required
+                             output device number held in ODEV,
+
+                             The character to be output is either:-
+
+                             (a) A six-bit 903 Internal code character.
+                             (b) A binary pattern to be output, with the
+                                  sign bit set to one.
+                             Entry to OTCHA2 causes a repetition of
+                             the previously output character.
+<p><a href="Description Pages/page24.jpg">[--PAGE 25--]</a></p>
+                Exit:        Exit is standard, with ODEV unaltered.
+
+                Workspace:   SBW.
+
+                Method:      If the sign bit is not present, the output
+                             code value of the character is found from TABLE.
+                             If a double character is indicated, the
+                             character in VBARCH is output before the
+                             translated character. (This is redundant
+                             in the 903 version). The output is done by
+                             using ODEVTB [ODEV] to modify a /15 0
+                             instruction.
+
+                             If the character is internal code newline,
+                             the character from TABLE is followed by output
+                             of the character from LFCH and a blank. (In
+                             the 903 version LFCH is blank also).
+
+                             A test is included for output device numbers
+                             greater than 4. At present this merely causes
+                             a jump to exit from the subroutine. At a
+                             later date this may be used to enter a digital
+                             plotter output routine and/or other special.
+                             output device routines.
+                             <div class=red>Devices greater than 4 are supported in the Issue 6 source code.</div>
+<div id=GECHAR>          5.2.2.   GECHAR.</div>
+                   [<a href=Interpreter_source.htm#G_GECHAR>CODE</a>]  [<a href=Flowcharts/GECHAR.pdf>FLOWCHART</a>]
+
+                        This subroutine effectively gets one character from
+                   the current input device. Different versions are provided
+                   for the 903 and (920/503 code) Interpreters. Entry and
+                   exit are identical for both versions.
+
+<div class= red>                   (The Issue 6 source code only supports 903 Telecode.)</div>
+                Workspace:   SBW.
+
+                Entry:       IDEV must contain the required input device
+                             number.
+
+                             Enter at GECH with the link stored in SBLINK.
+                             or Enter at GECHEN with the link stored in GECHAR.
+
+                Exit:        Exit is standard. The character just read from
+                             tape and translated to internal code is held
+<p><a href="Description Pages/page25.jpg">[--PAGE 26--]</a></p>
+                             in BUFFER [IDEV].
+
+                             The previous character (in internal code) is
+                             held in NEXTCH. The group code for this
+                             character is held in the Accumulator on Exit.
+
+                             (For a description of <a href="../Translator/Translator_Description.htm#GRPCODINF"</a>groupcode</a> see the
+                             Translator description, page 21. (For the
+                             920 Interpreter substitute "character just
+                             taken from the input buffer" for "character just
+                             read from tape").
+
+                Method:      (1)  903 Interpreter.
+
+                                  A character is taken from BUFFER (IDEV)
+                             and stored in NEXTCH. If this character was
+                             marked with the sign bit it represented a halt
+                             code and a wait stop is entered. (The initial
+                             routine <a href=#EXECUT>EXECUT</a> ensures that 'space' is the
+                             first character taken at the start of a program).
+
+                                  The program then reads one character from
+                             the current input device. A/15 0 instruction
+                             is modified by IDEVTB[IDEV]. Seven bits of
+                             this character are used to look up TABLE values.
+                             The parity bit is compared with that from the
+                             table. The least significant 6 bits of the
+                             table look up give the internal code value,
+                             except for special characters. Special
+                             characters are grouped into: illegal characters,
+                             ignorable characters, newline and halt.
+
+                                  The appropriate internal code is stored in
+                             BUFFER[IDEV]. The groupcode TABLE[NEXTCH] is
+                             taken before exit from the subroutine.
+
+                Method:      (2)   920 Interpreter.
+
+<div class= red>                             (The Issue 6 source code only supports 903 Telecode.)</div>
+                                  A character is taken from BUFFER (IDEV) and
+                             stored in NEXTCH. BUFLAG is then tested. If
+<p><a href="Description Pages/page26.jpg">[--PAGE 27--]</a></p>
+                             negative the line input buffer is empty.
+                             (<a href=#EXECUT>EXECUT</a> sets BUFLAG negative at the start of
+                             each program).
+
+                                  If the line buffer is not empty the next
+                             character is picked up and stored in BUFFER
+                             [IDEV]. The groupcode for NEXTCH is found by
+                             looking up TABLE and the routine exits. If
+                             the character picked up from the line buffer was
+                             newline then BUFFLAG is set negative and HALTMK
+                             tested. If HALTMK is true the newline
+                             character represents a halt code input and SWAIT
+                             (Systems wait) is entered.
+
+                                   If the line buffer is empty characters are
+                             read from paper tape, converted to internal
+                             code, and packed 3 to a word until the next
+                             newline is read. Vertical bar is treated as a
+                             special character, the following significant
+                             character is read and the appropriate internal
+                             code formed. Halt code is treated in the same
+                             way as newline, with a special setting of
+                             HALTMK to true. If an illegal character is
+                             found the buffer if filled up to newline before
+                             an error is given.
+
+                                   When the line buffer is full the routine
+                             returns to pick up the first character from the
+                             buffer and exit in the normal way.
+
+<div id=OUTI></div><div id=OUTR></div>     5.3. Output number routine.
+
+          OUTI: [<a href=Interpreter_source.htm#L_1_OUTI>CODE</a>]  [<a href=Flowcharts/OUTI.pdf>FLOWCHART</a>]
+          OUTR: [<a href=Interpreter_source.htm#L_1_OUTR>CODE</a>]  [<a href=Flowcharts/OUTR.pdf>FLOWCHART</a>]
+
+          Function:     To print a real number or integer on a specified
+                        output device, using a specified 903 Algol format.
+
+          Entry:        In all cases the link is stored in IOLNK.
+
+                        1)   Enter at OUTR to print the real number at (W)
+                             using the current local print settings. A holds the
+<p><a href="Description Pages/page27.jpg">[--PAGE 28--]</a></p>
+                             new value of SP.
+
+                        2)   Enter at OUTI to print the integer at (W) using
+                             the current local print settings. A holds the
+
+                        3)   Enter at OUTR2 with the required print mode given
+                             in the Accumulator to print the real number in (W).
+                             The output device number must be set in ODEV and
+                             the required digit settings in DIGM and DIGN where
+                             appropriate:
+
+                             <u>Output mode</u>   <u>Accumulator</u>        <u>DIGM</u>     <u>DIGN</u>
+                             Freepoint (n)     + 0         (not used)   +n
+                             Aligned (m,n)     - 1             +m       +n
+                             Scaled (n)        + 1         (not used)   +n
+
+                        4)   Enter at OUTI4 to print the integer held in the
+                             accumulator. ODEV must hold the output device
+                             number required. The current digits number is
+                             taken from INTDG.
+
+                        5)   Enter at OUTI5 to print the integer held in W3.
+                             ODEV must be set as for (4) and the accumulator
+                             must hold +n for a print in the style: digits (n).
+
+          Exit:         Exit is to INOEX, which causes a standard subroutine
+                        exit via the link in IOLNK.
+
+          Method:       Integers are converted by the standardise routine and
+                        printed as real numbers in the form aligned (n,o).
+                        The real number is converted from the form:
+                             N = a * 2<sup>b</sup> * 10<sup>o</sup> where -1.0 &le; a &lt; -0.5
+                                                 or +0.5 &le; a &lt; +1.0
+                        to:
+                             N = F * 2<sup>o</sup> * 10<sup>x</sup> * SIGN
+                                                 where +1.0 > F &ge; +0.1
+                                                 X is an integer
+                                                 SIGN is +l or -1
+<p><a href="Description Pages/page28.jpg">[--PAGE 29--]</a></p>
+                        The modulus of N is first taken, then X is found
+                        by repeated multiplication or division by +10.0,
+                        until F is in the required range when b is reduced to
+                        zero.
+
+                        If the number cannot be printed in the specified
+                        format an alarm print takes place according to the
+                        rules in the 903 Algol Manual. Otherwise the number
+                        is printed by <OUTMXD> as a mixed number. If in scaled
+                        format the number is printed as F * 10<sup>1</sup> and followed
+                        by subscript 10 and (X-1) printed as an integer with
+                        sign and non-significant zeros.
+
+                        <span id=OUTMXD></span>OUTXMD: [<a href=Interpreter_source.htm#L_1_OUTMXD>CODE</a>]  [<a href=Flowcharts/OUTMXD.pdf>FLOWCHART</a>]
+          Exit:         Exit is to INOEX, which causes a standard subroutine
+
+          Working
+          locations:    W, ODEV, are not altered by the routine,
+                        W3, W4, W5, DIGM, DIGN, SBLNK SBW, SBW1, SBW2,
+                        ADPART, SBLNK2, WS2 to WS8, WS14, NSIGNF, SIGNCH,
+                        TENPWR, SW, W1, W2, W7, W8, W9, WS10, WS11, WS12,
+                        are altered in an undefined manner.
+     <div id=RDNM></div>5.4. Input number routine.
+
+          RDNUM: [<a href=Interpreter_source.htm#L_1_RDNM>CODE</a>]  [<a href=Flowcharts/RDNM.pdf>FLOWCHART</a>]
+
+          Function:     To input a number punched in one of the standard
+                        Algol forms from the current input device.
+
+          Entry:        Store link in IOLNK and enter RDNM. To read
+                        real number ADPART must be set +2, otherwise an
+                        integer is assumed. W points to the address to
+                        which the number is assigned.
+
+          Exit:         The number is assigned to the given address. <a href=#SP>SP</a> is
+                        set equal to W. The number may be found in W3, W4 and
+                        W5 (3 for integer). Exit is via INOEX which causes a
+                        standard return via the link in IOLINK.
+
+         Method:        The routine always reads a real number, converting to
+                        integer form before exit if required. Each digit
+                        input is scaled and added to a double length
+                        mantissa, which is multiplied by 10 before the addition.
+<p><a href="Description Pages/page29.jpg">[--PAGE 30--]</a></p>
+                        A count is kept of the number of digits after the
+                        decimal point and this is combined with the decimal
+                        exponent (read as an integer). The floating point
+                        number formed from the digit input routine is then
+                        multiplied or divided by 10.0 the appropriate number
+                        of times.
+
+                        Before exit the number is negated if a negative sign
+                        was read, and converted to integer form if required.
+
+     5.5. Other INOUT routines.
+
+        These routines take their parameters from the top of the run-time
+stack. For read and print settings one routine is used for both global and
+local settings, the difference having been detected by INOUT. These routines
+detect whether the settings are out of range, and where necessary replace them
+by the standard settings. Thus the read and print routines do not have to allow
+for out-of-range settings.
+
+        For further details the <a href="../Object Code/Elliott 903 ALGOL Object Code Manual.pdf">903 ALGOL Object Code Manual</a>, the <a href="Interpreter_Flowcharts.pdf">flow
+diagrams</a> and <a href="Interpreter_source.htm">program sheets</a> should be studied.
+</pre>
+
+</body>
+</html>
+

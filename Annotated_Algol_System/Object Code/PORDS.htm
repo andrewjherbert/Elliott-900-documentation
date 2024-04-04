@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<title>Extracts from Elliott 903 Object Code Manual</title>
+
+<style>
+.red {
+    color: red
+    }
+
+.ul {
+    text-decoration-line: underline;
+    }
+
+.center {
+    text-align: center;
+    }
+
+.courier {
+    font-family: 'Courier New';
+    font-size: 10pt;
+    }
+
+</style>
+
+</head>
+<body style="margin-left:2cm;width:16.5cm" class="courier">
+<p class="center red">
+    <u>ELLIOTT 903 ALGOL OBJECT CODE</u>
+</p>
+<p class="indent red">
+    This document contains transcribed and lightly edited text taken from the
+    <a href="Elliott 903 ALGOL Object Code Manual.pdf">
+    Elliott 903 Algol Object Code Manual</a> and cross referenced from the
+    <a href="../Interpreter/Interpreter_source.htm">Algol Interpreter source code</a>.
+    The edits includes corrections for obvious spelling mistakes and handwritten notes
+    from the original document.
+<p class="indent red">
+    To show where page breaks occur in the original document, page links are
+    included in this document in the form [--PAGE nn--].  Clicking on these
+    links transfers to a scanned image of the page from the original document.
+</p>
+<p class="indent red">
+    N.B. Additional explanatory text, like this, that did not appear in the
+    original document is coloured red.
+</p>
+<p class="indent red">
+    Andrew Herbert April 2024
+</p>
+<br><br><hr><br><br>
+</p>
+<p><a href="Description Pages/page19.jpg">[--PAGE 17--]</a></p>
+<pre class=courier>
+<div id=CF></div>
+CF     The intention of this is to make a partial
+       stack entry before jumping to a procedure
+       body.
+
+       "address:= N+BA;
+
+       L1: store EP at SP; store SP in Entry Pointer
+           register; add 1 to SP; store PP at SP;
+           add 1 to SP;
+           PP:= address;"
+       [<a href=../Interpreter/Interpreter_source.htm#L_1_CF>CODE</a>]  [<a href=../Interpreter/Flowcharts/CF.pdf>FLOWCHART</a>]<div id=CFF></div>
+CFF    This is for a call of a formal function.
+
+       "Find FP using BN; address:= contents of
+       3n+FP; go to L1 in CF above;"
+       [<a href=../Interpreter/Interpreter_source.htm#L_1_CFF>CODE</a>]  [<a href=../Interpreter/Flowcharts/CFF.pdf>FLOWCHART</a>]<div id=GT></div>
+GT     An ordinary GO TO is executed by reference
+       to two words in QACODL, of which the first
+       contains the label address and the second
+       the Block Number. The Block Number is
+       needed in case a jump to an outer block
+       is involved.
+
+       "address:= N+QACODL;
+       L2: if BN equals contents of (address + 1)
+           then go to contents of address;
+
+       L3: if contents of (EP+3) equals contents
+           of (address + 1) then to to L4;
+           EP:= contents of EP; go to L3;
+
+       L4: if contents of (EP+2) &lt;O then go to L5;
+           SP:= contents of (EP+2);
+           FP:= SP-3; go to L6;
+
+       L5: SP:= EP;
+
+       L6: EP:= contents of EP;
+           BN:= contents of (EP+3);
+
+           go to contents of address;"
+       [<a href=../Interpreter/Interpreter_source.htm#L_1_GT>CODE</a>]  [<a href=../Interpreter/Flowcharts/GT.pdf>FLOWCHART</a>]
+
+<p><a href="Description Pages/page20.jpg">[--PAGE 18--]</a></p>
+<div id=GTF></div>
+GTF    "Find FP using BN; address: = contents of
+       (3n+FP); go to L2 in GT above;"
+       [<a href=../Interpreter/Interpreter_source.htm#L_1_GTF>CODE</a>] [<a href=../Interpreter/Flowcharts/GTF.pdf>FLOWCHART</a>]<div id=GTFS></div>
+GTFS   "Find FP using BN; address: = contents of
+       (3n+FP); go to L7 in GTS below;"
+       [<a href=../Interpreter/Interpreter_source.htm#L_1_GTFS>CODE</a>]  [<a href=../Interpreter/Flowcharts/GTFS.pdf>FLOWCHART</a>]<div id=GTS></div>
+GTS    "address: = N+QACODL;
+
+       L7: subtract 3 from SP; get integer from
+           stack; if integer is zero or greater
+           than contents of address then FAIL;
+
+       address: = 2 x integer -1 + address; go to
+       L2 in GT above;"
+       [<a href=../Interpreter/Interpreter_source.htm#L_1_GTS>CODE</a>]  [<a href=../Interpreter/Flowcharts/GTS.pdf>FLOWCHART</a>]<div id=IFJ></div>
+IFJ    "subtract 3 from SP; get boolean (integer) from
+       Stack; if zero then go to address N+BA;"
+       [<a href=../Interpreter/Interpreter_source.htm#L_1_IFJ>CODE</a>]  [<a href=../Interpreter/Flowcharts/IFJ.pdf>FLOWCHART</a>]<div id=IFUN></div>
+IFUN   This stacks the address of a function name if
+       n= 0 or of a parameter if n &ne; 0,
+
+       "Find FP using BN; store(3n+FP) at SP; add
+       1 to SP; store the constant +1 at SP; add
+       2 to SP;"
+
+       The constant +1 indicates that the address is
+       that of an integer or boolean variable; this
+       is checked at a procedure entry against the
+       parameter checking word.
+       [<a href=../Interpreter/Interpreter_source.htm#L_1_IFUN>CODE</a>]  [<a href=../Interpreter/Flowcharts/IFUN.pdf>FLOWCHART</a>]<div id=INDA></div>
+INDA   The purpose of this is to place the absolute:
+       address of an array element in the stack having
+       been given the address of the map entry and n
+       index values, If the array has real elements
+       then the most significant digit of the result
+       is a one, picked up from the array map. Next
+       to this is placed +1 for an integer or +2 for a
+       real array element.
+       [<a href=../Interpreter/Interpreter_source.htm#L_1_INDA>CODE</a>] [<a href=../Interpreter/Flowcharts/INDA.pdf>FLOWCHART</a>]<div id=INDR></div>
+INDR   As for INDA except that the value of the array
+       element is brought to the stack and unpacked
+       into 3 locations if real.
+       [<a href=../Interpreter/Interpreter_source.htm#L_1_INDR>CODE</a>] [<a href=../Interpreter/Flowcharts/INDR.pdf>FLOWCHART</a>]<div id=INDS></div>
+INDS   "address: = N+QACODL; subtract 3 from SP;
+       get integer from stack;
+
+       if integer is zero or greater than contents of
+
+       address then FAIL;
+
+       store 2 x integer -l +address at SP; add 3 to
+       SP;"
+       [<a href=../Interpreter/Interpreter_source.htm#L_1_INDS>CODE</a>]  [<a href=../Interpreter/Flowcharts/INDS.pdf>FLOWCHART</a>]<div id=INOUT></div>
+INOUT  See <a href="Description Pages/page30.jpg">section 9</a>; the address part of the pord, p,
+       determines the action in an identical way to
+       that of the address part of a PRIM pord.
+       [<a href=../Interpreter/Interpreter_Description.htm#INOUT>DESCRIPTION</a>] [<a href=../Interpreter/Interpreter_source.htm#L_1_INOUT>CODE</a>] [<a href=../Interpreter/Flowcharts/INOUT.pdf>FLOWCHART</a>]<div id=MAMPS></div>
+MAMPS  This operation is executed immediately after
+       entry to a block in which local arrays are declared.
+       The number of dimensions, d, and arrays, a, are
+
+<p><a href="Description Pages/page21.jpg">[--PAGE 19--]</a></p>
+       packed with 6 bits each at the right hand end
+       of the word containing MAMPS,
+
+       <u>begin</u> <u>real</u> <u>array</u> A,B,C,D [P:Q, R:S, T:U];
+
+       is translated to
+
+             TIR   P
+             TIR   Q
+             TIR   R
+             TIR   S
+             TIR   T
+             TIR   U
+             MAMPS 3,4
+       A:    /0    0         / indicates real
+              3    7         3 dimensions; 7 locations
+                             onwards to map address
+
+       B:    /0    0
+              3    5
+       C:    /0    0
+              3    5
+       D:     0    0
+              3    1
+              +0             / Map address filled in here
+                             by action of MAMPS (equal to
+                             SP).
+
+       The indications "A:" etc do not mean that a global
+       label is punched, merely that reference to array
+       A is by specifying the address of the "array pair"
+       marked "A:".
+
+       Using the top six entries in the stack an array
+       map is calculated and placed in the stack, advanc-
+       ing SP appropriately, The array map fora d,
+       dimensional array contains 2d + 2 words in all.
+       These are arrayed as follows (for d =3):-
+       of the word containing MAMPS.
+
+       array map :    DIMENSIONS
+                      TOTAL SIZE
+                      OFFSET
+                      l1
+                      c1
+                      l2
+                      c2
+                      l3
+
+       Note that there is one more lowbound value, l,
+       than map coefficient, c, TOTAL SIZE is the
+       number of locations occupied by the array itself,
+       OFFSET is the number of locations between the
+       leading element of the array and the element all
+       of whose index values are zero; it is positive if
+       the element with zero indices lies at a higher
+       address than the leading element.
+
+<p><a href="Description Pages/page22.jpg">[--PAGE 20--]</a></p>
+       The coefficients cl, c2 etc are calculated as
+       follows:-
+
+       c1 is the range of the first subscript multiplied
+       by two if the array is real.
+
+       c2 is the range of the second subscript multiplied
+       by cl.
+
+       The lowbound values l1, l2 etc are not necessary
+       for the evaluation of the address of an element
+       of the array, but are necessary for the standard
+       procedure lowbound,.
+
+       The address of the leading element of each array
+       is filled in at A:, B: etc., the first being
+       equal to SP, the next to SP + TOTAL SIZE etc.
+       OFFSET is then calculated
+
+       OFFSET = - 2 x P - R &times; c1 - T &times; c2
+
+       A "pointer pair" is created in QAVNDA - first
+       pointer points to array, second to map.
+
+       Finally there is a jump to execute the next pord
+       beyond the map address.
+
+       The address of element B [i,j,k] is -
+       the contents of location B: with its "/" to
+       indicate real plus
+                    OFFSET
+                     plus
+                   2i + j &times; c1 + k &times; c2
+       [<a href=../Interpreter/Interpreter_source.htm#L_1_MAMPS>CODE</a>]  [<a href=../Interpreter/Flowcharts/MAMPS.pdf>FLOWCHART</a>]<div id=PE></div>
+PE     This operation is at the head of a block bearing
+       the number BN' and expecting m parameters. The
+       action is to complete the stack entry set up by
+       CF or by CFF, and do parameter checking (see Section 8
+       <a href="Description Pages/page29.jpg">page 27</a>, <a href="Description Pages/page30.jpg">page 28</a>).
+
+       BN occupies 9 bits, m 4 bits.
+
+       "store EP-3m at SP; add 1 to SP; store (old)
+       BN at SP; add 1 to SP; store BN' in Block
+       Number register; store EP-3m-3 in Formal Pointer
+       register;"
+       [<a href=../Interpreter/Interpreter_source.htm#L_1_PE>CODE</a>] [<a href=../Interpreter/Flowcharts/PE.pdf>FLOWCHART</a>]<div id=PEM></div>
+PEM    This is placed at the head of a piece of machine
+       code to make it look like pords when called from
+       within the User's Algol program.
+
+       Example.
+
+       [ ARCTAN ]
+
+       ARCTAN      PEM     1
+                   +0             for return address
+                   ...
+                   ...
+                   ...
+                   0  ARCTAN+1    normal exit in machine
+                   /8 1           code
+
+<p><a href="Description Pages/page23.jpg">[--PAGE 21--]</a></p>
+       The stack entry is completed as for a PE operation
+       but using the current value of BN in place of BN’,
+       There is then a call of the machine code from within
+       the interpreter, On returning to the interpreter
+       in the normal way for a machine code subroutine
+       the action for RETURN (see <a href="#RETURN">7.2</a> below) are executed.
+       [<a href=../Interpreter/Interpreter_source.htm#L_1_PEM>CODE</a>]  [<a href=../Interpreter/Flowcharts/PEM.pdf>FLOWCHART</a>]<div id=PRIM></div>
+PRIM   Enter a subroutine at address N+PBA.
+       [<a href=../Interpreter/Interpreter_Description.htm#PRIM>DESCRIPTION</a>]  [<a href=../Interpreter/Interpreter_source.htm#L_1_PRIM>CODE</a>]  [<a href=../Interpreter/Flowcharts/PRIM.pdf>FLOWCHART</a>]<div id=RFUN></div>
+RFUN   This stacks the address of a real type procedure
+       or a real parameter so that an assignment can be
+       made to it.
+
+       "find FP using BN;
+       store FP+3n + /0 0 at SP; add 1 to SP;
+       store /0 2 at SP; add 2 to SP;"
+
+       The sign bit on the address word indicates a real
+       address, and the sign bit on the +2 indicates an
+       unpacked quantity. The +2 indicates a real quantity
+       for parameter checking (see <a href="Description Pages/page29.jpg">page 27</a>, <a href="Description Pages/page30.jpg">page 28</a>).
+       [<a href=../Interpreter/Interpreter_source.htm#L_1_RFUN>CODE</a>]  [<a href=../Interpreter/Flowcharts/RFUN.pdf>FLOWCHART</a>]<div id=TA></div>
+TA     "store N+BA at SP; add 3 to SP;"
+       [<a href=../Interpreter/Interpreter_source.htm#L_1_TA>CODE</a>]  [<a href=../Interpreter/Flowcharts/TA.pdf>FLOWCHART</a>]<div id=TF></div>
+TF   ) "find FP using BN;
+TFAI ) store contents of (3n+FP) at SP;
+TFAR ) store contents of (3n+FP+1) at SP+1;
+TFVI ) store contents of (3n+FP+2) at SP+2;
+TFVR ) add 3 to SP;"
+       [<a href=../Interpreter/Interpreter_source.htm#L_1_TFAI>CODE</a>]  [<a href=../Interpreter/Flowcharts/TF.pdf>FLOWCHART</a>]<div id=TIA></div>
+TIA    "store N+QAVNDA at SP; add1 to SP; store +1
+       at SP; add 2 to SP;"
+       [<a href=../Interpreter/Interpreter_source.htm#L_1_TIA>CODE</a>]  [<a href=../Interpreter/Flowcharts/TIA.pdf>FLOWCHART</a>]<div id=TIC></div>
+TIC    "store contents of (N+QACODL) at SP; add 3 to SP;"
+       [<a href=../Interpreter/Interpreter_source.htm#L_1_TIC>CODE</a>]  [<a href=../Interpreter/Flowcharts/TIC.pdf>FLOWCHART</a>]<div id=TICA></div>
+TICA)  "store N+QACODL + the constant 8 O at SP;
+TLA )  add 1 to SP; store +l at SP; add 2 to SP;"
+
+       The +1 written by TLA gets overwritten by +9 if
+       a label is an actual parameter.
+       [<a href=../Interpreter/Interpreter_source.htm#L_1_TICA>CODE</a>]  [<a href=../Interpreter/Flowcharts/TICA.pdf>FLOWCHART</a>]<div id=TIR>
+TIR    "store contents of (N+QAVNDA) at SP; add 3 to SP;"
+       [<a href=../Interpreter/Interpreter_source.htm#L_1_TIR>CODE</a>]  [<a href=../Interpreter/Flowcharts/TIR.pdf>FLOWCHART</a>]<div id=TRA></div>
+TRA    "store N+QAVNDA + the constant /0 0 at SP; add
+       1 to SP; store +2 at SP; add 2 to SP;"
+       [<a href=../Interpreter/Interpreter_source.htm#L_1_TRA>CODE</a>]  [<a href=../Interpreter/Flowcharts/TRA.pdf>FLOWCHART</a>]<div id=TRC></div>
+TRC    "store contents of (N+QACODL) at SP; unpack the
+       contents of (N+1+QACODL) and store at SP+1, SP+2;
+       add 3 to SP;"
+       [<a href=../Interpreter/Interpreter_source.htm#L_1_TRC>CODE</a>]  [<a href=../Interpreter/Flowcharts/TRC.pdf>FLOWCHART</a>]<div id=TRCA></div>
+TRCA   "store /8 0 plus N+QACODL at SP; store +2 at
+       SP+l; add 3 to SP;"
+       [<a href=../Interpreter/Interpreter_source.htm#L_1_TRCA>CODE</a>]  [<a href=../Interpreter/Flowcharts/TRCA.pdf>FLOWCHART</a>]
+
+<p><a href="Description Pages/page24.jpg">[--PAGE 22--]</a></p>
+<div id=TRCN>TRCN   "Find FP using BN; address := contents of
+       3n+FP; store contents of address at SP;
+       if address has sign bit =1 then
+          begin if contents of 3n+FP+l has
+          sign bit =l1 then transfer contents
+          of (address +1) to SP+1 and (address +2)
+          to SP+2 else unpack contents of (address
+          +1) and transfer to SP+1, SP+2 end;
+       add 3 to SP;"
+       [<a href=../Interpreter/Interpreter_source.htm#L_1_TRCN>CODE</a>]  [<a href=../Interpreter/Flowcharts/TRCN.pdf>FLOWCHART</a>]</div><div id=TRR></div>
+TRR    "store contents of (N+QAVNDA) at SP; unpack
+       the contents of (N+1+QAVNDA) and store at
+       SP+1, SP+2;
+       add 3 to SP;"
+       [<a href=../Interpreter/Interpreter_source.htm#L_1_TRR>CODE</a>]  [<a href=../Interpreter/Flowcharts/TRR.pdf>FLOWCHART</a>]<div id=UJ></div>
+UJ     "PP: = N+BA"
+       [<a href=../Interpreter/Interpreter_source.htm#L_1_UJ>CODE</a>]  [<a href=../Interpreter/Flowcharts/UJ.pdf>FLOWCHART</a>]<div id=TRAP></div>
+TRAP   "store /8 0 plus N+BA at SP;
+       store +2 at SP+1; add 3 to SP;"
+       This is only for referring to real constants in
+       hand porded programs, This function is not
+       produced by the translator.
+       [<a href=../Interpreter/Interpreter_source.htm#L_1_TRAP>CODE</a>]  [<a href=../Interpreter/Flowcharts/TRAP.pdf>FLOWCHART</a>]
+
+<p><a href="Description Pages/page26.jpg">[--PAGE 24--]</a></p>
+<div id=CBL></div>
+CBL    This has the same effect as a function
+       CF to a point two pords on and therefore
+       makes a partial stack entry.
+       [<a href=../Interpreter/Interpreter_source.htm#L_1_CBL>CODE</a>]  [<a href=../Interpreter/Flowcharts/CBL.pdf>FLOWCHART</a>]
+<span id=CHECKI><span id=CHECKR></span><span id=CHECKB></span> <span id=CHECKS></span>
+CHECK  These punch "newline, asterisk" followed
+       by a boolean, integer or real whose
+       value is at the top of the stack or a
+       string whose address is at the top of
+       the stack, SP is unchanged except
+       for CHECKS which reduces it by 3.
+       CHECKI [<a href=../Interpreter/Interpreter_source.htm#L_1_CHECKI>CODE</a>]  [<a href=../Interpreter/Flowcharts/CHECKI.pdf>FLOWCHART</a>]
+       CHECKR [<a href=../Interpreter/Interpreter_source.htm#L_1_CHECKR>CODE</a>]  [<a href=../Interpreter/Flowcharts/CHECKR.pdf>FLOWCHART</a>]
+       CHECKB [<a href=../Interpreter/Interpreter_source.htm#L_1_CHECKB>CODE</a>]  [<a href=../Interpreter/Flowcharts/CHECKB.pdf>FLOWCHART</a>]
+       CHECKS [<a href=../Interpreter/Interpreter_source.htm#L_1_CHECKS>CODE</a>]  [<a href=../Interpreter/Flowcharts/CHECKS.pdf>FLOWCHART</a>]
+<div id=DO></div>
+DO     This makes use of the common procedure
+       <a href=#ASSIGN>ASSIGN</a> (see below).
+
+       "ASSIGN; store PP at EP+1;
+       store contents of (EP+2) in Pord Pointer
+       register;"
+       [<a href=../Interpreter/Interpreter_source.htm#L_1_DO>CODE</a>]  [<a href=../Interpreter/Flowcharts/DO.pdf>FLOWCHART</a>]<div id=STW></div>
+STW    "ASSIGN; "
+       [<a href=../Interpreter/Interpreter_source.htm#L_1_STW>CODE</a>]  [<a href=../Interpreter/Flowcharts/STW.pdf>FLOWCHART</a>]<div id=FINISH></div>
+FINISH Punch 100 rows of blank tape, the word
+       FINISH and a halt code.    Then stop.
+       [<a href=../Interpreter/Interpreter_source.htm#L_1_FINISH>CODE</a>]  [<a href=../Interpreter/Flowcharts/FINISH.pdf>FLOWCHART</a>]<div id=FOR></div>
+FOR    A stack entry is made. In the object
+       program FOR is followed by three pords.
+
+       PRIM FOR
+       a           address of controlled statemen
+       BN'
+       b           address of next statement
+
+       "store EP at SP;
+       store (PP+4) at SP+1;*
+       store a + /0 0 at SP+2;
+       store old BN at SP+3;
+       store b at SP+4;
+       EP: = SP; add 5 to SP;
+       store BN’ in Block Number register;"
+       [<a href=../Interpreter/Interpreter_source.htm#L_1_FOR>CODE</a>]  [<a href=../Interpreter/Flowcharts/FOR.pdf>FLOWCHART</a>]<div id=FR></div>
+FR     This ends a controlled statement.
+       "pp; = contents of (EP+1);"
+       [<a href=../Interpreter/Interpreter_source.htm#L_1_FR>CODE</a>]  [<a href=../Interpreter/Flowcharts/FR.pdf>FLOWCHART</a>]
+
+* PP+4 points to 5 locations after PRIM FOR
+
+<p><a href="Description Pages/page27.jpg">[--PAGE 25--]</a></p>
+<div id=FSE></div>
+FSE    This undoes the effect of FOR and is
+       the last for list element.
+
+       "BN: = contents of (EP+3);
+       PP: = contents of (EP +4);
+       SP: = EP; EP: = contents of EP;"
+       [<a href=../Interpreter/Interpreter_source.htm#L_1_FSE>CODE</a>]  [<a href=../Interpreter/Flowcharts/FSE.pdf>FLOWCHART</a>]<div id=DIV></div>
+DIV    See <a href="#OPERATORS">arithmetic primitives.</a>
+       [<a href=../Interpreter/Interpreter_source.htm#L_1_DIV>CODE</a>]<span id=ITOR1></span><span id=ITOR2></span>
+ITOR1  Convert contents of SP-3 and SP-6 from
+ITOR2  integer to unpacked real respectively.
+       ITOR1 [<a href=../Interpreter/Interpreter_source.htm#L_1_ITOR1>CODE</a>]  [<a href=../Interpreter/Flowcharts/ITOR1.pdf>FLOWCHART</a>]
+       ITOR2 [<a href=../Interpreter/Interpreter_source.htm#L_1_ITOR2>CODE</a>]  [<a href=../Interpreter/Flowcharts/ITOR2.pdf>FLOWCHART</a>]
+<span id=NEGI></span><span id=NEGR></span>
+NEGI   Replace the contents of SP-3 by minus
+NEGR   the contents.
+       NEGI [<a href=../Interpreter/Interpreter_source.htm#L_1_NEGI>CODE</a>]  [<a href=../Interpreter/Flowcharts/NEGI.pdf>FLOWCHART</a>]
+       NEGR [<a href=../Interpreter/Interpreter_source.htm#L_1_NEGR>CODE</a>]  [<a href=../Interpreter/Flowcharts/NEGR.pdf>FLOWCHART</a>]
+<div id=RETURN></div>
+RETURN Used at the end of a block or procedure.
+       "BN: = contents of (EP+3);
+       SP: = contents of (EP+2);
+       PP: = contents of (EP+1);
+       EP: = contents of EP;
+       FP: = contents of (EP+2) minus 3;"
+       [<a href=../Interpreter/Interpreter_source.htm#L_1_RETURN>CODE</a>]  [<a href=../Interpreter/Flowcharts/RETURN.pdf>FLOWCHART</a>]<div id=RTOI1></div>
+RTOI1  Convert contents of SP-3 from unpacked
+       real to integer with FAIL if overflow.
+       [<a href=../Interpreter/Interpreter_source.htm#L_1_RTOI1>CODE</a>]  [<a href=../Interpreter/Flowcharts/RTOI1.pdf>FLOWCHART</a>]<div id=ST></div>
+ST     This makes use of the common procedure
+       <a href=#ASSIGN>ASSIGN</a> (see below)
+
+       "ASSIGN; subtract 3 from SP;"
+       [<a href=../Interpreter/Interpreter_source.htm#L_1_ST>CODE</a>]  [<a href=../Interpreter/Flowcharts/ST.pdf>FLOWCHART</a>]<div id=STA></div>
+STA    "ASSIGN; copy the contents of SP to SP-3
+       (SP+1) to SP-2
+       (SP+2) to SP-1;"
+       [<a href=../Interpreter/Interpreter_source.htm#L_1_STA>CODE</a>]  [<a href=../Interpreter/Flowcharts/STA.pdf>FLOWCHART</a>]<div id=STEP></div>
+STEP   "ASSIGN; store PP at EP+1;
+       clear location EP+7;"
+       [<a href=../Interpreter/Interpreter_source.htm#L_1_STEP>CODE</a>]  [<a href=../Interpreter/Flowcharts/SEP.pdf>FLOWCHART</a>]<div id=WAIT></div>
+WAIT   Halt but prepare to resume after a
+       start at 9.
+       [<a href=../Interpreter/Interpreter_source.htm#L_1_WAIT>CODE</a>]  [<a href=../Interpreter/Flowcharts/WAIT.pdf>FLOWCHART</a>]<div id=UNTIL></div>
+UNTIL  "If the contents of (EP+7) are zero
+       then make them non zero else add the
+       contents of (EP+8) to the variable
+       whose address is at EP+5;
+
+       If the sign of ( the increment held
+       at EP+8 times ( the controlled variable
+       whose address is at EP+5 minus the final
+       value given in (EP+11)) is greater than
+       zero then store PP at EP+1; this corres-
+       ponds to element exhausted;
+
+       subtract 6 from SP;
+
+       If the above sign is &le; O then store
+       the contents of (EP+2) in the pord
+       pointer register; this causes the
+       statement to be executed;"
+
+<p><a href="Description Pages/page28.jpg">[--PAGE 26--]</a></p>
+       The type of arithmetic is determined *
+       by the address of the controlled
+       variable held at EP+5.
+       * packing is determined by EP+5.
+       [<a href=../Interpreter/Interpreter_source.htm#L_1_UNTIL>CODE</a>]  [<a href=../Interpreter/Flowcharts/UNTIL.pdf>FLOWCHART</a>]<div id=UP></div>
+UP     This makes space in the stack for the
+       result of a type procedure.
+
+       "Add 3 to SP;"
+       [<a href=../Interpreter/Interpreter_source.htm#L_1_UP>CODE</a>]  [<a href=../Interpreter/Flowcharts/UP.pdf>FLOWCHART</a>]<div id=WHILE></div>
+WHILE  If the topmost value is <u>false</u> then the
+       next pord is taken, but if <u>true</u> then
+       a pord jump occurs to the address
+       given in EP+2.
+
+       "subtract 3 from SP;
+       if <u>false</u> store PP in EP+1;
+       if <u>true</u> store contents of (EP+2) in
+       Pord Pointer register;"
+       [<a href=../Interpreter/Interpreter_source.htm#L_1_WHILE>CODE</a>]  [<a href=../Interpreter/Flowcharts/WHILE.pdf>FLOWCHART</a>]<div id=ASSIGN></div>
+procedure ASSIGN;
+       "subtract 3 from SP;
+       address: = contents of (SP-3);
+       type: = contents of (SP-2);
+
+       if address has an "8 0" bit then
+       FAIL because assignment to a
+       constant is being attempted;
+
+       store contents of SP at address;
+
+       if address &lt; O then <u>begin</u>, if type
+       &lt; O then
+
+          transfer contents of (SP+1) to
+          address+1 and contents of (SP+2)
+          to address +2
+
+                     <u>else</u>
+          pack together the contents of (SP+1)
+          and (SP+2) with round off and store
+          at address +1
+
+       <u>end</u>; "
+
+<p><a href="Description Pages/page25.jpg">[--PAGE 23--]</a></p>
+<div id=OPERATORS></div>
+<span id=PRIM28>PRIM28  R&uarr;I&rarr;R</span>  [<a href=../Interpreter/Interpreter_source.htm#L_1_PRIM28>CODE</a>] <span class=red>(This PRIM was omitted in the original document.)</span>
+<span id=PRIM30>PRIM30  I+I&rarr;I</span>  [<a href=../Interpreter/Interpreter_source.htm#L_1_PRIM30>CODE</a>]
+
+<span id=PRIM31>PRIM31  R+R&rarr;R</span>  [<a href=../Interpreter/Interpreter_source.htm#L_1_PRIM31>CODE</a>]
+<span id=PRIM32>PRIM32  I-I&rarr;I</span>  [<a href=../Interpreter/Interpreter_source.htm#L_1_PRIM32>CODE</a>]
+<span id=PRIM33>PRIM33  R-R&rarr;R</span>  [<a href=../Interpreter/Interpreter_source.htm#L_1_PRIM33>CODE</a>]
+<span id=PRIM34>PRIM34  I&times;I&rarr;I</span>  [<a href=../Interpreter/Interpreter_source.htm#L_1_PRIM34>CODE</a>]
+<span id=PRIM35>PRIM35  R&times;R&rarr;R</span>  [<a href=../Interpreter/Interpreter_source.htm#L_1_PRIM35>CODE</a>]
+
+<span id=PRIM36>PRIM36  I/I&rarr;R</span>  [<a href=../Interpreter/Interpreter_source.htm#L_1_PRIM36>CODE</a>]
+<span id=PRIM37>PRIM37  R/R&rarr;R</span>  [<a href=../Interpreter/Interpreter_source.htm#L_1_PRIM37>CODE</a>]
+<span id=PRIM38>PRIM38  I&uarr;I&rarr;I</span>  [<a href=../Interpreter/Interpreter_source.htm#L_1_PRIM38>CODE</a>]
+<span id=PRIM39>PRIM39  I&uarr;I&rarr;R</span>  [<a href=../Interpreter/Interpreter_source.htm#L_1_PRIM39>CODE</a>]
+<span id=PRIM40>PRIM40  R&uarr;R&rarr;R</span>  [<a href=../Interpreter/Interpreter_source.htm#L_1_PRIM40>CODE</a>]
+
+<span id=PRIM41>PRIM41  I&lt;I&rarr;B</span>  [<a href=../Interpreter/Interpreter_source.htm#L_1_PRIM41>CODE</a>]
+<span id=PRIM42>PRIM42  R&lt;R&rarr;B</span>  [<a href=../Interpreter/Interpreter_source.htm#L_1_PRIM42>CODE</a>]
+<span id=PRIM43>PRIM43  I&le;I&rarr;B</span>  [<a href=../Interpreter/Interpreter_source.htm#L_1_PRIM43>CODE</a>]
+<span id=PRIM44>PRIM44  R&le;R&rarr;B</span>  [<a href=../Interpreter/Interpreter_source.htm#L_1_PRIM44>CODE</a>]
+<span id=PRIM45>PRIM45  I=I&rarr;B</span>  [<a href=../Interpreter/Interpreter_source.htm#L_1_PRIM45>CODE</a>]
+
+<span id=PRIM46>PRIM46  R=R&rarr;B</span>  [<a href=../Interpreter/Interpreter_source.htm#L_1_PRIM46>CODE</a>]
+<span id=PRIM47>PRIM47  I&ne;I&rarr;B</span>  [<a href=../Interpreter/Interpreter_source.htm#L_1_PRIM47>CODE</a>]
+<span id=PRIM48>PRIM48  R&ne;R&rarr;B</span>  [<a href=../Interpreter/Interpreter_source.htm#L_1_PRIM48>CODE</a>]
+<span id=PRIM49>PRIM49  I>I&rarr;B</span>  [<a href=../Interpreter/Interpreter_source.htm#L_1_PRIM49>CODE</a>]
+<span id=PRIM50>PRIM50  R>R&rarr;B</span>  [<a href=../Interpreter/Interpreter_source.htm#L_1_PRIM50>CODE</a>]
+
+<span id=PRIM51>PRIM51  I&ge;I&rarr;B</span>  [<a href=../Interpreter/Interpreter_source.htm#L_1_PRIM51>CODE</a>]
+<span id=PRIM52>PRIM52  R&ge;R&rarr;B</span>  [<a href=../Interpreter/Interpreter_source.htm#L_1_PRIM52>CODE</a>]
+<span id=PRIM53>PRIM53  B&and;B&rarr;B</span>  [<a href=../Interpreter/Interpreter_source.htm#L_1_PRIM53>CODE</a>]
+<span id=PRIM54>PRIM54  B&or;B&rarr;B</span>  [<a href=../Interpreter/Interpreter_source.htm#L_1_PRIM54>CODE</a>]
+<span id=PRIM55>PRIM55  B&equiv;B&rarr;B</span>  [<a href=../Interpreter/Interpreter_source.htm#L_1_PRIM55>CODE</a>]
+
+<span id=PRIM56>PRIM56  B&sup;B&rarr;B</span>  [<a href=../Interpreter/Interpreter_source.htm#L_1_PRIM56>CODE</a>]
+
+The primitives numbered 12 (<a href=#DIV>DIV</a>) and 30-56 have two inputs and
+one output. The left hand input is at SP-6, the right
+hand input is at SP-3. The output occupies SP-3 or,
+if real, the three words starting at SP-3. The nett
+effect of each primitive is to reduce SP by 3.
+
+<span id=PRIM57>PRIM57  &not;B&rarr;B  [<a href=../Interpreter/Interpreter_source.htm#L_1_PRIM57>CODE</a>]
+
+<p><a href="Description Pages/page29.jpg">[--PAGE 27--]</a></p>
+<span id=PRIM58>PRIM58  ABS</span>     [<a href=../Interpreter/Interpreter_source.htm#L_1_PRIM58>CODE</a>]
+<span id=PRIM59>PRIM59  ENTIER</span>  [<a href=../Interpreter/Interpreter_source.htm#L_1_PRIM59>CODE</a>]
+<span id=PRIM60>PRIM60  EXP</span>     [<a href=../Interpreter/Interpreter_source.htm#L_1_EXP>CODE</a>]
+<span id=PRIM61>PRIM61  LN</span>      [<a href=../Interpreter/Interpreter_source.htm#L_1_PRIM61>CODE</a>]
+<span id=PRIM62>PRIM62  SIGN</span>    [<a href=../Interpreter/Interpreter_source.htm#L_1_PRIM62>CODE</a>]
+
+The primitives numbered 58-62 are the ones which
+execute the Algol procedures which are <u>always</u> in the
+store. A call of one of these procedures does not
+produce a PRIM UP as an ordinary procedure call would,
+The actions of all these primitives are:-
+
+"replace contents of (SP-3) by the function of
+ the contents".
+
+<span id=PRIM63>PRIM63  |</span>  [<a href=../Interpreter/Interpreter_source.htm#L_1_PRIM30>CODE</a>]
+<span id=PRIM64>PRIM64  | These place integer</span>     [<a href=../Interpreter/Interpreter_source.htm#L_1_PRIM63>CODE</a>]
+<span id=PRIM65>PRIM65  | x in the stack at SP-2</span>  [<a href=../Interpreter/Interpreter_source.htm#L_1_PRIM64>CODE</a>]
+<span          >        | where x runs from 3</span>     [<a href=../Interpreter/Interpreter_source.htm#L_1_PRIM65>CODE</a>]
+<span id=PRIM66>PRIM66  | to 10 for primitives</span>    [<a href=../Interpreter/Interpreter_source.htm#L_1_PRIM66>CODE</a>]
+<span id=PRIM67>PRIM67  | 63-70.  The purpose</span>     [<a href=../Interpreter/Interpreter_source.htm#L_1_PRIM67>CODE</a>]
+<span id=PRIM68>PRIM68  | is for parameter</span>        [<a href=../Interpreter/Interpreter_source.htm#L_1_PRIM68>CODE</a>]
+<span id=PRIM69>PRIM69  | checking.</span>               [<a href=../Interpreter/Interpreter_source.htm#L_1_PRIM69>CODE</a>]
+<span id=PRIM70>PRIM70  |</span>                         [<a href=../Interpreter/Interpreter_source.htm#L_1_PRIM70>CODE</a>]
+
+The primitives numbered 63-70 serve the purpose
+of filling the stack with type information alongside the
+address of any call-by name actual parameter, This
+is for parameter checking.
+</body>
+</html>
